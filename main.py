@@ -1,21 +1,14 @@
 # imports
 import carla
+from carla import ColorConverter as cc
 import os
 import random
 import time
 import numpy as np
+import weakref
 import cv2
+import math
 
-
-#MAKE NEW CLASS FOR VEHICLES (VEHICLE WILL CALL THIS CLASS WHEN STARTING THE CAR MOVING AND IT WILL BE CALLED BY OUR LOOP (WHICH IS ALSO PROLLY A CLASS))
-#EACH TYPE OF CHECKING OR MOVING SHOULD BE A CLASS (EACH SECTION OF FUNCTIONAL REQUIREMENTS ALMOST CAN BE A CLASS)
-
-#SHOULD MAKE A CLASS THAT CHECKS FOR KEYBOARD INTERRUPT AND CALLS ANOTHER CLASS TO END THE PROGRAM
-#THIS CLASS WOULD USE VEHICLES AND SENSORS TO UTILIZE VEHICLE FUNCTIONS TO CORRECTLY MOVE THE CAR
-    #BASED ON LOOKING AT DOCUMENTATION WE EITHER WILL USE TRAFFIC MANAGER OR ACTOR FUNCTIONS (THERE MAY BE ISSUES IF BOTH ARE USED)
-
-#MAKE DESCRIPTION COMMENTS LIKE THIS FOR EACH CLASS (BUT SMALLER) FOR WHEN WORKING ON EACH OTHERS CODE 
-# list all attributes, their types and a tiny description, each method should have the parameters and return values and a tiny description
 
 """
 ===========
@@ -43,7 +36,6 @@ class World:
         cur_map = os.path.basename(self.__client.get_world().get_map().name)
         cur_map = cur_map[0].lower() + cur_map[1:]
 
-        #CAN MAYBE ADJUST THIS TO JUST ALWAYS GET OR LOAD FROM A VALUE INSTEAD OF CHECKING?
         if world_map == cur_map:
             self.__world = self.__client.get_world()
         else:
@@ -66,18 +58,93 @@ class World:
     def get_spawnpoints(self):
         return self.__world.get_map().get_spawn_points()
     
+# there are intersection entrance actors, stop sign actors, traffic light actors
+#TODO: command list for Vehicle
 
-#MAYBE ADJUST THIS CLASS TO TAKE IN A TYPE OF CAR TO BE INPUT INTO THE FILTER?
 class Vehicle: 
     def __init__(self, blueprint_lib, world_map, spawn):
         vehicle_bp = random.choice(blueprint_lib.filter('vehicle.bmw.*'))
         self.__car = world_map.spawn_actor(vehicle_bp, spawn)
-        self.__car.set_autopilot(True)
-
+        self.__actors = world_map.get_actors()
+        self.__sensors = Sensors()
+  
     def get_car(self):
         return self.__car
+    
+    def get_sensors(self):
+        return self.__sensors
+    
 
-# sensors
+    def set_sensors(self, transform, actor, blueprint, world):
+        self.__sensors.add_sensor(ObstacleSensor(transform[0], actor, blueprint[0], world))
+        self.__sensors.add_sensor(CollisionSensor(transform[1], actor, blueprint[1], world))
+        self.__sensors.add_sensor(LaneInvasionSensor(transform[2], actor, blueprint[2], world))
+    
+
+        for sensor in self.__sensors.get_sensors():
+            sensor.listen()
+
+    def control_loop(self):
+        if((self.__sensors.get_sensors()[0].get_other_actors() == []) or (self.__sensors.get_sensors()[2].get_lane_markings() == [])):
+            if(len(self.__sensors.get_sensors()[0].get_other_actors()) > 0):
+                self.avoid_obstacles()
+
+            elif(len(self.__sensors.get_sensors()[1].get_collisions()) > 0):
+                self.stop_car()
+                return False
+
+            elif(len(self.__sensors.get_sensors()[2].get_lane_markings()) > 0):
+                self.fix_lane()
+        else:
+            self.drive()
+
+
+    def maintain_speed(self):
+        v = self.get_car().get_velocity()                                   # velocity is a 3d vector in m/s
+        speed = round(3.6 * math.sqrt(v.x**2 + v.y**2 + v.z**2),0)          #speed in kilometers/hr 
+        PREFERRED_SPEED = 30        # targeted speed in kph
+        SPEED_THRESHOLD = 2         # how many kph we can comfortably be under the target
+        if speed >= PREFERRED_SPEED:
+            return 0
+        elif speed < PREFERRED_SPEED - SPEED_THRESHOLD:
+            return 0.8      # essentially 80% of gas
+        else:   
+            return 0.4      
+        
+    def drive(self):   
+
+        steering_angle = 0  # you can change this but once it gets near an obsticle it will stop in a straight line
+        estimated_throttle = self.maintain_speed()
+        self.get_car().apply_control(carla.VehicleControl(throttle=estimated_throttle,steer=steering_angle))
+    
+    def decelerate(self):
+        self.get_car().apply_control(carla.VehicleControl(throttle=0, steer=1.0, brake=0.7))  # cuts throttle and applies 70% braking power
+
+   
+    def avoid_obstacles(self):
+        # self.decelerate()
+        print("Avoiding")
+        self.get_car().apply_control(carla.VehicleControl(throttle=0.3,steer=-1.0))
+
+        self.__sensors.get_sensors()[0].delete_old_detection()
+    
+    def stop_car(self):
+        self.get_car().apply_control(carla.VehicleControl(throttle=0,steer=0,brake=1))
+        print("Stopping Car")
+        # print(Vehicle.get_car(self).get_velocity())
+    
+    def fix_lane(self):
+        if(self.__sensors.get_sensors()[2].get_lane_markings[0].side == carla.LaneMarkingSide.Left):
+            side = -1
+        elif(self.__sensors.get_sensors()[2].get_lane_markings[0].side == carla.LaneMarkingSide.Right):
+            side = 1
+        est_throttle = self.maintain_speed()
+        adjustment = 0.2 * side
+        self.get_car().apply_control(carla.VehicleControl(throttle=est_throttle,steer=adjustment))
+
+
+
+
 """
 ===========
 Sensors Class
@@ -103,7 +170,10 @@ class Sensors:
         self.__sensors.append(sensor)
 
     def destroy_sensors(self):
+        print(f"{len(self.__sensors)}heloooooooo")
         for sensor in self.__sensors:
+            print("Sensor destroyed.")
+            print(sensor)
             sensor.destroy()
 
 """
@@ -130,6 +200,7 @@ class ObstacleSensor(Sensors):
         self.__transform = relative_transform
         self.__parent = parent_actor
         self.__sensor = world.spawn_actor(blueprint, relative_transform, attach_to=self.__parent)
+        self.__other_actors = []
         self.__detections = []
     
     # getters
@@ -145,12 +216,20 @@ class ObstacleSensor(Sensors):
         return self.__sensor
     def get_detections(self):
         return self.__detections
+    def get_other_actors(self):
+        return self.__other_actors
     
-    
+    def delete_old_detection(self):
+        self.__detections.pop(0)
+        self.__other_actors.pop(0)
+          
     # with event, add to list of detections
     def obstacle_detect(self, event):
-        detection = (event.other_actor, event.distance)
-        self.__detections.append(detection)
+        if event.other_actor not in self.__other_actors:
+            detection = (event.other_actor, event.distance)
+            self.__detections.append(detection)
+            self.__other_actors.append(event.other_actor)
+
     
     # listen to sensor
     def listen(self):
@@ -203,6 +282,7 @@ class CollisionSensor(Sensors):
         # other impulse is a change in momentum - indicates magnitute and direction in global coordinates
         collision = (event.actor, event.other_actor, event.normal_impulse)
         self.__collisions.append(collision)
+        
     
     # listen to sensor
     def listen(self):
@@ -233,6 +313,7 @@ class LaneInvasionSensor(Sensors):
         self.__parent = parent_actor
         self.__sensor = world.spawn_actor(blueprint, relative_transform, attach_to=self.__parent)
         self.__lane_invasions = []
+        self.__lane_markings = []
     
     # getters
     def get_transform(self):
@@ -245,62 +326,77 @@ class LaneInvasionSensor(Sensors):
         return self.__blueprint
     def get_sensor(self):
         return self.__sensor
-    def get_collisions(self):
-        return self.__collisions
+    def get_lane_invasions(self):        
+        return self.__lane_invasions
+    def get_lane_markings(self):
+        return self.__lane_markings
     
+
+    def delete_old_detection(self):
+        self.__lane_invasions.pop(0)
+        self.__lane_markings.pop(0)
     
     # with event, add to list of detections
     def lane_invasion(self, event):
         # actor is actor that sensor is attached to and invaded another lane
+        #THIS LINE HAS A RUNTIME ERROR (TRYING TO OPERATE ON A DESTROYED ACTOR)
         lane_invasion = (event.actor, event.crossed_lane_markings)
         self.__lane_invasions.append(lane_invasion)
+        self.__lane_markings.append(event.crossed_lane_markings)
     
     # listen to sensor
     def listen(self):
         self.__sensor.listen(lambda event: self.lane_invasion(event))
 
+
+
 def main ():
-    #MAYBE BREAK OUT SOME VALUES TO SET THESE MANUALLY SO WE CAN TEST DIFFERENT ENVIRONMENTS
     #initializing the world and spawns
 
-    #CAN THIS BE DONE AS WE GO OR DO WE THINK IT IS BEST TO INITALIZE ALL VARIABLES TOGETHER?
     world = World('/Game/Carla/Maps/Town01')
     client = world.get_client()
     map = world.get_world()
     spts = world.get_spawnpoints()
-    #IS SPAWN THE SAME AS DEFAULT SPAWN OR WHAT IS DEFAULT SPAWN THEN
     spawn = spts[0]
     blueprint_lib = world.get_blueprints()
 
 
-    # Spectators - MOVE INTO SENSORS?
+    # Spectators
     spectator = map.get_spectator()
     spec_trans = spectator.get_transform()
     spectator.set_transform(carla.Transform(carla.Location(
         x = spawn.location.x, y = spawn.location.y, z = spawn.location.z + 60)))
 
-    # actor list - MAYBE KEEP IN THE WORLD CLASS?
+    # actor list
     actor_list = []
-
     
     vehicle = Vehicle(blueprint_lib, map, spawn)
     car = vehicle.get_car()
     actor_list.append(car)
+    transforms = [carla.Transform(carla.Location(x=2.8, z=0.7)), carla.Transform(carla.Location(x=4.8, z=0.7)), carla.Transform(carla.Location(x=6.8, z=0.7))]
+    blueprints = [blueprint_lib.find('sensor.other.obstacle'), blueprint_lib.find('sensor.other.collision'), blueprint_lib.find('sensor.other.lane_invasion')]
+    blueprints[0].set_attribute('distance', '15.0')
+    vehicle.set_sensors(transforms, car, blueprints, map)
+    actor_list.append(vehicle.get_sensors().get_sensors()[0])
+    actor_list.append(vehicle.get_sensors().get_sensors()[1])
+    actor_list.append(vehicle.get_sensors().get_sensors()[2])
 
-    #MAKE A CLASS? (COULD BE CALLED END PROGRAM OR KEYBOARD CONTROL)
+
     while True:
         try:
             # Move the spectator behind the vehicle 
             transform = carla.Transform(car.get_transform().transform(carla.Location(x=-4,z=2.5)),car.get_transform().rotation) 
             spectator.set_transform(transform) 
             time.sleep(0.005)
+            vehicle.drive()
+            if(vehicle.control_loop() == False):
+                raise KeyboardInterrupt()
 
         except KeyboardInterrupt:
             try: 
-                #MAYBE THIS IS ITS OWN CLASS OR A FUNCTION IN WORLD
-                for actor in actor_list:
-                    actor.destroy()
-                    print('\nCar Destroyed. Bye!')
+                client.reload_world()
+                print("World cleared :)\n")
+  
             finally:
                 break
             
