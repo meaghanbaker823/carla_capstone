@@ -99,22 +99,22 @@ class Vehicle:
             self.drive()
 
 
-    def maintain_speed(self):
-        v = self.get_car().get_velocity()                                   # velocity is a 3d vector in m/s
-        speed = round(3.6 * math.sqrt(v.x**2 + v.y**2 + v.z**2),0)          #speed in kilometers/hr 
+    def maintain_speed(self, s):
         PREFERRED_SPEED = 30        # targeted speed in kph
         SPEED_THRESHOLD = 2         # how many kph we can comfortably be under the target
-        if speed >= PREFERRED_SPEED:
+        if s >= PREFERRED_SPEED:
             return 0
-        elif speed < PREFERRED_SPEED - SPEED_THRESHOLD:
+        elif s < PREFERRED_SPEED - SPEED_THRESHOLD:
             return 0.8      # essentially 80% of gas
         else:   
             return 0.4      
         
     def drive(self):   
-
+        v = self.get_car().get_velocity()                                   # velocity is a 3d vector in m/s
+        speed = round(3.6 * math.sqrt(v.x**2 + v.y**2 + v.z**2),0)          # speed in kilometers/hr 
         steering_angle = 0  # you can change this but once it gets near an obsticle it will stop in a straight line
-        estimated_throttle = self.maintain_speed()
+
+        estimated_throttle = self.maintain_speed(speed)
         self.get_car().apply_control(carla.VehicleControl(throttle=estimated_throttle,steer=steering_angle))
     
     def decelerate(self):
@@ -123,8 +123,8 @@ class Vehicle:
    
     def avoid_obstacles(self):
         # self.decelerate()
-        print("Avoiding")
-        self.get_car().apply_control(carla.VehicleControl(throttle=0.3,steer=-1.0))
+        print("Decelerating")
+        self.get_car().apply_control(carla.VehicleControl(throttle=0.4,steer=-1.0))
 
         self.__sensors.get_sensors()[0].delete_old_detection()
     
@@ -134,15 +134,7 @@ class Vehicle:
         # print(Vehicle.get_car(self).get_velocity())
     
     def fix_lane(self):
-        if(self.__sensors.get_sensors()[2].get_lane_markings[0].side == carla.LaneMarkingSide.Left):
-            side = -1
-        elif(self.__sensors.get_sensors()[2].get_lane_markings[0].side == carla.LaneMarkingSide.Right):
-            side = 1
-        est_throttle = self.maintain_speed()
-        adjustment = 0.2 * side
-        self.get_car().apply_control(carla.VehicleControl(throttle=est_throttle,steer=adjustment))
-
-
+        return True
 
 
 """
