@@ -67,37 +67,90 @@ class Vehicle:
         self.__car = world_map.spawn_actor(vehicle_bp, spawn)
         self.__actors = world_map.get_actors()
         self.__sensors = Sensors()
+        self.__light_color = "unknown"
   
     def get_car(self):
         return self.__car
     
     def get_sensors(self):
         return self.__sensors
-    
 
+    def get_light_color(self):
+        return self.__light_color
+    
+    def set_light_color(self, color):
+        self.__light_color = color
+    
     def set_sensors(self, transform, actor, blueprint, world):
         self.__sensors.add_sensor(ObstacleSensor(transform[0], actor, blueprint[0], world))
         self.__sensors.add_sensor(CollisionSensor(transform[1], actor, blueprint[1], world))
         self.__sensors.add_sensor(LaneInvasionSensor(transform[2], actor, blueprint[2], world))
     
-
         for sensor in self.__sensors.get_sensors():
             sensor.listen()
 
+    def check_traffic_light(self, target_distance):
+        traffic_light_near = False
+        all_lights = self.__actors.filter('traffic.traffic_light*')
+        for light in all_lights:
+
+            car_location = self.get_car().get_location()
+            light_location = light.get_location()
+
+            distance = car_location.distance(light_location)
+
+            car_rotation= int(self.get_car().get_transform().rotation.roll)
+            light_rotation= int(light.get_transform().rotation.roll)
+
+            rotation_difference = abs(car_rotation - light_rotation)
+
+            if((rotation_difference < 30) and (distance < target_distance)):
+
+                traffic_light_near = True
+                color = light.get_state()
+
+                old_color = self.get_light_color()
+
+                if color == carla.TrafficLightState.Red:
+                    self.set_light_color("red")
+                elif color == carla.TrafficLightState.Yellow:
+                    self.set_light_color("yellow")
+                elif color == carla.TrafficLightState.Green:
+                    self.set_light_color("green")
+                else:
+                    self.set_light_color("unknown")
+                if(old_color != self.get_light_color()):
+                    print("Traffic light is ", self.get_light_color())
+
+        return traffic_light_near
+
     def control_loop(self):
-        if((self.__sensors.get_sensors()[0].get_other_actors() == []) or (self.__sensors.get_sensors()[2].get_lane_markings() == [])):
-            if(len(self.__sensors.get_sensors()[0].get_other_actors()) > 0):
-                self.avoid_obstacles()
+        car_changed = False
 
-            elif(len(self.__sensors.get_sensors()[1].get_collisions()) > 0):
-                self.stop_car()
-                return False
+        if(self.__sensors.get_sensors()[1].get_collisions() != []):
+            self.stop_car()
+            return False
+        
+        if(self.__sensors.get_sensors()[0].get_other_actors() != []):
+            car_changed = True
+            self.avoid_obstacles()
 
-            elif(len(self.__sensors.get_sensors()[2].get_lane_markings()) > 0):
-                self.fix_lane()
-        else:
+        if(self.check_traffic_light(10)):
+            car_changed = True
+            self.reactToTrafficLight(self.__light_color)
+
+        if(self.__sensors.get_sensors()[2].get_lane_markings() != []):
+            car_changed = True
+            self.fix_lane()
+
+        if(not car_changed):
             self.drive()
 
+    def is_car_moving(self):
+        if(self.get_car().get_velocity() == 0):
+            return False
+        else:
+            return True
 
     def maintain_speed(self, s):
         PREFERRED_SPEED = 30        # targeted speed in kph
@@ -118,21 +171,42 @@ class Vehicle:
         self.get_car().apply_control(carla.VehicleControl(throttle=estimated_throttle,steer=steering_angle))
     
     def decelerate(self):
-        self.get_car().apply_control(carla.VehicleControl(throttle=0, steer=1.0, brake=0.7))  # cuts throttle and applies 70% braking power
+        self.get_car().apply_control(carla.VehicleControl(throttle=0, brake=0.7))
 
-   
+    def swerve_left(self):
+        self.get_car().apply_control(carla.VehicleControl(throttle=0.7,steer=-1.0))
+
+    def swerve_right(self):
+        self.get_car().apply_control(carla.VehicleControl(throttle=0.4,steer=1.0))
+
     def avoid_obstacles(self):
-        # self.decelerate()
-        print("Decelerating")
-        self.get_car().apply_control(carla.VehicleControl(throttle=0.4,steer=-1.0))
-
+        print("Car avoiding ", self.__sensors.get_sensors()[0].get_other_actors()[0].type_id)
+        self.swerve_left()
+        # what is the obstacle and then go from there
         self.__sensors.get_sensors()[0].delete_old_detection()
     
-    def stop_car(self):
-        self.get_car().apply_control(carla.VehicleControl(throttle=0,steer=0,brake=1))
-        print("Stopping Car")
-        # print(Vehicle.get_car(self).get_velocity())
+    #ABBY
+    def get_path(self):
+        return True
     
+    #turn decisions, will be a future function
+    def follow_path(self):
+        return True
+
+    def stop_car(self):
+        if(self.is_car_moving):
+            self.get_car().apply_control(carla.VehicleControl(throttle=0,steer=0,brake=0.5))
+
+
+    def reactToTrafficLight(self, color):
+        if(color == "red"):
+            self.stop_car()
+        elif(color == "yellow"):
+            self.stop_car()
+        else:
+            self.drive()
+
+    #ARIN
     def fix_lane(self):
         return True
 
@@ -268,14 +342,12 @@ class CollisionSensor(Sensors):
     def get_collisions(self):
         return self.__collisions
     
-    
     # with event, add to list of detections
     def collision_detect(self, event):
         # other impulse is a change in momentum - indicates magnitute and direction in global coordinates
         collision = (event.actor, event.other_actor, event.normal_impulse)
         self.__collisions.append(collision)
         
-    
     # listen to sensor
     def listen(self):
         self.__sensor.listen(lambda event: self.collision_detect(event))
@@ -341,8 +413,8 @@ class LaneInvasionSensor(Sensors):
         self.__sensor.listen(lambda event: self.lane_invasion(event))
 
 
-
 def main ():
+
     #initializing the world and spawns
 
     world = World('/Game/Carla/Maps/Town01')
@@ -367,7 +439,7 @@ def main ():
     actor_list.append(car)
     transforms = [carla.Transform(carla.Location(x=2.8, z=0.7)), carla.Transform(carla.Location(x=4.8, z=0.7)), carla.Transform(carla.Location(x=6.8, z=0.7))]
     blueprints = [blueprint_lib.find('sensor.other.obstacle'), blueprint_lib.find('sensor.other.collision'), blueprint_lib.find('sensor.other.lane_invasion')]
-    blueprints[0].set_attribute('distance', '15.0')
+    blueprints[0].set_attribute('distance', '20.0')
     vehicle.set_sensors(transforms, car, blueprints, map)
     actor_list.append(vehicle.get_sensors().get_sensors()[0])
     actor_list.append(vehicle.get_sensors().get_sensors()[1])
