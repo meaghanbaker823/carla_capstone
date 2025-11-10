@@ -90,7 +90,7 @@ class Vehicle:
     def set_sensors(self, transform, actor, blueprint, world):
         self.__sensors.add_sensor(ObstacleSensor(transform[0], actor, blueprint[0], world))
         self.__sensors.add_sensor(CollisionSensor(transform[1], actor, blueprint[1], world))
-        self.__sensors.add_sensor(LaneInvasionSensor(transform[2], actor, blueprint[2], world))
+        # self.__sensors.add_sensor(LaneInvasionSensor(transform[2], actor, blueprint[2], world))
     
         for sensor in self.__sensors.get_sensors():
             sensor.listen()
@@ -102,16 +102,28 @@ class Vehicle:
 
             car_location = self.get_car().get_location()
             light_location = light.get_location()
+            car_transform = self.get_car().get_transform()
+            
+            v1= car_transform.get_forward_vector()
+
+            v2 = light_location -car_location
+     
+            
+            dot_product = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z
+            magnitude_v1 = math.sqrt(v1.x**2 + v1.y**2 + v1.z**2)
+            magnitude_v2 = math.sqrt(v2.x**2 + v2.y**2 + v2.z**2)
+            cos_angle = dot_product / (magnitude_v1 * magnitude_v2)
+            cos_angle = max(-1.0, min(1.0, cos_angle))
+            angle_rad = math.acos(cos_angle)
+            angle_deg = abs(math.degrees(angle_rad))
 
             distance = car_location.distance(light_location)
 
-            car_rotation= int(self.get_car().get_transform().rotation.roll)
-            light_rotation= int(light.get_transform().rotation.roll)
-
-            rotation_difference = abs(car_rotation - light_rotation)
-
-            if((rotation_difference < 30) and (distance < target_distance)):
-
+            if((angle_deg < 50) and (distance < target_distance)):
+                print("ANGLE")
+                print(angle_deg)
+                print("DISTANCE")
+                print(distance)
                 traffic_light_near = True
                 color = light.get_state()
 
@@ -145,9 +157,9 @@ class Vehicle:
             car_changed = True
             self.reactToTrafficLight(self.__light_color)
 
-        if(self.__sensors.get_sensors()[2].get_lane_markings() != []):
-            car_changed = True
-            self.fix_lane()
+        # if(self.__sensors.get_sensors()[2].get_lane_markings() != []):
+        #     car_changed = True
+        #     self.fix_lane()
 
         if(not car_changed):
             self.drive()
@@ -188,7 +200,7 @@ class Vehicle:
         self.get_car().apply_control(carla.VehicleControl(throttle=0.4,steer=1.0))
 
     def avoid_obstacles(self):
-        print("Car avoiding ", self.__sensors.get_sensors()[0].get_other_actors()[0].type_id)
+        # print("Car avoiding ", self.__sensors.get_sensors()[0].get_other_actors()[0].type_id)
         self.swerve_left()
         # what is the obstacle and then go from there
         self.__sensors.get_sensors()[0].delete_old_detection()
@@ -508,10 +520,10 @@ class Navigation():
             fixed_deg = degrees
 
          # limit steering to max angle 40 degrees
-        if fixed_deg <-40:
-            steer_input = -40 
-        elif fixed_deg> 40 :
-            steer_input = 40 
+        if fixed_deg <-50:
+            steer_input = -50
+        elif fixed_deg> 50:
+            steer_input = 50
         else:
             steer_input = fixed_deg
         
@@ -550,7 +562,7 @@ def main ():
     vehicle.set_sensors(transforms, car, blueprints, map)
     actor_list.append(vehicle.get_sensors().get_sensors()[0])
     actor_list.append(vehicle.get_sensors().get_sensors()[1])
-    actor_list.append(vehicle.get_sensors().get_sensors()[2])
+    # actor_list.append(vehicle.get_sensors().get_sensors()[2])
 
 
 
