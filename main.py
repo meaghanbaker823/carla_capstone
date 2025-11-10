@@ -8,6 +8,7 @@ import numpy as np
 import weakref
 import cv2
 import math
+from global_route_planner import GlobalRoutePlanner
 
 
 """
@@ -412,7 +413,42 @@ class LaneInvasionSensor(Sensors):
     def listen(self):
         self.__sensor.listen(lambda event: self.lane_invasion(event))
 
+"""
+===========
+Navigation Class
 
+__init__(self, start, destination, world) creates instance and initilizes attributes
+    self.__start = the inital location of the vechicle
+    self.__destination = the coorinates the car wants to go to 
+    self.__global_route_planner = the global route planner object
+    self.__route = set of waypoints (the route)
+   
+
+getters for each of these attributes
+
+lane_invasion(self, event) | adds collision (parent actor which invaded lane, line markings which were crossed) to self.__lane_invasions
+
+listen(self) | retreives data from sensor and calls the lane_invasion method
+===========
+"""
+class Navigation():
+    def __init__(self, start, destination, world):
+        self.__start = start
+        self.__destiniation = destination
+        self.__global_route_planner = GlobalRoutePlanner(world.get_map(), 1)
+        self.__route = self.__global_route_planner.trace_route(self.__start, self.__destiniation)
+
+    def get_start(self):
+        return self.__start
+    def get_destination(self):
+        return self.__destiniation
+    def get_global_route_planner(self):
+        return self.__global_route_planner
+    def get_route(self):
+        return self.__route
+
+    
+    
 def main ():
 
     #initializing the world and spawns
