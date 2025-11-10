@@ -63,12 +63,17 @@ class World:
 #TODO: command list for Vehicle
 
 class Vehicle: 
-    def __init__(self, blueprint_lib, world_map, spawn):
+    def __init__(self, blueprint_lib, world_map, spawn, navigator):
         vehicle_bp = random.choice(blueprint_lib.filter('vehicle.bmw.*'))
         self.__car = world_map.spawn_actor(vehicle_bp, spawn)
         self.__actors = world_map.get_actors()
         self.__sensors = Sensors()
         self.__light_color = "unknown"
+        self.__navigator = navigator
+    
+    
+    def get_navigator(self):
+        return self.__navigator
   
     def get_car(self):
         return self.__car
@@ -163,11 +168,13 @@ class Vehicle:
         else:   
             return 0.4      
         
-    def drive(self):   
+    def drive(self):  
+        self.__navigator.advance_waypoint(self.__car)
         v = self.get_car().get_velocity()                                   # velocity is a 3d vector in m/s
         speed = round(3.6 * math.sqrt(v.x**2 + v.y**2 + v.z**2),0)          # speed in kilometers/hr 
-        steering_angle = 0  # you can change this but once it gets near an obsticle it will stop in a straight line
-
+        waypt_nm, steering_angle = self.__navigator.get_proper_angle(self.__car, self.__navigator.get_cur_waypoint_num(), self.__navigator.get_route()) 
+        self.__navigator.set_cur_waypoint(waypt_nm)
+        steering_angle /= 75
         estimated_throttle = self.maintain_speed(speed)
         self.get_car().apply_control(carla.VehicleControl(throttle=estimated_throttle,steer=steering_angle))
     
@@ -185,19 +192,10 @@ class Vehicle:
         self.swerve_left()
         # what is the obstacle and then go from there
         self.__sensors.get_sensors()[0].delete_old_detection()
-    
-    #ABBY
-    def get_path(self):
-        return True
-    
-    #turn decisions, will be a future function
-    def follow_path(self):
-        return True
-
+ 
     def stop_car(self):
         if(self.is_car_moving):
             self.get_car().apply_control(carla.VehicleControl(throttle=0,steer=0,brake=0.5))
-
 
     def reactToTrafficLight(self, color):
         if(color == "red"):
@@ -431,13 +429,22 @@ lane_invasion(self, event) | adds collision (parent actor which invaded lane, li
 listen(self) | retreives data from sensor and calls the lane_invasion method
 ===========
 """
+
 class Navigation():
     def __init__(self, start, destination, world):
-        self.__start = start
-        self.__destiniation = destination
+        self.__start = start.location
+        self.__destiniation = destination.location
         self.__global_route_planner = GlobalRoutePlanner(world.get_map(), 1)
         self.__route = self.__global_route_planner.trace_route(self.__start, self.__destiniation)
+        self.__current_waypoint_num = 5
+        self.__current_waypoint = self.__route[self.__current_waypoint_num]
 
+        # visualizing waypoints
+        for waypoint in self.__route:
+            world.debug.draw_string(waypoint[0].transform.location, '^', draw_shadow=False,
+            color=carla.Color(r=0, g=0, b=255), life_time=30.0,
+            persistent_lines=True)
+    
     def get_start(self):
         return self.__start
     def get_destination(self):
@@ -446,8 +453,72 @@ class Navigation():
         return self.__global_route_planner
     def get_route(self):
         return self.__route
-
+    def get_cur_waypoint(self):
+        return self.__current_waypoint
+    def get_cur_waypoint_num(self):
+        return self.__current_waypoint_num
+    def set_cur_waypoint(self, num):
+        self.__current_waypoint = self.__route[num]
+        self.__current_waypoint_num = num
+    def advance_waypoint(self, car):
+        while self.__current_waypoint_num < len(self.__route) and car.get_transform().location.distance(self.__route[self.__current_waypoint_num][0].transform.location)<5:
+            self.__current_waypoint_num +=1
+       
     
+    # angle between two vectors
+    def angle_between(self, v1, v2):
+        return math.degrees(np.arctan2(v1[1], v1[0]) - np.arctan2(v2[1], v2[0]))
+
+    # function to get angle between the car and target waypoint
+    def get_angle(self,car,wp):
+        vehicle_pos = car.get_transform()
+        car_x = vehicle_pos.location.x
+        car_y = vehicle_pos.location.y
+        wp_x = wp.transform.location.x
+        wp_y = wp.transform.location.y
+        
+        # vector to waypoint
+        x = (wp_x - car_x)/((wp_y - car_y)**2 + (wp_x - car_x)**2)**0.5
+        y = (wp_y - car_y)/((wp_y - car_y)**2 + (wp_x - car_x)**2)**0.5
+        
+        #car vector
+        car_vector = vehicle_pos.get_forward_vector()
+        degrees = self.angle_between((x,y),(car_vector.x,car_vector.y))
+
+        corrected_deg = self.correct_angle(degrees)
+        return corrected_deg
+    
+    def get_proper_angle(self, car,wp_idx,rte):
+        # create a list of angles to next 5 waypoints starting with current
+        next_angle_list = []
+        for i in range(10):
+            if wp_idx + i*3 <len(rte)-1:
+                next_angle_list.append(self.get_angle(car,rte[wp_idx + i*3][0]))
+        idx = 0
+        while idx<len(next_angle_list)-2 and abs(next_angle_list[idx])>40:
+            idx +=1
+        return wp_idx+idx*3,next_angle_list[idx]
+    
+    def correct_angle(self, degrees):
+        if degrees<-300:
+            fixed_deg = degrees +360
+        elif degrees> 300:
+            fixed_deg = degrees -360
+        else:
+            fixed_deg = degrees
+
+         # limit steering to max angle 40 degrees
+        if fixed_deg <-40:
+            steer_input = -40 
+        elif fixed_deg> 40 :
+            steer_input = 40 
+        else:
+            steer_input = fixed_deg
+        
+        return steer_input
+        
+     
+
     
 def main ():
 
@@ -469,8 +540,8 @@ def main ():
 
     # actor list
     actor_list = []
-    
-    vehicle = Vehicle(blueprint_lib, map, spawn)
+    nav = Navigation(spawn, spts[6], map) 
+    vehicle = Vehicle(blueprint_lib, map, spawn, nav)
     car = vehicle.get_car()
     actor_list.append(car)
     transforms = [carla.Transform(carla.Location(x=2.8, z=0.7)), carla.Transform(carla.Location(x=4.8, z=0.7)), carla.Transform(carla.Location(x=6.8, z=0.7))]
@@ -480,6 +551,8 @@ def main ():
     actor_list.append(vehicle.get_sensors().get_sensors()[0])
     actor_list.append(vehicle.get_sensors().get_sensors()[1])
     actor_list.append(vehicle.get_sensors().get_sensors()[2])
+
+
 
 
     while True:
