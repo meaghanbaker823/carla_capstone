@@ -84,6 +84,9 @@ class Vehicle:
     def get_light_color(self):
         return self.__light_color
     
+    def get_speed_limit(self):
+        return 30
+
     def set_light_color(self, color):
         self.__light_color = color
     
@@ -106,9 +109,8 @@ class Vehicle:
             
             v1= car_transform.get_forward_vector()
 
-            v2 = light_location -car_location
+            v2 = light_location - car_location
      
-            
             dot_product = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z
             magnitude_v1 = math.sqrt(v1.x**2 + v1.y**2 + v1.z**2)
             magnitude_v2 = math.sqrt(v2.x**2 + v2.y**2 + v2.z**2)
@@ -119,11 +121,8 @@ class Vehicle:
 
             distance = car_location.distance(light_location)
 
-            if((angle_deg < 50) and (distance < target_distance)):
-                print("ANGLE")
-                print(angle_deg)
-                print("DISTANCE")
-                print(distance)
+            if((angle_deg < 40) and (distance < target_distance)):
+        
                 traffic_light_near = True
                 color = light.get_state()
 
@@ -153,7 +152,7 @@ class Vehicle:
             car_changed = True
             self.avoid_obstacles()
 
-        if(self.check_traffic_light(10)):
+        if(self.check_traffic_light(9)):
             car_changed = True
             self.reactToTrafficLight(self.__light_color)
 
@@ -162,8 +161,9 @@ class Vehicle:
         #     self.fix_lane()
 
         if(not car_changed):
-            self.drive()
-
+            if(not self.drive()):
+                return False
+    
     def is_car_moving(self):
         if(self.get_car().get_velocity() == 0):
             return False
@@ -171,7 +171,7 @@ class Vehicle:
             return True
 
     def maintain_speed(self, s):
-        PREFERRED_SPEED = 30        # targeted speed in kph
+        PREFERRED_SPEED = self.get_speed_limit()         # targeted speed in kph
         SPEED_THRESHOLD = 2         # how many kph we can comfortably be under the target
         if s >= PREFERRED_SPEED:
             return 0
@@ -181,14 +181,20 @@ class Vehicle:
             return 0.4      
         
     def drive(self):  
-        self.__navigator.advance_waypoint(self.__car)
-        v = self.get_car().get_velocity()                                   # velocity is a 3d vector in m/s
-        speed = round(3.6 * math.sqrt(v.x**2 + v.y**2 + v.z**2),0)          # speed in kilometers/hr 
-        waypt_nm, steering_angle = self.__navigator.get_proper_angle(self.__car, self.__navigator.get_cur_waypoint_num(), self.__navigator.get_route()) 
-        self.__navigator.set_cur_waypoint(waypt_nm)
-        steering_angle /= 75
-        estimated_throttle = self.maintain_speed(speed)
-        self.get_car().apply_control(carla.VehicleControl(throttle=estimated_throttle,steer=steering_angle))
+        try:
+            self.__navigator.advance_waypoint(self.__car)
+            v = self.get_car().get_velocity()                                   # velocity is a 3d vector in m/s
+            speed = round(3.6 * math.sqrt(v.x**2 + v.y**2 + v.z**2),0)          # speed in kilometers/hr 
+            if self.__navigator.get_cur_waypoint_num() >= len(self.__navigator.get_route()) - 6:
+                return False
+            waypt_nm, steering_angle = self.__navigator.get_proper_angle(self.__car, self.__navigator.get_cur_waypoint_num(), self.__navigator.get_route()) 
+            self.__navigator.set_cur_waypoint(waypt_nm)
+            steering_angle /= 75
+            estimated_throttle = self.maintain_speed(speed)
+            self.get_car().apply_control(carla.VehicleControl(throttle=estimated_throttle,steer=steering_angle))
+            return True
+        except:
+            return False
     
     def decelerate(self):
         self.get_car().apply_control(carla.VehicleControl(throttle=0, brake=0.7))
