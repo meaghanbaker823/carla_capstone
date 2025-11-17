@@ -67,7 +67,7 @@ class Vehicle:
         vehicle_bp = random.choice(blueprint_lib.filter('vehicle.bmw.*'))
         self.__car = world_map.spawn_actor(vehicle_bp, spawn)
         self.__actors = world_map.get_actors()
-        self.__sensors = Sensors()
+        self.__sensors = SensorManager()
         self.__light_color = "unknown"
         self.__navigator = navigator
     
@@ -230,7 +230,7 @@ class Vehicle:
 
 """
 ===========
-Sensors Class
+SensorManager Class
 
 __init__ creates instance and creates list to manage all sensors
 
@@ -242,7 +242,7 @@ destroy_sensors()                | destroys all sensors in sensor list
 
 ===========
 """
-class Sensors:
+class SensorManager:
     def __init__(self):
         self.__sensors = []
 
@@ -253,7 +253,6 @@ class Sensors:
         self.__sensors.append(sensor)
 
     def destroy_sensors(self):
-        print(f"{len(self.__sensors)}heloooooooo")
         for sensor in self.__sensors:
             print("Sensor destroyed.")
             print(sensor)
@@ -277,9 +276,8 @@ listen(self) | retreives data from sensor and calls the obstacle dection method
 ===========
 """
 
-class ObstacleSensor(Sensors):
+class ObstacleSensor():
     def __init__(self, relative_transform, parent_actor, blueprint, world):
-        Sensors.__init__(self)
         self.__transform = relative_transform
         self.__parent = parent_actor
         self.__sensor = world.spawn_actor(blueprint, relative_transform, attach_to=self.__parent)
@@ -337,9 +335,8 @@ listen(self) | retreives data from sensor and calls the collision_detect method
 ===========
 """
 
-class CollisionSensor(Sensors):
+class CollisionSensor():
     def __init__(self, relative_transform, parent_actor, blueprint, world):
-        Sensors.__init__(self)
         self.__transform = relative_transform
         self.__parent = parent_actor
         self.__sensor = world.spawn_actor(blueprint, relative_transform, attach_to=self.__parent)
@@ -387,9 +384,8 @@ listen(self) | retreives data from sensor and calls the lane_invasion method
 ===========
 """
 
-class LaneInvasionSensor(Sensors):
+class LaneInvasionSensor():
     def __init__(self, relative_transform, parent_actor, blueprint, world):
-        Sensors.__init__(self)
         self.__transform = relative_transform
         self.__parent = parent_actor
         self.__sensor = world.spawn_actor(blueprint, relative_transform, attach_to=self.__parent)
@@ -460,7 +456,7 @@ class Navigation():
         # visualizing waypoints
         for waypoint in self.__route:
             world.debug.draw_string(waypoint[0].transform.location, '^', draw_shadow=False,
-            color=carla.Color(r=0, g=0, b=255), life_time=30.0,
+            color=carla.Color(r=0, g=0, b=255), life_time=90.0,
             persistent_lines=True)
     
     def get_start(self):
