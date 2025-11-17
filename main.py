@@ -531,13 +531,8 @@ class Navigation():
         
         return steer_input
         
-     
-
-    
-def main ():
-
-    #initializing the world and spawns
-
+#initialize the world object, store/return relevant values
+def init_world():
     world = World('/Game/Carla/Maps/Town01')
     client = world.get_client()
     map = world.get_world()
@@ -545,16 +540,20 @@ def main ():
     spawn = spts[0]
     blueprint_lib = world.get_blueprints()
 
+    return (world, client, map, spts, spawn, blueprint_lib)
 
-    # Spectators
+#initialize the spectator camera
+def init_spectator():
     spectator = map.get_spectator()
-    spec_trans = spectator.get_transform()
     spectator.set_transform(carla.Transform(carla.Location(
         x = spawn.location.x, y = spawn.location.y, z = spawn.location.z + 60)))
 
-    # actor list
+    return spectator
+
+#initialize the list of actors
+def init_actors():
     actor_list = []
-    nav = Navigation(spawn, spts[6], map) 
+    nav = Navigation(spawn, spts[6], map)
     vehicle = Vehicle(blueprint_lib, map, spawn, nav)
     car = vehicle.get_car()
     actor_list.append(car)
@@ -564,28 +563,39 @@ def main ():
     vehicle.set_sensors(transforms, car, blueprints, map)
     actor_list.append(vehicle.get_sensors().get_sensors()[0])
     actor_list.append(vehicle.get_sensors().get_sensors()[1])
-    # actor_list.append(vehicle.get_sensors().get_sensors()[2])
+    actor_list.append(vehicle.get_sensors().get_sensors()[2])
 
+    return (actor_list, nav, vehicle, car)
 
+#repeating logic performed in the main function
+def main_loop():
+    # Move the spectator behind the vehicle
+    transform = carla.Transform(car.get_transform().transform(carla.Location(x=-4,z=2.5)),car.get_transform().rotation)
+    spectator.set_transform(transform)
+    time.sleep(0.005)
+    vehicle.drive()
+    if(vehicle.control_loop() == False):
+        raise KeyboardInterrupt()
 
+def clear_world():
+    client.reload_world()
+    print("World cleared :)\n")
+
+def main():   
+    world, client, map, spts, pawn, blueprint_lib = init_world()
+    
+    spectator = init_spectator()
+
+    actor_list, nav, vehicle, car = init_actors()
 
     while True:
         try:
-            # Move the spectator behind the vehicle 
-            transform = carla.Transform(car.get_transform().transform(carla.Location(x=-4,z=2.5)),car.get_transform().rotation) 
-            spectator.set_transform(transform) 
-            time.sleep(0.005)
-            vehicle.drive()
-            if(vehicle.control_loop() == False):
-                raise KeyboardInterrupt()
-
+            main_loop()
         except KeyboardInterrupt:
-            try: 
-                client.reload_world()
-                print("World cleared :)\n")
-  
+            try:
+                clear_world()
             finally:
                 break
-            
 
-main()
+if __name__ == "__main__":
+    main()
