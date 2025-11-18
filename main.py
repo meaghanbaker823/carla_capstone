@@ -59,18 +59,38 @@ class World:
     def get_spawnpoints(self):
         return self.__world.get_map().get_spawn_points()
     
-# there are intersection entrance actors, stop sign actors, traffic light actors
-#TODO: command list for Vehicle
+"""
+===========
+Vehicle Class
 
+__init__ creates instance and creates list to manage a vehicle
+
+control_loop()                  | sets color by processing the state of the light
+
+set_sensors()                   | moves the vehicle based on the color
+
+is_car_moving()                 | detects if light is applicable
+
+maintain_speed()                | adjusts throttle based on current speed to adjust to current speed
+
+drive()                         | drives the car based on navigator
+
+decelerate()                    | slows down car with brake
+
+stop_car()                      | stops car by applying full brake
+
+fix_lane()                      | adjusts car into the center of the lane
+
+avoid_obstacles()               | will avoid obstacles detected
+===========
+"""
 class Vehicle: 
     def __init__(self, blueprint_lib, world_map, spawn, navigator):
-        vehicle_bp = random.choice(blueprint_lib.filter('vehicle.bmw.*'))
-        self.__car = world_map.spawn_actor(vehicle_bp, spawn)
+        self.__car = world_map.spawn_actor(random.choice(blueprint_lib.filter('vehicle.bmw.*')), spawn)
         self.__actors = world_map.get_actors()
         self.__sensors = SensorManager()
-        self.__light_color = "unknown"
         self.__navigator = navigator
-    
+        self.__speed_limit = 30
     
     def get_navigator(self):
         return self.__navigator
@@ -80,15 +100,15 @@ class Vehicle:
     
     def get_sensors(self):
         return self.__sensors
-
-    def get_light_color(self):
-        return self.__light_color
     
     def get_speed_limit(self):
-        return 30
-
-    def set_light_color(self, color):
-        self.__light_color = color
+        return self.__speed_limit
+    
+    def get_actors(self):
+        return self.__actors
+    
+    def set_speed_limit(self ,speed):
+        self.__speed_limit = speed
     
     def set_sensors(self, transform, actor, blueprint, world):
         self.__sensors.add_sensor(ObstacleSensor(transform[0], actor, blueprint[0], world))
@@ -97,49 +117,6 @@ class Vehicle:
     
         for sensor in self.__sensors.get_sensors():
             sensor.listen()
-
-    def check_traffic_light(self, target_distance):
-        traffic_light_near = False
-        all_lights = self.__actors.filter('traffic.traffic_light*')
-        for light in all_lights:
-
-            car_location = self.get_car().get_location()
-            light_location = light.get_location()
-            car_transform = self.get_car().get_transform()
-            
-            v1= car_transform.get_forward_vector()
-
-            v2 = light_location - car_location
-     
-            dot_product = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z
-            magnitude_v1 = math.sqrt(v1.x**2 + v1.y**2 + v1.z**2)
-            magnitude_v2 = math.sqrt(v2.x**2 + v2.y**2 + v2.z**2)
-            cos_angle = dot_product / (magnitude_v1 * magnitude_v2)
-            cos_angle = max(-1.0, min(1.0, cos_angle))
-            angle_rad = math.acos(cos_angle)
-            angle_deg = abs(math.degrees(angle_rad))
-
-            distance = car_location.distance(light_location)
-
-            if((angle_deg < 40) and (distance < target_distance)):
-        
-                traffic_light_near = True
-                color = light.get_state()
-
-                old_color = self.get_light_color()
-
-                if color == carla.TrafficLightState.Red:
-                    self.set_light_color("red")
-                elif color == carla.TrafficLightState.Yellow:
-                    self.set_light_color("yellow")
-                elif color == carla.TrafficLightState.Green:
-                    self.set_light_color("green")
-                else:
-                    self.set_light_color("unknown")
-                if(old_color != self.get_light_color()):
-                    print("Traffic light is ", self.get_light_color())
-
-        return traffic_light_near
 
     def control_loop(self):
         car_changed = False
@@ -152,9 +129,13 @@ class Vehicle:
             car_changed = True
             self.avoid_obstacles()
 
-        if(self.check_traffic_light(9)):
+        traffic_lights = TrafficLight(self.get_actors())
+        if(traffic_lights.process_color(self.get_car()) != ""):
             car_changed = True
-            self.reactToTrafficLight(self.__light_color)
+            if(traffic_lights.get_response == "stop"):
+                self.stop_car()
+            else:
+                self.drive()
 
         # if(self.__sensors.get_sensors()[2].get_lane_markings() != []):
         #     car_changed = True
@@ -165,67 +146,131 @@ class Vehicle:
                 return False
     
     def is_car_moving(self):
-        if(self.get_car().get_velocity() == 0):
-            return False
-        else:
-            return True
+        return self.get_car().get_velocity()
+ 
 
-    def maintain_speed(self, s):
-        PREFERRED_SPEED = self.get_speed_limit()         # targeted speed in kph
+    def maintain_speed(self, current):
         SPEED_THRESHOLD = 2         # how many kph we can comfortably be under the target
-        if s >= PREFERRED_SPEED:
+        print("CURRENT SPEED: ",current)
+        # print("SPEED LIMIT: ", PREFERRED_SPEED)
+        if current >= self.get_speed_limit():
             return 0
-        elif s < PREFERRED_SPEED - SPEED_THRESHOLD:
+        elif current < self.get_speed_limit() - SPEED_THRESHOLD:
             return 0.8      # essentially 80% of gas
         else:   
-            return 0.4      
+            return 0.4
         
-    def drive(self):  
+    def drive(self):
         try:
+            if self.__navigator.get_cur_waypoint_num() >= (len(self.__navigator.get_route()) - 6):
+                return False
             self.__navigator.advance_waypoint(self.__car)
             v = self.get_car().get_velocity()                                   # velocity is a 3d vector in m/s
             speed = round(3.6 * math.sqrt(v.x**2 + v.y**2 + v.z**2),0)          # speed in kilometers/hr 
-            if self.__navigator.get_cur_waypoint_num() >= len(self.__navigator.get_route()) - 6:
-                return False
+            
             waypt_nm, steering_angle = self.__navigator.get_proper_angle(self.__car, self.__navigator.get_cur_waypoint_num(), self.__navigator.get_route()) 
+            
             self.__navigator.set_cur_waypoint(waypt_nm)
             steering_angle /= 75
+            
             estimated_throttle = self.maintain_speed(speed)
-            self.get_car().apply_control(carla.VehicleControl(throttle=estimated_throttle,steer=steering_angle))
+            if (estimated_throttle == 0):
+                brake_force = 1.0
+            else:
+                brake_force = 0
+            self.get_car().apply_control(carla.VehicleControl(throttle=estimated_throttle,steer=steering_angle, brake=brake_force))
             return True
+        
         except:
             return False
-    
+
     def decelerate(self):
         self.get_car().apply_control(carla.VehicleControl(throttle=0, brake=0.7))
 
-    def swerve_left(self):
-        self.get_car().apply_control(carla.VehicleControl(throttle=0.7,steer=-1.0))
-
-    def swerve_right(self):
-        self.get_car().apply_control(carla.VehicleControl(throttle=0.4,steer=1.0))
-
     def avoid_obstacles(self):
-        # print("Car avoiding ", self.__sensors.get_sensors()[0].get_other_actors()[0].type_id)
-        self.swerve_left()
-        # what is the obstacle and then go from there
+        if(self.__sensors.get_sensors()[0].get_other_actors()[0].type_id[:-2] == "traffic.speed_limit."):
+            self.set_speed_limit(30)
+            # self.set_speed_limit(int(self.__sensors.get_sensors()[0].get_other_actors()[0].type_id[-2:]))
+        #print("Car avoiding ", self.__sensors.get_sensors()[0].get_other_actors()[0].type_id)
         self.__sensors.get_sensors()[0].delete_old_detection()
  
     def stop_car(self):
         if(self.is_car_moving):
-            self.get_car().apply_control(carla.VehicleControl(throttle=0,steer=0,brake=0.5))
+            self.get_car().apply_control(carla.VehicleControl(throttle=0,brake=1.0))
 
-    def reactToTrafficLight(self, color):
-        if(color == "red"):
-            self.stop_car()
-        elif(color == "yellow"):
-            self.stop_car()
-        else:
-            self.drive()
-
-    #ARIN
     def fix_lane(self):
         return True
+
+
+"""
+===========
+TrafficLight Class
+
+__init__ creates instance and creates list to manage traffic lights
+
+process_color()                  | sets color by processing the state of the light
+
+react_to_color()                 | moves the vehicle based on the color
+
+is_light_close()                 | detects if light is applicable
+
+===========
+"""
+class TrafficLight():
+    def __init__(self, actors):
+        self.__lights = []
+        self.__color = "unknown"
+        self.__response = ""
+        self.set_lights(actors)
+
+    def get_color(self):
+        return self.__color
+    def get_lights(self):
+        return self.__lights
+    def get_response(self):
+        return self.__response
+    
+    def set_lights(self, actors):
+        self.__lights = actors.filter('traffic.traffic_light*')
+    def set_response(self, response):
+        self.__response = response
+    def set_color(self, color):
+        self.__color = color
+
+    def process_color(self, car):
+        for light in self.get_lights:
+            if(self.is_light_close(car, light, 40, 10)):
+                old_color = self.get_color()
+                self.set_color(light.get_state().name)
+
+                if(old_color != self.get_color()):
+                    print("Traffic light is ", self.get_color())
+                    self.set_response(self.react_to_color())
+                    break
+            else:
+                self.set_response("")
+  
+        return self.get_response()
+
+    def react_to_color(self):
+        if(self.get_color == "Green"):
+            return "drive"
+        else:
+            return "stop"
+    
+    def is_light_close(self, car_check, light_check, target_distance, target_angle):
+        
+        car = car_check.get_transform().get_forward_vector()
+        light = light_check.get_location - car_check.get_location()
+    
+        dot_product = car.x * light.x + car.y * light.y + car.z * light.z
+        magnitude_car = math.sqrt(car.x**2 + car.y**2 + car.z**2)
+        magnitude_light = math.sqrt(light.x**2 + light.y**2 + light.z**2)
+
+        angle_deg = abs(math.degrees(math.acos(max(-1.0, min(1.0, (dot_product / (magnitude_car * magnitude_light)))))))
+        distance = car_check.get_location().distance(light_check.get_location())
+
+        return ((angle_deg < target_angle) and (distance < target_distance))
 
 
 """
