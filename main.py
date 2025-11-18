@@ -132,7 +132,7 @@ class Vehicle:
         traffic_lights = TrafficLight(self.get_actors())
         if(traffic_lights.process_color(self.get_car()) != ""):
             car_changed = True
-            if(traffic_lights.get_response == "stop"):
+            if(traffic_lights.get_response() == "stop"):
                 self.stop_car()
             else:
                 self.drive()
@@ -151,7 +151,7 @@ class Vehicle:
 
     def maintain_speed(self, current):
         SPEED_THRESHOLD = 2         # how many kph we can comfortably be under the target
-        print("CURRENT SPEED: ",current)
+        # print("CURRENT SPEED: ",current)
         # print("SPEED LIMIT: ", PREFERRED_SPEED)
         if current >= self.get_speed_limit():
             return 0
@@ -238,13 +238,13 @@ class TrafficLight():
         self.__color = color
 
     def process_color(self, car):
-        for light in self.get_lights:
-            if(self.is_light_close(car, light, 40, 10)):
+        for light in self.get_lights():
+            if(self.is_light_close(car, light, 10, 40)):
                 old_color = self.get_color()
                 self.set_color(light.get_state().name)
 
                 if(old_color != self.get_color()):
-                    print("Traffic light is ", self.get_color())
+                    # print("Traffic light is ", self.get_color())
                     self.set_response(self.react_to_color())
                     break
             else:
@@ -253,7 +253,7 @@ class TrafficLight():
         return self.get_response()
 
     def react_to_color(self):
-        if(self.get_color == "Green"):
+        if(self.get_color() == "Green"):
             return "drive"
         else:
             return "stop"
@@ -261,7 +261,7 @@ class TrafficLight():
     def is_light_close(self, car_check, light_check, target_distance, target_angle):
         
         car = car_check.get_transform().get_forward_vector()
-        light = light_check.get_location - car_check.get_location()
+        light = light_check.get_location() - car_check.get_location()
     
         dot_product = car.x * light.x + car.y * light.y + car.z * light.z
         magnitude_car = math.sqrt(car.x**2 + car.y**2 + car.z**2)
@@ -588,7 +588,7 @@ def init_world():
     return (world, client, map, spts, spawn, blueprint_lib)
 
 #initialize the spectator camera
-def init_spectator():
+def init_spectator(spawn, map):
     spectator = map.get_spectator()
     spectator.set_transform(carla.Transform(carla.Location(
         x = spawn.location.x, y = spawn.location.y, z = spawn.location.z + 60)))
@@ -596,24 +596,19 @@ def init_spectator():
     return spectator
 
 #initialize the list of actors
-def init_actors():
-    actor_list = []
-    nav = Navigation(spawn, spts[6], map)
+def init_actors(spawn, blueprint_lib, spts, map):
+    nav = Navigation(spawn  , spts[6], map)
     vehicle = Vehicle(blueprint_lib, map, spawn, nav)
     car = vehicle.get_car()
-    actor_list.append(car)
     transforms = [carla.Transform(carla.Location(x=2.8, z=0.7)), carla.Transform(carla.Location(x=4.8, z=0.7)), carla.Transform(carla.Location(x=6.8, z=0.7))]
     blueprints = [blueprint_lib.find('sensor.other.obstacle'), blueprint_lib.find('sensor.other.collision'), blueprint_lib.find('sensor.other.lane_invasion')]
     blueprints[0].set_attribute('distance', '20.0')
     vehicle.set_sensors(transforms, car, blueprints, map)
-    actor_list.append(vehicle.get_sensors().get_sensors()[0])
-    actor_list.append(vehicle.get_sensors().get_sensors()[1])
-    actor_list.append(vehicle.get_sensors().get_sensors()[2])
 
-    return (actor_list, nav, vehicle, car)
+    return (vehicle, car)
 
 #repeating logic performed in the main function
-def main_loop():
+def main_loop(spectator, car, vehicle):
     # Move the spectator behind the vehicle
     transform = carla.Transform(car.get_transform().transform(carla.Location(x=-4,z=2.5)),car.get_transform().rotation)
     spectator.set_transform(transform)
@@ -622,23 +617,23 @@ def main_loop():
     if(vehicle.control_loop() == False):
         raise KeyboardInterrupt()
 
-def clear_world():
+def clear_world(client):
     client.reload_world()
     print("World cleared :)\n")
 
 def main():   
-    world, client, map, spts, pawn, blueprint_lib = init_world()
+    world, client, map, spts, spawn, blueprint_lib = init_world()
     
-    spectator = init_spectator()
+    spectator = init_spectator(spawn, map)
 
-    actor_list, nav, vehicle, car = init_actors()
+    vehicle, car = init_actors(spawn, blueprint_lib, spts, map)
 
     while True:
         try:
-            main_loop()
+            main_loop(spectator, car, vehicle)
         except KeyboardInterrupt:
             try:
-                clear_world()
+                clear_world(client)
             finally:
                 break
 
