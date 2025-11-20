@@ -88,10 +88,16 @@ class Vehicle:
     def __init__(self, blueprint_lib, world_map, spawn, navigator):
         self.__car = world_map.spawn_actor(random.choice(blueprint_lib.filter('vehicle.bmw.*')), spawn)
         self.__actors = world_map.get_actors()
-        self.__sensors = SensorManager()
+        self.__sensors = []
         self.__navigator = navigator
         self.__speed_limit = 30
     
+    def get_sensors(self):
+        return self.__sensors
+    
+    def add_sensor(self, sensor):
+        self.__sensors.append(sensor)
+
     def get_navigator(self):
         return self.__navigator
   
@@ -111,21 +117,21 @@ class Vehicle:
         self.__speed_limit = speed
     
     def set_sensors(self, transform, actor, blueprint, world):
-        self.__sensors.add_sensor(ObstacleSensor(transform[0], actor, blueprint[0], world))
-        self.__sensors.add_sensor(CollisionSensor(transform[1], actor, blueprint[1], world))
+        self.add_sensor(ObstacleSensor(transform[0], actor, blueprint[0], world))
+        self.add_sensor(CollisionSensor(transform[1], actor, blueprint[1], world))
         # self.__sensors.add_sensor(LaneInvasionSensor(transform[2], actor, blueprint[2], world))
     
-        for sensor in self.__sensors.get_sensors():
+        for sensor in self.__sensors:
             sensor.listen()
 
     def control_loop(self):
         car_changed = False
 
-        if(self.__sensors.get_sensors()[1].get_collisions() != []):
+        if(self.__sensors[1].get_collisions() != []):
             self.stop_car()
             return False
         
-        if(self.__sensors.get_sensors()[0].get_other_actors() != []):
+        if(self.__sensors[0].get_other_actors() != []):
             car_changed = True
             self.avoid_obstacles()
 
@@ -188,11 +194,11 @@ class Vehicle:
         self.get_car().apply_control(carla.VehicleControl(throttle=0, brake=0.7))
 
     def avoid_obstacles(self):
-        if(self.__sensors.get_sensors()[0].get_other_actors()[0].type_id[:-2] == "traffic.speed_limit."):
+        if(self.__sensors[0].get_other_actors()[0].type_id[:-2] == "traffic.speed_limit."):
             self.set_speed_limit(30)
             # self.set_speed_limit(int(self.__sensors.get_sensors()[0].get_other_actors()[0].type_id[-2:]))
         #print("Car avoiding ", self.__sensors.get_sensors()[0].get_other_actors()[0].type_id)
-        self.__sensors.get_sensors()[0].delete_old_detection()
+        self.__sensors[0].delete_old_detection()
  
     def stop_car(self):
         if(self.is_car_moving):
@@ -273,35 +279,29 @@ class TrafficLight():
         return ((angle_deg < target_angle) and (distance < target_distance))
 
 
-"""
-===========
-SensorManager Class
 
-__init__ creates instance and creates list to manage all sensors
 
-get_sensors()                    | returns list of sensors
 
-add_sensor(sensor: Carla sensor) | adds sensor to list of sensors
+class Sensor:
+    def __init__(self, relative_transform, parent_actor, blueprint, world):
+        self.__transform = relative_transform
+        self.__parent = parent_actor
+        self.__sensor = world.spawn_actor(blueprint, relative_transform, attach_to=self.__parent)
 
-destroy_sensors()                | destroys all sensors in sensor list
-
-===========
-"""
-class SensorManager:
-    def __init__(self):
-        self.__sensors = []
-
-    def get_sensors(self):
-        return self.__sensors
+    # getters
+    def get_transform(self):
+        return self.__transform
+    def get_parent(self):
+        return self.__parent
+    def get_world(self):
+        return self.__world
+    def get_blueprint(self):
+        return self.__blueprint
+    def get_sensor(self):
+        return self.__sensor
     
-    def add_sensor(self, sensor):
-        self.__sensors.append(sensor)
-
-    def destroy_sensors(self):
-        for sensor in self.__sensors:
-            print("Sensor destroyed.")
-            print(sensor)
-            sensor.destroy()
+    def listen():
+        pass
 
 """
 ===========
@@ -321,25 +321,13 @@ listen(self) | retreives data from sensor and calls the obstacle dection method
 ===========
 """
 
-class ObstacleSensor():
+class ObstacleSensor(Sensor):
     def __init__(self, relative_transform, parent_actor, blueprint, world):
-        self.__transform = relative_transform
-        self.__parent = parent_actor
-        self.__sensor = world.spawn_actor(blueprint, relative_transform, attach_to=self.__parent)
+        Sensor.__init__(self, relative_transform, parent_actor, blueprint, world)
         self.__other_actors = []
         self.__detections = []
     
     # getters
-    def get_transform(self):
-        return self.__transform
-    def get_parent(self):
-        return self.__parent
-    def get_world(self):
-        return self.__world
-    def get_blueprint(self):
-        return self.__blueprint
-    def get_sensor(self):
-        return self.__sensor
     def get_detections(self):
         return self.__detections
     def get_other_actors(self):
@@ -359,7 +347,7 @@ class ObstacleSensor():
     
     # listen to sensor
     def listen(self):
-        self.__sensor.listen(lambda event: self.obstacle_detect(event))
+        self.get_sensor().listen(lambda event: self.obstacle_detect(event))
 
     
 """
@@ -380,24 +368,12 @@ listen(self) | retreives data from sensor and calls the collision_detect method
 ===========
 """
 
-class CollisionSensor():
+class CollisionSensor(Sensor):
     def __init__(self, relative_transform, parent_actor, blueprint, world):
-        self.__transform = relative_transform
-        self.__parent = parent_actor
-        self.__sensor = world.spawn_actor(blueprint, relative_transform, attach_to=self.__parent)
+        Sensor.__init__(self, relative_transform, parent_actor, blueprint, world)
         self.__collisions = []
     
     # getters
-    def get_transform(self):
-        return self.__transform
-    def get_parent(self):
-        return self.__parent
-    def get_world(self):
-        return self.__world
-    def get_blueprint(self):
-        return self.__blueprint
-    def get_sensor(self):
-        return self.__sensor
     def get_collisions(self):
         return self.__collisions
     
@@ -409,7 +385,7 @@ class CollisionSensor():
         
     # listen to sensor
     def listen(self):
-        self.__sensor.listen(lambda event: self.collision_detect(event))
+        self.get_sensor().listen(lambda event: self.collision_detect(event))
 
 """
 ===========
@@ -429,25 +405,14 @@ listen(self) | retreives data from sensor and calls the lane_invasion method
 ===========
 """
 
-class LaneInvasionSensor():
+class LaneInvasionSensor(Sensor):
     def __init__(self, relative_transform, parent_actor, blueprint, world):
-        self.__transform = relative_transform
-        self.__parent = parent_actor
-        self.__sensor = world.spawn_actor(blueprint, relative_transform, attach_to=self.__parent)
+        Sensor.__init__(self, relative_transform, parent_actor, blueprint, world)
         self.__lane_invasions = []
         self.__lane_markings = []
     
     # getters
-    def get_transform(self):
-        return self.__transform
-    def get_parent(self):
-        return self.__parent
-    def get_world(self):
-        return self.__world
-    def get_blueprint(self):
-        return self.__blueprint
-    def get_sensor(self):
-        return self.__sensor
+
     def get_lane_invasions(self):        
         return self.__lane_invasions
     def get_lane_markings(self):
@@ -468,7 +433,7 @@ class LaneInvasionSensor():
     
     # listen to sensor
     def listen(self):
-        self.__sensor.listen(lambda event: self.lane_invasion(event))
+        self.get_sensor().listen(lambda event: self.lane_invasion(event))
 
 """
 ===========
@@ -585,7 +550,7 @@ def init_world():
     spawn = spts[0]
     blueprint_lib = world.get_blueprints()
 
-    return (world, client, map, spts, spawn, blueprint_lib)
+    return (client, map, spts, spawn, blueprint_lib)
 
 #initialize the spectator camera
 def init_spectator(spawn, map):
@@ -613,7 +578,6 @@ def main_loop(spectator, car, vehicle):
     transform = carla.Transform(car.get_transform().transform(carla.Location(x=-4,z=2.5)),car.get_transform().rotation)
     spectator.set_transform(transform)
     time.sleep(0.005)
-    vehicle.drive()
     if(vehicle.control_loop() == False):
         raise KeyboardInterrupt()
 
@@ -622,7 +586,7 @@ def clear_world(client):
     print("World cleared :)\n")
 
 def main():   
-    world, client, map, spts, spawn, blueprint_lib = init_world()
+    client, map, spts, spawn, blueprint_lib = init_world()
     
     spectator = init_spectator(spawn, map)
 
