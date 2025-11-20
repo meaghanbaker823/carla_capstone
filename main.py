@@ -50,14 +50,31 @@ class World:
     def get_world(self):
         return self.__world
 
+    def get_map(self):
+        return self.__world.get_map()
+
     def change_map(self, world_map='town10HD_Opt'):
         return self.__world.load_world(world_map)
 
     def get_blueprints(self):
         return self.__world.get_blueprint_library()
-    
+
     def get_spawnpoints(self):
         return self.__world.get_map().get_spawn_points()
+
+    def init_world(self):
+        return (self.__client,
+            self.get_map(),
+            self.get_spawnpoints(),
+            self.default_spawn,
+            self.get_blueprint())
+
+    def init_spectator(self, spawn):
+        spectator = self.__world.get_spectator()
+        spectator.set_transform(carla.Transform(carla.Location(
+            x = spawn.location.x, y = spawn.location.y, z = spawn.location.z + 60)))
+
+        return spectator
     
 """
 ===========
@@ -540,25 +557,6 @@ class Navigation():
             steer_input = fixed_deg
         
         return steer_input
-        
-#initialize the world object, store/return relevant values
-def init_world():
-    world = World('/Game/Carla/Maps/Town01')
-    client = world.get_client()
-    map = world.get_world()
-    spts = world.get_spawnpoints()
-    spawn = spts[0]
-    blueprint_lib = world.get_blueprints()
-
-    return (client, map, spts, spawn, blueprint_lib)
-
-#initialize the spectator camera
-def init_spectator(spawn, map):
-    spectator = map.get_spectator()
-    spectator.set_transform(carla.Transform(carla.Location(
-        x = spawn.location.x, y = spawn.location.y, z = spawn.location.z + 60)))
-
-    return spectator
 
 #initialize the list of actors
 def init_actors(spawn, blueprint_lib, spts, map):
@@ -586,9 +584,10 @@ def clear_world(client):
     print("World cleared :)\n")
 
 def main():   
-    client, map, spts, spawn, blueprint_lib = init_world()
+    world = World()
+    client, map, spts, spawn, blueprint_lib = world.init_world()
     
-    spectator = init_spectator(spawn, map)
+    spectator = world.init_spectator(spawn)
 
     vehicle, car = init_actors(spawn, blueprint_lib, spts, map)
 
