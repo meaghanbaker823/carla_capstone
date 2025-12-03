@@ -8,6 +8,7 @@ import numpy as np
 import weakref
 import cv2
 import math
+import traceback
 from global_route_planner import GlobalRoutePlanner
 
 
@@ -30,9 +31,9 @@ get_spawnpoints()   | returns list of map spawn points
 ===========
 """
 class World:
-    def __init__(self, world_map='town10HD_Opt'):
+    def __init__(self, world_map='town01'):
         self.__client = carla.Client('localhost', 2000)
-        self.__client.set_timeout(30.0)
+        self.__client.set_timeout(60.0)
 
         cur_map = os.path.basename(self.__client.get_world().get_map().name)
         cur_map = cur_map[0].lower() + cur_map[1:]
@@ -42,8 +43,6 @@ class World:
         else:
             self.__world = self.__client.load_world(world_map)
 
-        self.default_spawn = self.__world.get_map().get_spawn_points()[0]
-
     def get_client(self):
         return self.__client
 
@@ -52,6 +51,9 @@ class World:
 
     def get_map(self):
         return self.__world.get_map()
+    
+    def get_actors(self):
+        return self.__world.get_actors()
 
     def change_map(self, world_map='town10HD_Opt'):
         return self.__world.load_world(world_map)
@@ -66,8 +68,8 @@ class World:
         return (self.__client,
             self.get_map(),
             self.get_spawnpoints(),
-            self.default_spawn,
-            self.get_blueprint())
+            self.get_spawnpoints()[0],
+            self.get_blueprints())
 
     def init_spectator(self, spawn):
         spectator = self.__world.get_spectator()
@@ -173,6 +175,11 @@ class Vehicle:
  
 
     def maintain_speed(self, current):
+        try:
+            assert current >= 0
+        except Exception as e:
+            print(traceback.format_exc())
+            clear_world()
         SPEED_THRESHOLD = 2         # how many kph we can comfortably be under the target
         # print("CURRENT SPEED: ",current)
         # print("SPEED LIMIT: ", PREFERRED_SPEED)
@@ -204,7 +211,8 @@ class Vehicle:
             self.get_car().apply_control(carla.VehicleControl(throttle=estimated_throttle,steer=steering_angle, brake=brake_force))
             return True
         
-        except:
+        except Exception as e:
+            print(traceback.format_exc())
             return False
 
     def decelerate(self):
@@ -261,6 +269,11 @@ class TrafficLight():
         self.__color = color
 
     def process_color(self, car):
+        try:
+            assert type(car) == "vehicle"
+        except Exception as e:
+            print(traceback.format_exc())
+            clear_world()
         for light in self.get_lights():
             if(self.is_light_close(car, light, 10, 40)):
                 old_color = self.get_color()
@@ -282,6 +295,14 @@ class TrafficLight():
             return "stop"
     
     def is_light_close(self, car_check, light_check, target_distance, target_angle):
+        try:
+            assert type(car_check) == carla.Vehicle
+            assert type(light_check) == carla.TrafficLight
+            assert target_distance >= 0
+            assert -180 <= target_angle <= 180
+        except Exception as e:
+            print(traceback.format_exc())
+            clear_world()
         
         car = car_check.get_transform().get_forward_vector()
         light = light_check.get_location() - car_check.get_location()
@@ -297,13 +318,11 @@ class TrafficLight():
 
 
 
-
-
 class Sensor:
     def __init__(self, relative_transform, parent_actor, blueprint, world):
         self.__transform = relative_transform
         self.__parent = parent_actor
-        self.__sensor = world.spawn_actor(blueprint, relative_transform, attach_to=self.__parent)
+        self.__sensor = world.get_world().spawn_actor(blueprint, relative_transform, attach_to=self.__parent)
 
     # getters
     def get_transform(self):
@@ -340,7 +359,15 @@ listen(self) | retreives data from sensor and calls the obstacle dection method
 
 class ObstacleSensor(Sensor):
     def __init__(self, relative_transform, parent_actor, blueprint, world):
-        Sensor.__init__(self, relative_transform, parent_actor, blueprint, world)
+         # pre-condition
+        try:
+            assert type(relative_transform) == 'carla.libcarla.Transform' # relative transform must be a transform object
+            assert parent_actor in world.get_actors() # parent actor must be spawned in the world
+            assert blueprint == world.get_blueprint_library().find('sensor.other.obstacle') # blueprint must be obstacle detector
+        except Exception as e:
+            print(traceback.format_exc())
+            clear_world(world.get_client())
+        super().__init__(relative_transform, parent_actor, blueprint, world)
         self.__other_actors = []
         self.__detections = []
     
@@ -351,15 +378,41 @@ class ObstacleSensor(Sensor):
         return self.__other_actors
     
     def delete_old_detection(self):
+        detections_len = len(self.__detections)
+        oactorer_len = len(self.__other_actors)
+
         self.__detections.pop(0)
         self.__other_actors.pop(0)
+
+         # post condition
+        try:
+            assert len(self.__detections) == detections_len - 1
+            assert len(self.__other_actors) == oactorer_len - 1
+        except Exception as e:
+            print(traceback.format_exc())
+            clear_world()
           
     # with event, add to list of detections
     def obstacle_detect(self, event):
+        try:
+            assert type(event) == carla.libcarla.ObstacleDetectionEvent
+        except Exception as e:
+            print(traceback.format_exc())
+            clear_world()
+
+        detections_len = len(self.__detections)
+
         if event.other_actor not in self.__other_actors:
             detection = (event.other_actor, event.distance)
             self.__detections.append(detection)
             self.__other_actors.append(event.other_actor)
+
+             # post condition
+            try:
+                assert len(self.__detections) == detections_len + 1
+            except Exception as e:
+                print(traceback.format_exc())
+                clear_world()
 
     
     # listen to sensor
@@ -387,8 +440,17 @@ listen(self) | retreives data from sensor and calls the collision_detect method
 
 class CollisionSensor(Sensor):
     def __init__(self, relative_transform, parent_actor, blueprint, world):
-        Sensor.__init__(self, relative_transform, parent_actor, blueprint, world)
+         # pre-condition
+        try:
+            assert type(relative_transform) == 'carla.libcarla.Transform' # relative transform must be a transform object
+            assert parent_actor in world.get_actors() # parent actor must be spawned in the world
+            assert blueprint == world.get_blueprint_library().find('sensor.other.collision') # blueprint must be obstacle detector
+        except Exception as e:
+            print(traceback.format_exc())
+            clear_world(world.get_client())
+        super().__init__(relative_transform, parent_actor, blueprint, world)
         self.__collisions = []
+        
     
     # getters
     def get_collisions(self):
@@ -396,9 +458,25 @@ class CollisionSensor(Sensor):
     
     # with event, add to list of detections
     def collision_detect(self, event):
+        try:
+            assert type(event) == carla.libcarla.Collision.Event
+        except Exception as e:
+            print(traceback.format_exc())
+            clear_world()
+
+        collisions_len = len(self.__collisions)
         # other impulse is a change in momentum - indicates magnitute and direction in global coordinates
         collision = (event.actor, event.other_actor, event.normal_impulse)
         self.__collisions.append(collision)
+
+        # post condition
+        try:
+            assert len(self.__collisions) == collisions_len + 1
+        except Exception as e:
+            print(traceback.format_exc())
+            clear_world()
+    
+
         
     # listen to sensor
     def listen(self):
@@ -424,7 +502,17 @@ listen(self) | retreives data from sensor and calls the lane_invasion method
 
 class LaneInvasionSensor(Sensor):
     def __init__(self, relative_transform, parent_actor, blueprint, world):
-        Sensor.__init__(self, relative_transform, parent_actor, blueprint, world)
+        # pre-condition
+        try:
+            assert type(relative_transform) == 'carla.libcarla.Transform' # relative transform must be a transform object
+            assert parent_actor in world.get_actors() # parent actor must be spawned in the world
+            assert blueprint == world.get_blueprint_library().find('sensor.other.lane_invasion')# blueprint must be lane invasion sensor
+        except Exception as e:
+            print(traceback.format_exc())
+            clear_world(world.get_client())
+        
+
+        super().__init__(relative_transform, parent_actor, blueprint, world)
         self.__lane_invasions = []
         self.__lane_markings = []
     
@@ -437,16 +525,49 @@ class LaneInvasionSensor(Sensor):
     
 
     def delete_old_detection(self):
+        # need to check post condition
+        # get length of lane invasions and markings
+        # make sure length is decreased by one after pop
+        invasions_len = len(self.__lane_invasions)
+        markings_len = len(self.__lane_markings)
+
         self.__lane_invasions.pop(0)
         self.__lane_markings.pop(0)
+
+        try:
+            assert len(self.__lane_invasions) == invasions_len - 1
+            assert len(self.__lane_markings) == markings_len - 1
+
+        except Exception as e:
+            print(traceback.format_exc())
+            clear_world()
+
     
     # with event, add to list of detections
     def lane_invasion(self, event):
+        try:
+            assert type(event) == carla.libcarla.LaneInvasionEvent
+        except Exception as e:
+            print(traceback.format_exc())
+            clear_world()
+        
         # actor is actor that sensor is attached to and invaded another lane
         #THIS LINE HAS A RUNTIME ERROR (TRYING TO OPERATE ON A DESTROYED ACTOR)
+
+        invasions_len = len(self.__lane_invasions)
+        markings_len = len(self.__lane_markings)
+
         lane_invasion = (event.actor, event.crossed_lane_markings)
         self.__lane_invasions.append(lane_invasion)
         self.__lane_markings.append(event.crossed_lane_markings)
+
+        # post condition
+        try:
+            assert len(self.__lane_invasions) == invasions_len + 1
+            assert len(self.__lane_markings) == markings_len + 1
+        except Exception as e:
+            print(traceback.format_exc())
+            clear_world()
     
     # listen to sensor
     def listen(self):
@@ -559,14 +680,14 @@ class Navigation():
         return steer_input
 
 #initialize the list of actors
-def init_actors(spawn, blueprint_lib, spts, map):
-    nav = Navigation(spawn  , spts[6], map)
-    vehicle = Vehicle(blueprint_lib, map, spawn, nav)
+def init_actors(spawn, blueprint_lib, spts, world):
+    nav = Navigation(spawn, spts[6], world.get_world())
+    vehicle = Vehicle(blueprint_lib, world.get_world(), spawn, nav)
     car = vehicle.get_car()
     transforms = [carla.Transform(carla.Location(x=2.8, z=0.7)), carla.Transform(carla.Location(x=4.8, z=0.7)), carla.Transform(carla.Location(x=6.8, z=0.7))]
     blueprints = [blueprint_lib.find('sensor.other.obstacle'), blueprint_lib.find('sensor.other.collision'), blueprint_lib.find('sensor.other.lane_invasion')]
     blueprints[0].set_attribute('distance', '20.0')
-    vehicle.set_sensors(transforms, car, blueprints, map)
+    vehicle.set_sensors(transforms, car, blueprints, world)
 
     return (vehicle, car)
 
@@ -586,19 +707,26 @@ def clear_world(client):
 def main():   
     world = World()
     client, map, spts, spawn, blueprint_lib = world.init_world()
-    
-    spectator = world.init_spectator(spawn)
 
-    vehicle, car = init_actors(spawn, blueprint_lib, spts, map)
+    try:
+        spectator = world.init_spectator(spawn)
 
-    while True:
-        try:
+        vehicle, car = init_actors(spawn, blueprint_lib, spts, world)
+
+        while True:
+            #try:
             main_loop(spectator, car, vehicle)
-        except KeyboardInterrupt:
-            try:
-                clear_world(client)
-            finally:
-                break
+            #except KeyboardInterrupt:
+            #    try:
+            #        clear_world(client)
+            #    finally:
+            #        break
+    except Exception:
+        print(traceback.format_exc())
+    except KeyboardInterrupt:
+        print("Keyboard Interrupt")
+    finally:
+        clear_world(client)
 
 if __name__ == "__main__":
     main()
