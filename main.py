@@ -72,11 +72,20 @@ class World:
             self.get_blueprints())
 
     def init_spectator(self, spawn):
+        try:
+            assert type(spawn) == carla.libcarla.Transform
+        except:
+            print(traceback.format_exc())
+
         spectator = self.__world.get_spectator()
         spectator.set_transform(carla.Transform(carla.Location(
             x = spawn.location.x, y = spawn.location.y, z = spawn.location.z + 60)))
 
-        return spectator
+        if type(spectator) == carla.libcarla.Actor:
+            return spectator
+        else:
+            print(traceback.format_exc)
+            return False
     
 """
 ===========
@@ -174,13 +183,21 @@ class Vehicle:
             assert current >= 0
         except Exception as e:
             print(traceback.format_exc())
+
         SPEED_THRESHOLD = 2         # how many kph we can comfortably be under the target
+        new = -4
         if current >= self.get_speed_limit():
-            return 0
+            new = 0
         elif current < self.get_speed_limit() - SPEED_THRESHOLD:
-            return 0.8      # essentially 80% of gas
+            new = 0.8      # essentially 80% of gas
         else:   
-            return 0.4
+            new = 0.4
+        
+        try:
+            assert 0 <= new <= 1
+        except Exception as e:
+            print(traceback.format_exc())
+        return new
         
     def drive(self):
         try:
@@ -218,9 +235,6 @@ class Vehicle:
     def stop_car(self):
         if(self.is_car_moving):
             self.get_car().apply_control(carla.VehicleControl(throttle=0,brake=1.0))
-
-    def fix_lane(self):
-        return True
 
 
 """
@@ -269,7 +283,6 @@ class TrafficLight():
                 self.set_color(light.get_state().name)
 
                 if(old_color != self.get_color()):
-                    # print("Traffic light is ", self.get_color())
                     self.set_response(self.react_to_color())
                     break
             else:
@@ -311,7 +324,6 @@ class TrafficLight():
         distance = car_check.get_location().distance(light_check.get_location())
 
         return ((angle_deg < target_angle) and (distance < target_distance))
-
 
 
 class Sensor:
@@ -492,6 +504,13 @@ listen(self) | retreives data from sensor and calls the lane_invasion method
 
 class Navigation():
     def __init__(self, start, destination, world):
+        try:
+            assert type(start) == carla.libcarla.Transform
+            assert type(destination) == carla.libcarla.Transform
+            assert type(world) == carla.libcarla.World 
+        except:
+            print(traceback.format_exc())
+
         self.__start = start.location
         self.__destiniation = destination.location
         self.__global_route_planner = GlobalRoutePlanner(world.get_map(), 1)
@@ -521,16 +540,31 @@ class Navigation():
         self.__current_waypoint = self.__route[num]
         self.__current_waypoint_num = num
     def advance_waypoint(self, car):
+        try:
+            assert type(car) == carla.libcarla.Vehicle
+        except:
+            print(traceback.format_exc())
+
         while self.__current_waypoint_num < len(self.__route) and car.get_transform().location.distance(self.__route[self.__current_waypoint_num][0].transform.location)<5:
             self.__current_waypoint_num +=1
        
     
     # angle between two vectors
     def angle_between(self, v1, v2):
+        try:
+            assert type(v1) == tuple and type(v2) == tuple
+        except:
+            print(traceback.format_exc())
         return math.degrees(np.arctan2(v1[1], v1[0]) - np.arctan2(v2[1], v2[0]))
 
     # function to get angle between the car and target waypoint
     def get_angle(self,car,wp):
+        try:
+            assert type(car) == carla.libcarla.Vehicle
+            assert type(wp) == carla.Waypoint
+        except:
+            print(traceback.format_exc())
+
         vehicle_pos = car.get_transform()
         car_x = vehicle_pos.location.x
         car_y = vehicle_pos.location.y
@@ -549,6 +583,13 @@ class Navigation():
         return corrected_deg
     
     def get_proper_angle(self, car,wp_idx,rte):
+        try:
+            assert type(car) == carla.libcarla.Vehicle
+            assert type(wp_idx) == int
+            assert type(rte) == list
+        except:
+            print(traceback.format_exc())
+
         # create a list of angles to next 5 waypoints starting with current
         next_angle_list = []
         for i in range(10):
@@ -560,6 +601,11 @@ class Navigation():
         return wp_idx+idx*3,next_angle_list[idx]
     
     def correct_angle(self, degrees):
+        try:
+            assert (-360<= degrees <= 360)
+        except:
+            print(traceback.format_exc())
+
         if degrees<-300:
             fixed_deg = degrees +360
         elif degrees> 300:
@@ -567,18 +613,31 @@ class Navigation():
         else:
             fixed_deg = degrees
 
-         # limit steering to max angle 40 degrees
+         # limit steering to max angle 50 degrees
         if fixed_deg <-50:
             steer_input = -50
         elif fixed_deg> 50:
             steer_input = 50
         else:
             steer_input = fixed_deg
+
+        try:
+            assert (-50<= steer_input <= 50)
+        except:
+            print(traceback.format_exc())
         
         return steer_input
 
 #initialize the list of actors
 def init_actors(spawn, blueprint_lib, spts, world):
+    try:
+        assert type(spawn) == carla.libcarla.Transform
+        assert type(blueprint_lib) == carla.libcarla.BlueprintLibrary
+        assert type(spts) == list
+        assert type(world) == World
+    except:
+        print(traceback.format_exc())
+
     nav = Navigation(spawn, spts[6], world.get_world())
     vehicle = Vehicle(blueprint_lib, world.get_world(), spawn, nav)
     car = vehicle.get_car()
@@ -587,10 +646,20 @@ def init_actors(spawn, blueprint_lib, spts, world):
     blueprints[0].set_attribute('distance', '20.0')
     vehicle.set_sensors(transforms, car, blueprints, world, blueprint_lib)
 
-    return (vehicle, car)
+    if type(vehicle) == Vehicle and type(car) == carla.libcarla.Vehicle:
+        return (vehicle, car)
+    else:
+        print(traceback.format_exc())
+        return False
 
 #repeating logic performed in the main function
 def main_loop(spectator, car, vehicle):
+    try:
+        assert type(car) == carla.libcarla.Vehicle
+        assert type(vehicle) == Vehicle
+    except:
+        print(traceback.format_exc())
+
     # Move the spectator behind the vehicle
     transform = carla.Transform(car.get_transform().transform(carla.Location(x=-4,z=2.5)),car.get_transform().rotation)
     spectator.set_transform(transform)
@@ -599,6 +668,11 @@ def main_loop(spectator, car, vehicle):
         raise KeyboardInterrupt()
 
 def clear_world(client):
+    try:
+        assert type(client) == carla.libcarla.Client
+    except:
+        print(traceback.format_exc())
+
     client.reload_world()
     print("World cleared :)\n")
 
@@ -612,13 +686,8 @@ def main():
         vehicle, car = init_actors(spawn, blueprint_lib, spts, world)
 
         while True:
-            #try:
             main_loop(spectator, car, vehicle)
-            #except KeyboardInterrupt:
-            #    try:
-            #        clear_world(client)
-            #    finally:
-            #        break
+
     except Exception:
         print(traceback.format_exc())
     except KeyboardInterrupt:
