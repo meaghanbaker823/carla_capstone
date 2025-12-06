@@ -77,6 +77,11 @@ class World:
         except:
             print(traceback.format_exc())
 
+        try:
+            assert type(spawn) == carla.libcarla.Transform
+        except:
+            print(traceback.format_exc())
+
         spectator = self.__world.get_spectator()
         spectator.set_transform(carla.Transform(carla.Location(
             x = spawn.location.x, y = spawn.location.y, z = spawn.location.z + 60)))
@@ -86,6 +91,7 @@ class World:
         else:
             print(traceback.format_exc)
             return False
+
     
 """
 ===========
@@ -147,6 +153,9 @@ class Vehicle:
     def set_sensors(self, transform, actor, blueprint, world, blueprint_lib):
         self.add_sensor(ObstacleSensor(transform[0], actor, blueprint[0], world, blueprint_lib))
         self.add_sensor(CollisionSensor(transform[1], actor, blueprint[1], world, blueprint_lib))
+    def set_sensors(self, transform, actor, blueprint, world, blueprint_lib):
+        self.add_sensor(ObstacleSensor(transform[0], actor, blueprint[0], world, blueprint_lib))
+        self.add_sensor(CollisionSensor(transform[1], actor, blueprint[1], world, blueprint_lib))
     
         for sensor in self.__sensors:
             sensor.listen()
@@ -184,11 +193,15 @@ class Vehicle:
         except:
             print(traceback.format_exc())
 
+
         SPEED_THRESHOLD = 2         # how many kph we can comfortably be under the target
+        new = -4
         new = -4
         if current >= self.get_speed_limit():
             new = 0
+            new = 0
         elif current < self.get_speed_limit() - SPEED_THRESHOLD:
+            new = 0.8      # essentially 80% of gas
             new = 0.8      # essentially 80% of gas
         else:   
             new = 0.4
@@ -292,7 +305,9 @@ class TrafficLight():
 
     def react_to_color(self):
         action = ""
+        action = ""
         if(self.get_color() == "Green"):
+            action = "drive"
             action = "drive"
         else:
             action = "stop"
@@ -451,6 +466,7 @@ class CollisionSensor(Sensor):
             assert str(blueprint) == str(blueprint_lib.find('sensor.other.collision')) # blueprint must be obstacle detector
         except:
             print(traceback.format_exc())
+
 
         super().__init__(relative_transform, parent_actor, blueprint, world)
         self.__collisions = []
