@@ -92,7 +92,55 @@ class World:
             print(traceback.format_exc)
             return False
 
+class Rule():
+    def __init__(self, sensors, car):
+        self.__sensors = sensors
+        self.__car = car
+
+    def rule_flag(self, traffic_lights):
+        pass
+
+class CollisionRule(Rule):
+    def __init__(self, sensors, car):
+        super().__init__(sensors, car)
+        self.__sensors = sensors
+        self.__car = car
+        
+    def rule_flag(self, traffic_lights):
+        global control_flag
+        if(self.__sensors[1].get_collisions() != []):
+            self.__car.stop_car()
+            control_flag = False
+            return False
+        return True
     
+class ObstacleRule(Rule):
+    def __init__(self, sensors, car):
+        super().__init__(sensors, car)
+        self.__sensors = sensors
+        self.__car = car
+
+    def rule_flag(self, traffic_lights):
+        if(self.__sensors[0].get_other_actors() != []):
+            self.__car.avoid_obstacles()
+            return False
+        return True
+        
+class TrafficRule(Rule):
+    def __init__(self, sensors, car):
+        super().__init__(sensors, car)
+        self.__sensors = sensors
+        self.__car = car
+
+    def rule_flag(self, traffic_lights):
+        if(traffic_lights.process_color(self.__car.get_car()) != ""):
+            if(traffic_lights.get_response() == "stop"):
+                self.__car.stop_car()
+            else:
+                self.__car.drive()
+            return False
+            
+        return True
 """
 ===========
 Vehicle Class
@@ -118,6 +166,7 @@ fix_lane()                      | adjusts car into the center of the lane
 avoid_obstacles()               | will avoid obstacles detected
 ===========
 """
+control_flag = True
 class Vehicle: 
     def __init__(self, blueprint_lib, world_map, spawn, navigator):
         self.__car = world_map.spawn_actor(random.choice(blueprint_lib.filter('vehicle.bmw.*')), spawn)
@@ -125,12 +174,26 @@ class Vehicle:
         self.__sensors = []
         self.__navigator = navigator
         self.__speed_limit = 30
-    
+        self.__rules = []
+        self.__checks = []
+
     def get_sensors(self):
         return self.__sensors
     
     def add_sensor(self, sensor):
         self.__sensors.append(sensor)
+    
+    def get_rules(self):
+        return self.__rules
+    
+    def set_rules(self, rules):
+        self.__rules = rules
+    
+    def get_checks(self):
+        return self.__checks
+    
+    def set_checks(self, checks):
+        self.__checks = checks
 
     def get_navigator(self):
         return self.__navigator
@@ -149,10 +212,7 @@ class Vehicle:
     
     def set_speed_limit(self ,speed):
         self.__speed_limit = speed
-    
-    def set_sensors(self, transform, actor, blueprint, world, blueprint_lib):
-        self.add_sensor(ObstacleSensor(transform[0], actor, blueprint[0], world, blueprint_lib))
-        self.add_sensor(CollisionSensor(transform[1], actor, blueprint[1], world, blueprint_lib))
+
     def set_sensors(self, transform, actor, blueprint, world, blueprint_lib):
         self.add_sensor(ObstacleSensor(transform[0], actor, blueprint[0], world, blueprint_lib))
         self.add_sensor(CollisionSensor(transform[1], actor, blueprint[1], world, blueprint_lib))
@@ -160,24 +220,17 @@ class Vehicle:
         for sensor in self.__sensors:
             sensor.listen()
 
+    # refactor control loop
     def control_loop(self):
+        global control_flag
         car_changed = False
-
-        if(self.__sensors[1].get_collisions() != []):
-            self.stop_car()
-            return False
-        
-        if(self.__sensors[0].get_other_actors() != []):
-            car_changed = True
-            self.avoid_obstacles()
-
         traffic_lights = TrafficLight(self.get_actors())
-        if(traffic_lights.process_color(self.get_car()) != ""):
-            car_changed = True
-            if(traffic_lights.get_response() == "stop"):
-                self.stop_car()
-            else:
-                self.drive()
+        for rule in self.__rules:
+            # if false, then rule not passed
+            if not rule.rule_flag(traffic_lights):
+                if not control_flag:
+                    return False
+                car_changed = True
 
         if(not car_changed):
             if(not self.drive()):
@@ -193,18 +246,10 @@ class Vehicle:
         except:
             print(traceback.format_exc())
 
-
-        SPEED_THRESHOLD = 2         # how many kph we can comfortably be under the target
-        new = -4
-        new = -4
-        if current >= self.get_speed_limit():
-            new = 0
-            new = 0
-        elif current < self.get_speed_limit() - SPEED_THRESHOLD:
-            new = 0.8      # essentially 80% of gas
-            new = 0.8      # essentially 80% of gas
-        else:   
-            new = 0.4
+        for check in self.get_checks():
+            if(check.speed_check(current, self.get_speed_limit()) != -1):
+                new = check.speed_check(current, self.get_speed_limit())
+                break
         
         try:
             assert 0 <= new <= 1
@@ -249,6 +294,35 @@ class Vehicle:
         if(self.is_car_moving):
             self.get_car().apply_control(carla.VehicleControl(throttle=0,brake=1.0))
 
+
+class SpeedMonitor():
+    def __init__(self, threshold):
+        self.__threshold = threshold
+
+    def get_threshold(self):
+        return self.__threshold
+
+class SpeedOverCheck(SpeedMonitor):
+    def speed_check(self, current, limit):
+        if(current >= limit):
+            return 0
+        else:
+            return -1
+
+class SpeedUnderCheck(SpeedMonitor):
+    def speed_check(self, current, limit):
+        if(current < (limit - self.get_threshold())):
+            return 0.8
+        else:
+            return -1
+
+class SpeedPerfectCheck(SpeedMonitor):
+    def speed_check(self, current, limit):
+        if(current == (limit - self.get_threshold())):
+            return 0.3
+        else:
+            return -1
+        
 
 """
 ===========
@@ -305,9 +379,7 @@ class TrafficLight():
 
     def react_to_color(self):
         action = ""
-        action = ""
         if(self.get_color() == "Green"):
-            action = "drive"
             action = "drive"
         else:
             action = "stop"
@@ -498,6 +570,28 @@ class CollisionSensor(Sensor):
     def listen(self):
         self.get_sensor().listen(lambda event: self.collision_detect(event))
 
+#Class for adjusting angle between two values
+class AngleConstraint():
+    def __init__(self, min, max, adjust):
+        self.__min = min
+        self.__max = max
+        self.__adjust = adjust
+
+    def clamp(self, degrees):
+        if degrees < self.__min:
+            return degrees + self.__adjust
+        elif degrees > self.__max:
+            return degrees - self.__adjust
+
+        return degrees
+    
+    def max_steer(self, degrees):
+        if degrees < self.__min:
+            return self.__min
+        elif degrees > self.__max:
+            return self.__max
+        else:
+            return degrees        
 
 """
 ===========
@@ -618,24 +712,16 @@ class Navigation():
     
     def correct_angle(self, degrees):
         try:
-            assert (-360<= degrees <= 360)
+            assert (-360 <= degrees <= 360)
         except:
             print(traceback.format_exc())
 
-        if degrees<-300:
-            fixed_deg = degrees +360
-        elif degrees> 300:
-            fixed_deg = degrees -360
-        else:
-            fixed_deg = degrees
+        degree_constraint = AngleConstraint(-300, 300, 360)
+        fixed_deg = degree_constraint.clamp(degrees)
 
-         # limit steering to max angle 50 degrees
-        if fixed_deg <-50:
-            steer_input = -50
-        elif fixed_deg> 50:
-            steer_input = 50
-        else:
-            steer_input = fixed_deg
+        # limit steering to max angle 50 degrees
+        steer_constraint = AngleConstraint(-50, 50, 0)
+        steer_input = steer_constraint.max_steer(fixed_deg)
 
         try:
             assert (-50<= steer_input <= 50)
@@ -661,6 +747,11 @@ def init_actors(spawn, blueprint_lib, spts, world):
     blueprints = [blueprint_lib.find('sensor.other.obstacle'), blueprint_lib.find('sensor.other.collision'), blueprint_lib.find('sensor.other.lane_invasion')]
     blueprints[0].set_attribute('distance', '20.0')
     vehicle.set_sensors(transforms, car, blueprints, world, blueprint_lib)
+    traffic_lights = TrafficLight(world.get_world().get_actors())
+    rules = [CollisionRule(vehicle.get_sensors(), vehicle), ObstacleRule(vehicle.get_sensors(), vehicle), TrafficRule(vehicle.get_sensors(), vehicle)]
+    vehicle.set_rules(rules)
+    checks = [SpeedOverCheck(3), SpeedPerfectCheck(3), SpeedUnderCheck(3)]
+    vehicle.set_checks(checks)
 
     if type(vehicle) == Vehicle and type(car) == carla.libcarla.Vehicle:
         return (vehicle, car)
