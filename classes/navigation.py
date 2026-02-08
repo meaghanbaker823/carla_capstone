@@ -6,7 +6,6 @@ import numpy as np
 from classes.globalRoutePlanner import GlobalRoutePlanner
 from classes.angleConstraint import AngleConstraint
 
-
 """
 ===========
 Navigation Class
@@ -27,6 +26,16 @@ listen(self) | retreives data from sensor and calls the lane_invasion method
 """
 
 class Navigation():
+    def __init__(self, start, destination):
+        self.__start = start.location
+        self.__destination = destination.location
+
+    def get_start(self):
+        return self.__start
+    def get_destination(self):
+        return self.__destination
+
+class MainNavigator(Navigation):
     def __init__(self, start, destination, world):
         try:
             assert type(start) == carla.libcarla.Transform
@@ -35,10 +44,9 @@ class Navigation():
         except:
             print(traceback.format_exc())
 
-        self.__start = start.location
-        self.__destiniation = destination.location
+        super().__init__(start, destination)
         self.__global_route_planner = GlobalRoutePlanner(world.get_map(), 1)
-        self.__route = self.__global_route_planner.trace_route(self.__start, self.__destiniation)
+        self.__route = self.__global_route_planner.trace_route(super().get_start() , super().get_destination())
         self.__current_waypoint_num = 5
         self.__current_waypoint = self.__route[self.__current_waypoint_num]
 
@@ -49,9 +57,9 @@ class Navigation():
             persistent_lines=True)
     
     def get_start(self):
-        return self.__start
+        return super().get_start()
     def get_destination(self):
-        return self.__destiniation
+        return super().get_destination()
     def get_global_route_planner(self):
         return self.__global_route_planner
     def get_route(self):
