@@ -30,7 +30,7 @@ class Monitor(MAPEStep):
 
         self.add_sensors(ObstacleSensor(transform[0], car, blueprint[0], world, blueprint_lib))
         self.add_sensors(CollisionSensor(transform[1], car, blueprint[1], world, blueprint_lib))
-    
+
         for sensor in self.__sensors:
             sensor.listen()
 

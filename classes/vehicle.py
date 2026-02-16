@@ -55,6 +55,9 @@ class Vehicle:
     
     def set_rules(self, rules):
         self.__rules = rules
+
+    def get_sensors(self):
+        return self.__monitor_class.get_sensors()
     
     def get_checks(self):
         return self.__checks

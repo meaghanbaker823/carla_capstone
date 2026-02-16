@@ -37,7 +37,7 @@ def init_actors(spawn, blueprint_lib, spts, world):
     vehicle = Vehicle(blueprint_lib, world.get_world(), spawn, spts[5], transforms, blueprints, world)
     car = vehicle.get_car()
 
-    vehicle.set_sensors(transforms, car, blueprints, world, blueprint_lib)
+    # vehicle.set_sensors(transforms, car, blueprints, world, blueprint_lib)
     rules = [CollisionRule(vehicle.get_sensors(), vehicle), TrafficRule(vehicle.get_sensors(), vehicle)]
     vehicle.set_rules(rules)
 
