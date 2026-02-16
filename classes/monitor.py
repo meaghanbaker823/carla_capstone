@@ -54,9 +54,6 @@ class Monitor(MAPEStep):
             assert type(self.__car) == carla.libcarla.Vehicle
         except:
             raise
-        
-        condition1 = current_waypoint_num < len(self.__route)
-        condition2 = self.__car.get_transform().location.distance(self.__route[current_waypoint_num][0].transform.location) < 5
 
         while current_waypoint_num < len(self.__route) and self.__car.get_transform().location.distance(self.__route[current_waypoint_num][0].transform.location)<5:
             current_waypoint_num += 1
@@ -74,8 +71,6 @@ class Monitor(MAPEStep):
         self.__new_detections["traffic_lights"] = TrafficLight(self.get_actors())
 
         self.__new_detections["current_waypoint_num"] = self.advance_waypoint(current_waypoint_num)
-        # print(f"current waypoint: {self.__new_detections['current_waypoint_num']}")
-        # print(len(self.__route))
         self.__new_detections["route"] = self.__route
     
         #return the info that the analyzer needs

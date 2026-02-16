@@ -6,6 +6,7 @@ from classes.speedOverCheck import SpeedOverCheck
 from classes.speedPerfectCheck import SpeedPerfectCheck
 from classes.speedUnderCheck import SpeedUnderCheck  
 from classes.collision_exception import CollisionErr
+from classes.route_done import RouteDone
 import carla
 import time
 import traceback
@@ -94,6 +95,8 @@ def main():
 
     except CollisionErr:
         print("Collision")
+    except RouteDone:
+        print("Route done!")
     except Exception:
         print(traceback.format_exc())
     except KeyboardInterrupt:

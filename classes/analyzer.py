@@ -4,6 +4,7 @@ from classes.angleConstraint import AngleConstraint
 import math
 import carla
 import numpy as np
+from classes.route_done import RouteDone
 
 """
 ===========
@@ -82,7 +83,11 @@ class Analzyer(MAPEStep):
         idx = 0
         while idx < len(next_angle_list) - 2 and abs(next_angle_list[idx]) > 40:
             idx += 1
-        return wp_idx + idx * 3, next_angle_list[idx]
+        try:
+            return wp_idx + idx * 3, next_angle_list[idx]
+        except:
+            raise RouteDone("Route complete :)")
+    
     
     def correct_angle(self, degrees):
         try:

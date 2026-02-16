@@ -19,8 +19,6 @@ class TrafficRule(Rule):
         self.__car = car
 
     def rule_flag(self, traffic_lights):
-        global control_flag
-        control_flag = True
         if(traffic_lights.process_color(self.__car.get_car()) != ""):
             return False
         return True
