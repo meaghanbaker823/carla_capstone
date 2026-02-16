@@ -4,11 +4,9 @@ import time
 import traceback
 
 from classes.vehicle import Vehicle
-from classes.navigation import Navigation
-from classes.trafficLight import TrafficLight
+from classes.navigation import MainNavigator
 from classes.world import World
 from classes.collisionRule import CollisionRule
-from classes.obstacleRule import ObstacleRule
 from classes.trafficRule import TrafficRule
 from classes.speedOverCheck import SpeedOverCheck
 from classes.speedPerfectCheck import SpeedPerfectCheck
@@ -24,17 +22,18 @@ def init_actors(spawn, blueprint_lib, spts, world):
     except:
         print(traceback.format_exc())
 
-    nav = Navigation(spawn, spts[6], world.get_world())
-    vehicle = Vehicle(blueprint_lib, world.get_world(), spawn, nav)
-    car = vehicle.get_car()
+    # nav = MainNavigator(spawn, spts[5], world.get_world())
+    
     transforms = [carla.Transform(carla.Location(x=2.8, z=0.7)), carla.Transform(carla.Location(x=4.8, z=0.7)), carla.Transform(carla.Location(x=6.8, z=0.7))]
     blueprints = [blueprint_lib.find('sensor.other.obstacle'), blueprint_lib.find('sensor.other.collision'), blueprint_lib.find('sensor.other.lane_invasion')]
     blueprints[0].set_attribute('distance', '20.0')
+    vehicle = Vehicle(blueprint_lib, world.get_world(), spawn, spts[5], transforms, blueprints)
+    car = vehicle.get_car()
     vehicle.set_sensors(transforms, car, blueprints, world, blueprint_lib)
-    traffic_lights = TrafficLight(world.get_world().get_actors())
-    rules = [CollisionRule(vehicle.get_sensors(), vehicle), ObstacleRule(vehicle.get_sensors(), vehicle), TrafficRule(vehicle.get_sensors(), vehicle)]
+    rules = [CollisionRule(vehicle.get_sensors(), vehicle), TrafficRule(vehicle.get_sensors(), vehicle)]
     vehicle.set_rules(rules)
-    checks = [SpeedOverCheck(3), SpeedPerfectCheck(3), SpeedUnderCheck(3)]
+    speed_threshold = 3
+    checks = [SpeedOverCheck(speed_threshold), SpeedPerfectCheck(speed_threshold), SpeedUnderCheck(speed_threshold)]
     vehicle.set_checks(checks)
     world.spawn_pedestrians()
 
@@ -56,8 +55,9 @@ def main_loop(spectator, car, vehicle):
     transform = carla.Transform(car.get_transform().transform(carla.Location(x=-4,z=2.5)),car.get_transform().rotation)
     spectator.set_transform(transform)
     time.sleep(0.005)
-    if(vehicle.control_loop() == False):
-        raise KeyboardInterrupt()
+    # if(vehicle.control_loop() == False):
+    if(vehicle.mape_drive(30)):
+        raise Exception("controlLoop")
 
 def clear_world(client):
     try:
@@ -83,7 +83,7 @@ def main():
     except Exception:
         print(traceback.format_exc())
     except KeyboardInterrupt:
-        print("Keyboard Interrupt")
+        print(" Keyboard Interrupt")
     finally:
         clear_world(client)
 

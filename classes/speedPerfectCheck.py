@@ -4,5 +4,4 @@ class SpeedPerfectCheck(SpeedMonitor):
     def speed_check(self, current, limit):
         if(current == (limit - self.get_threshold())):
             return 0.3
-        else:
-            return -1
+        return -1

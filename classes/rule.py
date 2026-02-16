@@ -5,3 +5,6 @@ class Rule():
 
     def rule_flag(self, traffic_lights):
         pass
+
+    def rule_follow(self, traffic_lights, limit):
+        pass

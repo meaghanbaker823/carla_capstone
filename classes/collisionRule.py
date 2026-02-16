@@ -9,7 +9,10 @@ class CollisionRule(Rule):
     def rule_flag(self, traffic_lights):
         global control_flag
         if(self.__sensors[1].get_collisions() != []):
-            self.__car.stop_car()
             control_flag = False
             return False
         return True
+    
+    def rule_follow(self, traffic_lights, limit):
+        # pass brake as 1 and speed as 0
+        return 1, 0

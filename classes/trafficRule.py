@@ -8,10 +8,12 @@ class TrafficRule(Rule):
 
     def rule_flag(self, traffic_lights):
         if(traffic_lights.process_color(self.__car.get_car()) != ""):
-            if(traffic_lights.get_response() == "stop"):
-                self.__car.stop_car()
-            else:
-                self.__car.drive()
             return False
             
         return True
+    
+    def rule_follow(self, traffic_lights, limit):
+        if(traffic_lights.get_response() == "stop"):
+            return 1, 0
+        else:
+            return 0, limit

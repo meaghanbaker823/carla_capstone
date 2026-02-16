@@ -59,7 +59,7 @@ class World:
         return (self.__client,
             self.get_map(),
             self.get_spawnpoints(),
-            self.get_spawnpoints()[0],
+            self.get_spawnpoints()[8],
             self.get_blueprints())
 
     def init_spectator(self, spawn):
@@ -89,14 +89,14 @@ class World:
         spwn_pts = self.get_spawnpoints()
 
 
-        # spawn 3 pedestrians
+        # spawn 10 pedestrians
         for i in range(10):
-            print(i)
             pd_bp = random.choice(pd_bps)
 
             # remove pedestrian spawn choice to avoid collision
             
             spawn = carla.Transform()
+            # at 10
             # choose random location, then remove that spawnpoint to avoid pedestrians from not spawning
             spawn.location = (spwn_pts[10]).location
             

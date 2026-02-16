@@ -6,6 +6,12 @@ import math
 from classes.obstacleSensor import ObstacleSensor
 from classes.collisionSensor import CollisionSensor
 from classes.trafficLight import TrafficLight
+from classes.pedestrianAvoidance import AvoidPedestrians
+from classes.globalRoutePlanner import GlobalRoutePlanner
+from classes.monitor import Monitor
+from classes.analyzer import Analzyer
+from classes.planner import Planner
+from classes.executor import Executor
 
 """
 ===========
@@ -34,14 +40,22 @@ avoid_obstacles()               | will avoid obstacles detected
 """
 control_flag = True
 class Vehicle: 
-    def __init__(self, blueprint_lib, world_map, spawn, navigator):
+    def __init__(self, blueprint_lib, world_map, spawn, destination, transform, blueprint):
         self.__car = world_map.spawn_actor(random.choice(blueprint_lib.filter('vehicle.bmw.*')), spawn)
         self.__actors = world_map.get_actors()
+        self.__world = world_map
         self.__sensors = []
-        self.__navigator = navigator
-        self.__speed_limit = 30
         self.__rules = []
         self.__checks = []
+        self.__waypoint_num = None
+        self.__global_route_planner = GlobalRoutePlanner(self.__world.get_map(), 1)
+        self.__route = self.__global_route_planner.trace_route(spawn.location, destination.location)
+        self.mape_init(transform, blueprint, blueprint_lib, 5, 30)
+        self.draw_route()
+
+    def draw_route(self):
+        for waypoint in self.__route:
+            self.__world.debug.draw_string(waypoint[0].transform.location, '^', draw_shadow = False, color = carla.Color(r = 0, g = 0, b = 255), life_time = 90.0, persistent_lines = True)
 
     def get_sensors(self):
         return self.__sensors
@@ -112,6 +126,8 @@ class Vehicle:
         except:
             print(traceback.format_exc())
 
+        new = 0
+
         for check in self.get_checks():
             if(check.speed_check(current, self.get_speed_limit()) != -1):
                 new = check.speed_check(current, self.get_speed_limit())
@@ -123,13 +139,45 @@ class Vehicle:
             print(traceback.format_exc())
         return new
         
+    def mape_init(self, transform, blueprint, blueprint_lib, initial_waypoint_num, speed_limit):
+        try:
+            self.__monitor_class = Monitor(transform, self.__car, blueprint, self.__world, blueprint_lib, self.__actors, self.__route)
+            self.__analyzer_class = Analzyer()
+            self.__planner_class = Planner()
+            self.__executor_class = Executor()
+            monitor_info = self.__monitor_class.monitor(initial_waypoint_num)
+            analyzer_info = self.__analyzer_class.analyze(self.get_car(), self.get_rules(), monitor_info)
+            self.__waypoint_num = analyzer_info["new_waypoint"]
+            plan_info = self.__planner_class.plan(analyzer_info, speed_limit)
+            self.__executor_class.execute(plan_info, self.get_car())
+            return True
+
+        except:
+            return False
+
+
+
+    def mape_drive(self, speed_limit):        
+        try:
+            monitor_info = self.__monitor_class.monitor(self.__waypoint_num)
+            analyzer_info = self.__analyzer_class.analyze(self.get_car(), self.get_rules(), monitor_info)
+            self.__waypoint_num = analyzer_info["new_waypoint"]
+            plan_info = self.__planner_class.plan(analyzer_info, speed_limit)
+            self.__executor_class.execute(plan_info, self.get_car())
+    
+            return True
+
+        except:
+            return False
+
+
     def drive(self):
         try:
             if self.__navigator.get_cur_waypoint_num() >= (len(self.__navigator.get_route()) - 6):
                 return False
             self.__navigator.advance_waypoint(self.__car)
             v = self.get_car().get_velocity()                                   # velocity is a 3d vector in m/s
-            speed = round(3.6 * math.sqrt(v.x**2 + v.y**2 + v.z**2),0)          # speed in kilometers/hr 
+            speed = round(3.6 * math.sqrt(v.x**2 + v.y**2 + v.z**2),0)          # speed in kilometers/hr
             
             waypt_nm, steering_angle = self.__navigator.get_proper_angle(self.__car, self.__navigator.get_cur_waypoint_num(), self.__navigator.get_route()) 
             
@@ -159,3 +207,4 @@ class Vehicle:
     def stop_car(self):
         if(self.is_car_moving):
             self.get_car().apply_control(carla.VehicleControl(throttle=0,brake=1.0))
+
