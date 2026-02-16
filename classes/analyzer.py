@@ -126,6 +126,7 @@ class Analzyer(MAPEStep):
         self.__new_observations["current_speed"] = round(3.6 * math.sqrt(detections["current_velocity"].x ** 2 + detections["current_velocity"].y ** 2 + detections["current_velocity"].z ** 2), 0)
 
         waypoint_num, steering_angle = self.get_proper_angle(car, detections["current_waypoint_num"], detections["route"])
+      
         self.__new_observations["new_waypoint"] = waypoint_num
         self.__new_observations["steering_angle"] = steering_angle / 75
 
