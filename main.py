@@ -5,7 +5,7 @@ from classes.trafficRule import TrafficRule
 from classes.speedOverCheck import SpeedOverCheck
 from classes.speedPerfectCheck import SpeedPerfectCheck
 from classes.speedUnderCheck import SpeedUnderCheck  
-
+from classes.collision_exception import CollisionErr
 import carla
 import time
 import traceback
@@ -92,6 +92,8 @@ def main():
         while True:
             main_loop(spectator, car, vehicle)
 
+    except CollisionErr:
+        print("Collision")
     except Exception:
         print(traceback.format_exc())
     except KeyboardInterrupt:

@@ -1,5 +1,5 @@
 from classes.rule import Rule
-
+from classes.collision_exception import CollisionErr
 """
 ===========
 CollisionRule Class(Rule)
@@ -19,10 +19,8 @@ class CollisionRule(Rule):
         self.__car = car
         
     def rule_flag(self, traffic_lights):
-        global control_flag
         if(self.__sensors[1].get_collisions() != []):
-            control_flag = False
-            return False
+            raise CollisionErr("")
         return True
     
     def rule_follow(self, traffic_lights, limit):

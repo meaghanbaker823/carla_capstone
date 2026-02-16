@@ -110,17 +110,16 @@ class Analzyer(MAPEStep):
         self.add_old_observations(self.__new_observations)
         self.__new_observations = {}
         
-        global control_flag
         self.__new_observations["rules"] = []
         self.__new_observations["traffic_lights"] = detections["traffic_lights"]
 
         for rule in rules:
             # if false, then rule not passed
-            if not rule.rule_flag(detections["traffic_lights"]):
-                if not control_flag:
-                    self.__new_observations["rules"].append(rule)
-                else:
-                    raise Exception("ControlFlag")
+            try:
+                if not rule.rule_flag(detections["traffic_lights"]):
+                        self.__new_observations["rules"].append(rule)
+            except:
+                raise
                     
         # unit is kilometers/hr
         self.__new_observations["current_speed"] = round(3.6 * math.sqrt(detections["current_velocity"].x ** 2 + detections["current_velocity"].y ** 2 + detections["current_velocity"].z ** 2), 0)
