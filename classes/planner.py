@@ -11,7 +11,7 @@ class Planner(MAPEStep):
     def get_new_plan(self):
         return self.__new_plan
     
-    def maintain_speed(self, current):
+    def maintain_speed(self, current, limit, checks):
         try:
             assert current >= 0
         except:
@@ -19,9 +19,9 @@ class Planner(MAPEStep):
 
         new = 0
 
-        for check in self.get_checks():
-            if(check.speed_check(current, self.get_speed_limit()) != -1):
-                new = check.speed_check(current, self.get_speed_limit())
+        for check in checks:
+            if(check.speed_check(current, limit) != -1):
+                new = check.speed_check(current, limit)
                 break
         
         try:
@@ -30,7 +30,7 @@ class Planner(MAPEStep):
             print(traceback.format_exc())
         return new
 
-    def plan(self, observations, limit):
+    def plan(self, observations, limit, checks):
         self.__old_plans.append(self.__new_plan)
         self.__new_plan = {"brake": None, "steering": None, "throttle": None}
         speed = observations["current_speed"]
@@ -41,7 +41,7 @@ class Planner(MAPEStep):
         
         self.__new_plan["steering"] = observations["steering_angle"]
 
-        self.__new_plan["throttle"] = self.maintain_speed(speed)
+        self.__new_plan["throttle"] = self.maintain_speed(speed, limit, checks)
         if (self.__new_plan["throttle"] == 0):
             self.__new_plan["brake"] = 1.0
         else:

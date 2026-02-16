@@ -27,7 +27,7 @@ def init_actors(spawn, blueprint_lib, spts, world):
     transforms = [carla.Transform(carla.Location(x=2.8, z=0.7)), carla.Transform(carla.Location(x=4.8, z=0.7)), carla.Transform(carla.Location(x=6.8, z=0.7))]
     blueprints = [blueprint_lib.find('sensor.other.obstacle'), blueprint_lib.find('sensor.other.collision'), blueprint_lib.find('sensor.other.lane_invasion')]
     blueprints[0].set_attribute('distance', '20.0')
-    vehicle = Vehicle(blueprint_lib, world.get_world(), spawn, spts[5], transforms, blueprints)
+    vehicle = Vehicle(blueprint_lib, world.get_world(), spawn, spts[5], transforms, blueprints, world)
     car = vehicle.get_car()
     vehicle.set_sensors(transforms, car, blueprints, world, blueprint_lib)
     rules = [CollisionRule(vehicle.get_sensors(), vehicle), TrafficRule(vehicle.get_sensors(), vehicle)]
@@ -56,8 +56,9 @@ def main_loop(spectator, car, vehicle):
     spectator.set_transform(transform)
     time.sleep(0.005)
     # if(vehicle.control_loop() == False):
-    if(vehicle.mape_drive(30)):
-        raise Exception("controlLoop")
+    if(not vehicle.mape_drive(30)):
+        print(traceback.format_exc())
+        return False
 
 def clear_world(client):
     try:
@@ -78,7 +79,8 @@ def main():
         vehicle, car = init_actors(spawn, blueprint_lib, spts, world)
 
         while True:
-            main_loop(spectator, car, vehicle)
+            if(main_loop(spectator, car, vehicle)):
+                raise Exception()
 
     except Exception:
         print(traceback.format_exc())

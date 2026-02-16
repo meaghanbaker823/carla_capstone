@@ -40,22 +40,23 @@ avoid_obstacles()               | will avoid obstacles detected
 """
 control_flag = True
 class Vehicle: 
-    def __init__(self, blueprint_lib, world_map, spawn, destination, transform, blueprint):
-        self.__car = world_map.spawn_actor(random.choice(blueprint_lib.filter('vehicle.bmw.*')), spawn)
-        self.__actors = world_map.get_actors()
-        self.__world = world_map
+    def __init__(self, blueprint_lib, carla_world, spawn, destination, transform, blueprint, world):
+        self.__car = carla_world.spawn_actor(random.choice(blueprint_lib.filter('vehicle.bmw.*')), spawn)
+        self.__actors = carla_world.get_actors()
+        self.__world = world
+        self.__carla_world = carla_world
         self.__sensors = []
         self.__rules = []
         self.__checks = []
         self.__waypoint_num = None
-        self.__global_route_planner = GlobalRoutePlanner(self.__world.get_map(), 1)
+        self.__global_route_planner = GlobalRoutePlanner(self.__carla_world.get_map(), 1)
         self.__route = self.__global_route_planner.trace_route(spawn.location, destination.location)
         self.mape_init(transform, blueprint, blueprint_lib, 5, 30)
         self.draw_route()
 
     def draw_route(self):
         for waypoint in self.__route:
-            self.__world.debug.draw_string(waypoint[0].transform.location, '^', draw_shadow = False, color = carla.Color(r = 0, g = 0, b = 255), life_time = 90.0, persistent_lines = True)
+            self.__carla_world.debug.draw_string(waypoint[0].transform.location, '^', draw_shadow = False, color = carla.Color(r = 0, g = 0, b = 255), life_time = 90.0, persistent_lines = True)
 
     def get_sensors(self):
         return self.__sensors
@@ -148,26 +149,29 @@ class Vehicle:
             monitor_info = self.__monitor_class.monitor(initial_waypoint_num)
             analyzer_info = self.__analyzer_class.analyze(self.get_car(), self.get_rules(), monitor_info)
             self.__waypoint_num = analyzer_info["new_waypoint"]
-            plan_info = self.__planner_class.plan(analyzer_info, speed_limit)
+            plan_info = self.__planner_class.plan(analyzer_info, speed_limit, self.get_checks())
             self.__executor_class.execute(plan_info, self.get_car())
             return True
 
         except:
+            print(traceback.format_exc())
             return False
 
 
 
-    def mape_drive(self, speed_limit):        
+    def mape_drive(self, speed_limit):     
         try:
             monitor_info = self.__monitor_class.monitor(self.__waypoint_num)
             analyzer_info = self.__analyzer_class.analyze(self.get_car(), self.get_rules(), monitor_info)
             self.__waypoint_num = analyzer_info["new_waypoint"]
-            plan_info = self.__planner_class.plan(analyzer_info, speed_limit)
+            plan_info = self.__planner_class.plan(analyzer_info, speed_limit, self.get_checks())
             self.__executor_class.execute(plan_info, self.get_car())
+            print(self.__executor_class.notify())
     
             return True
 
         except:
+            print(traceback.format_exc())
             return False
 
 
@@ -189,7 +193,7 @@ class Vehicle:
                 brake_force = 1.0
             else:
                 brake_force = 0
-            self.get_car().apply_control(carla.VehicleControl(throttle=estimated_throttle,steer=steering_angle, brake=brake_force))
+            self.get_car().apply_control(carla.VehicleControl(throttle = estimated_throttle, steer=steering_angle, brake= brake_force))
             return True
         
         except:

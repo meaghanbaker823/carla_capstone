@@ -14,8 +14,8 @@ class Monitor(MAPEStep):
         self.__actors = actors
         self.__route = route
 
-        self.add_sensor(ObstacleSensor(transform[0], car, blueprint[0], world, blueprint_lib))
-        self.add_sensor(CollisionSensor(transform[1], car, blueprint[1], world, blueprint_lib))
+        self.add_sensors(ObstacleSensor(transform[0], car, blueprint[0], world, blueprint_lib))
+        self.add_sensors(CollisionSensor(transform[1], car, blueprint[1], world, blueprint_lib))
     
         for sensor in self.__sensors:
             sensor.listen()
@@ -45,7 +45,8 @@ class Monitor(MAPEStep):
         condition2 = self.__car.get_transform().location.distance(self.__route[current_waypoint_num][0].transform.location) < 5
 
         while condition1 and condition2:
-            self.__current_waypoint_num += 1
+            current_waypoint_num += 1
+        return current_waypoint_num
 
     def monitor(self, current_waypoint_num):
         self.add_old_detections(self.__new_detections)
@@ -55,9 +56,7 @@ class Monitor(MAPEStep):
         self.__new_detections["current_velocity"] = self.__car.get_velocity()
         self.__new_detections["traffic_lights"] = TrafficLight(self.get_actors())
 
-        self.advance_waypoint(current_waypoint_num)
-
-        self.__new_detections["current_waypoint_num"] = current_waypoint_num
+        self.__new_detections["current_waypoint_num"] = self.advance_waypoint(current_waypoint_num)
         self.__new_detections["route"] = self.__route
     
         #return the info that the analyzer needs
