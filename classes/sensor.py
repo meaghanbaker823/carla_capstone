@@ -1,3 +1,15 @@
+"""
+===========
+Sensor Class()
+
+__init__(self) creates instance and initilizes attributes
+    self.__
+
+function(self) return type | description
+
+===========
+"""
+
 class Sensor:
     def __init__(self, relative_transform, parent_actor, blueprint, world):
         self.__transform = relative_transform

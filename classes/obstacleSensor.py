@@ -1,7 +1,6 @@
-import traceback
-import carla
-
 from classes.sensor import Sensor
+
+import carla
 
 """
 ===========
@@ -29,7 +28,7 @@ class ObstacleSensor(Sensor):
             assert str(parent_actor) in [str(actor) for actor in world.get_actors()] # parent actor must be spawned in the world
             assert str(blueprint) == str(blueprint_lib.find('sensor.other.obstacle')) # blueprint must be obstacle detector
         except:
-            print(traceback.format_exc())
+            raise
         super().__init__(relative_transform, parent_actor, blueprint, world)
         self.__other_actors = []
         self.__detections = []
@@ -52,14 +51,14 @@ class ObstacleSensor(Sensor):
             assert len(self.__detections) == detections_len - 1
             assert len(self.__other_actors) == oactorer_len - 1
         except:
-            print(traceback.format_exc())
+            raise
           
     # with event, add to list of detections
     def obstacle_detect(self, event):
         try:
             assert type(event) == carla.libcarla.ObstacleDetectionEvent
         except:
-            print(traceback.format_exc())
+            raise
 
         detections_len = len(self.__detections)
 
@@ -72,9 +71,8 @@ class ObstacleSensor(Sensor):
             try:
                 assert len(self.__detections) == detections_len + 1
             except:
-                print(traceback.format_exc())
+                raise
 
-    
     # listen to sensor
     def listen(self):
         self.get_sensor().listen(lambda event: self.obstacle_detect(event))

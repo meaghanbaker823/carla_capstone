@@ -1,11 +1,10 @@
 import carla
 import os
-import traceback
 import random
 
 """
 ===========
-World Class
+World Class()
     pub default_spawn   | first spawn point on map
 
 create instance to initialize client connection
@@ -57,7 +56,6 @@ class World:
 
     def init_world(self):
         return (self.__client,
-            self.get_map(),
             self.get_spawnpoints(),
             self.get_spawnpoints()[8],
             self.get_blueprints())
@@ -66,22 +64,15 @@ class World:
         try:
             assert type(spawn) == carla.libcarla.Transform
         except:
-            print(traceback.format_exc())
-
-        try:
-            assert type(spawn) == carla.libcarla.Transform
-        except:
-            print(traceback.format_exc())
+            raise
 
         spectator = self.__world.get_spectator()
-        spectator.set_transform(carla.Transform(carla.Location(
-            x = spawn.location.x, y = spawn.location.y, z = spawn.location.z + 60)))
+        spectator.set_transform(carla.Transform(carla.Location(x = spawn.location.x, y = spawn.location.y, z = spawn.location.z + 60)))
 
         if type(spectator) == carla.libcarla.Actor:
             return spectator
         else:
-            print(traceback.format_exc)
-            return False
+            raise
         
     def spawn_pedestrians(self):
         # pedestrian blueprints
@@ -90,7 +81,7 @@ class World:
 
 
         # spawn 10 pedestrians
-        for i in range(10):
+        for _ in range(10):
             pd_bp = random.choice(pd_bps)
 
             # remove pedestrian spawn choice to avoid collision

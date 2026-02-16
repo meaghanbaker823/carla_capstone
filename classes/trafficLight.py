@@ -1,5 +1,4 @@
 import carla
-import traceback
 import math
 
 """
@@ -41,7 +40,9 @@ class TrafficLight():
         try:
             assert type(car) == carla.libcarla.Vehicle
         except:
-            print(traceback.format_exc())
+            raise
+
+        # this portion for the testing assignment
         for light in self.get_lights():
             if(self.is_light_close(car, light, 10, 40)):
                 old_color = self.get_color()
@@ -65,7 +66,7 @@ class TrafficLight():
         try:
             assert type(action) == str
         except:
-            print(traceback.format_exc())
+            raise
 
         return action
     
@@ -76,7 +77,7 @@ class TrafficLight():
             assert target_distance >= 0
             assert -180 <= target_angle <= 180
         except:
-            print(traceback.format_exc())
+            raise
         
         car = car_check.get_transform().get_forward_vector()
         light = light_check.get_location() - car_check.get_location()

@@ -1,5 +1,16 @@
 from classes.MAPEStep import MAPEStep
-import traceback
+
+"""
+===========
+Planner Class()
+
+__init__(self) creates instance and initilizes attributes
+    self.__
+
+function(self) return type | description
+
+===========
+"""
 
 class Planner(MAPEStep):
     def __init__(self):
@@ -15,7 +26,7 @@ class Planner(MAPEStep):
         try:
             assert current >= 0
         except:
-            print(traceback.format_exc())
+            raise
 
         new = 0
 
@@ -27,10 +38,12 @@ class Planner(MAPEStep):
         try:
             assert 0 <= new <= 1
         except:
-            print(traceback.format_exc())
+            raise
         return new
 
     def plan(self, observations, limit, checks):
+        self.__old_parameters.append(self.__new_parameters)
+        self.__new_parameters = [observations, limit, checks]
         self.__old_plans.append(self.__new_plan)
         self.__new_plan = {"brake": None, "steering": None, "throttle": None}
         speed = observations["current_speed"]

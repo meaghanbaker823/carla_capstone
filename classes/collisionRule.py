@@ -1,5 +1,17 @@
 from classes.rule import Rule
 
+"""
+===========
+CollisionRule Class(Rule)
+
+__init__(self) creates instance and initilizes attributes
+    self.__
+
+function(self) return type | description
+
+===========
+"""
+
 class CollisionRule(Rule):
     def __init__(self, sensors, car):
         super().__init__(sensors, car)

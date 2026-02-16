@@ -1,3 +1,15 @@
+"""
+===========
+AngleConstraint Class()
+
+__init__(self) creates instance and initilizes attributes
+    self.__
+
+function(self) return type | description
+
+===========
+"""
+
 class AngleConstraint():
     def __init__(self, min, max, adjust):
         self.__min = min

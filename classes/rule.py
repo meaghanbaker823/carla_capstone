@@ -1,3 +1,15 @@
+"""
+===========
+Rule Class()
+
+__init__(self) creates instance and initilizes attributes
+    self.__
+
+function(self) return type | description
+
+===========
+"""
+
 class Rule():
     def __init__(self, sensors, car):
         self.__sensors = sensors

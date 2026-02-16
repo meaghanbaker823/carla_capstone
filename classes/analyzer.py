@@ -1,9 +1,24 @@
 from classes.MAPEStep import MAPEStep
-import traceback
+from classes.angleConstraint import AngleConstraint
+
 import math
 import carla
 import numpy as np
-from classes.angleConstraint import AngleConstraint
+
+"""
+===========
+Analyzer Class()
+
+__init__(self) creates instance and initilizes attributes
+    self.__old_parameters | (list) list of parameter history
+    self.__new_parameters | (list) new parameters for this iteration
+    self.__new_observations | (list) observations from this iteration
+    self.__old_observations | (list) list of observation history
+
+function(self) return type | description
+
+===========
+"""
 
 class Analzyer(MAPEStep):
     def __init__(self):
@@ -23,7 +38,7 @@ class Analzyer(MAPEStep):
         try:
             assert type(v1) == tuple and type(v2) == tuple
         except:
-            print(traceback.format_exc())
+            raise
         return math.degrees(np.arctan2(v1[1], v1[0]) - np.arctan2(v2[1], v2[0]))
 
     # function to get angle between the car and target waypoint
@@ -32,7 +47,7 @@ class Analzyer(MAPEStep):
             assert type(car) == carla.libcarla.Vehicle
             assert type(wp) == carla.Waypoint
         except:
-            print(traceback.format_exc())
+            raise
 
         vehicle_pos = car.get_transform()
         car_x = vehicle_pos.location.x
@@ -57,7 +72,7 @@ class Analzyer(MAPEStep):
             assert type(wp_idx) == int
             assert type(rte) == list
         except:
-            print(traceback.format_exc())
+            raise
 
         # create a list of angles to next 5 waypoints starting with current
         next_angle_list = []
@@ -73,7 +88,7 @@ class Analzyer(MAPEStep):
         try:
             assert (-360 <= degrees <= 360)
         except:
-            print(traceback.format_exc())
+            raise
 
         degree_constraint = AngleConstraint(-300, 300, 360)
         fixed_deg = degree_constraint.clamp(degrees)
@@ -85,17 +100,20 @@ class Analzyer(MAPEStep):
         try:
             assert (-50 <= steer_input <= 50)
         except:
-            print(traceback.format_exc())
+            raise
         
         return steer_input
 
     def analyze(self, car, rules, detections):
+        self.__old_parameters.append(self.__new_parameters)
+        self.__new_parameters = [car, rules, detections]
         self.add_old_observations(self.__new_observations)
         self.__new_observations = {}
         
         global control_flag
         self.__new_observations["rules"] = []
         self.__new_observations["traffic_lights"] = detections["traffic_lights"]
+
         for rule in rules:
             # if false, then rule not passed
             if not rule.rule_flag(detections["traffic_lights"]):

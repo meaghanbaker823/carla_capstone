@@ -1,5 +1,4 @@
 import carla
-import traceback
 import math
 
 """
@@ -46,7 +45,7 @@ class AvoidPedestrians():
             assert target_distance >= 0
             assert -180 <= target_angle <= 180
         except:
-            print(traceback.format_exc())
+            raise
 
         car = car_check.get_transform().get_forward_vector()
         walker = walker_check.get_location() - car_check.get_location()
