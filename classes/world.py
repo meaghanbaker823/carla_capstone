@@ -73,6 +73,8 @@ class World:
             return spectator
         else:
             raise
+    
+    
         
     def spawn_pedestrians(self):
         # pedestrian blueprints
@@ -81,7 +83,7 @@ class World:
 
 
         # spawn 10 pedestrians
-        for _ in range(10):
+        for _ in range(1):
             pd_bp = random.choice(pd_bps)
 
             # remove pedestrian spawn choice to avoid collision
@@ -89,11 +91,16 @@ class World:
             spawn = carla.Transform()
             # at 10
             # choose random location, then remove that spawnpoint to avoid pedestrians from not spawning
+
             spawn.location = (spwn_pts[10]).location
-            
 
             ped = self.__world.spawn_actor(pd_bp, spawn)
             control_bp = self.get_blueprints().find('controller.ai.walker')
             controller = self.__world.spawn_actor(control_bp, carla.Transform(), ped)
             controller.start()
-            controller.go_to_location(self.__world.get_random_location_from_navigation())
+            controller.set_max_speed(2.0)
+            destination = self.__world.get_random_location_from_navigation()
+            while destination == None:
+                destination = self.__world.get_random_location_from_navigation()
+            self.__world.tick()
+            controller.go_to_location(destination)

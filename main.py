@@ -92,6 +92,7 @@ def main():
 
         while True:
             main_loop(spectator, car, vehicle)
+            world.get_world().tick()
 
     except CollisionErr:
         print("Collision")
