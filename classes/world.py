@@ -80,10 +80,10 @@ class World:
         # pedestrian blueprints
         pd_bps = self.get_blueprints().filter("walker.pedestrian.*")
         spwn_pts = self.get_spawnpoints()
-
+        good_spwn_pts = [spwn_pts[4], spwn_pts[5], spwn_pts[9], spwn_pts[10], spwn_pts[13]]
 
         # spawn 10 pedestrians
-        for _ in range(1):
+        for i in range(len(good_spwn_pts)):
             pd_bp = random.choice(pd_bps)
 
             # remove pedestrian spawn choice to avoid collision
@@ -92,7 +92,7 @@ class World:
             # at 10
             # choose random location, then remove that spawnpoint to avoid pedestrians from not spawning
 
-            spawn.location = (spwn_pts[10]).location
+            spawn.location = (good_spwn_pts[i]).location
 
             ped = self.__world.spawn_actor(pd_bp, spawn)
             control_bp = self.get_blueprints().find('controller.ai.walker')
