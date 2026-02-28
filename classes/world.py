@@ -57,7 +57,7 @@ class World:
     def init_world(self):
         return (self.__client,
             self.get_spawnpoints(),
-            self.get_spawnpoints()[8],
+            self.get_spawnpoints()[142],
             self.get_blueprints())
 
     def init_spectator(self, spawn):
@@ -74,17 +74,34 @@ class World:
         else:
             raise
     
-    
+    def spawn_vehicles(self):
+      # vehicle blueprints
+        v_bps = self.get_blueprints().filter("vehicle.*")
+
+        spwn_pts = self.get_spawnpoints()
+        v_spwn_pts = [spwn_pts[13], spwn_pts[117], spwn_pts[114], spwn_pts[141]]  
         
-    def spawn_pedestrians(self):
+        for i in range(len(v_spwn_pts)):
+            v_bp = random.choice(v_bps)
+            spawn = v_spwn_pts[i]
+
+            self.__world.spawn_actor(v_bp, spawn)
+            
+
+
+
+    def spawn_pedestrians(self): 
         # pedestrian blueprints
         pd_bps = self.get_blueprints().filter("walker.pedestrian.*")
         spwn_pts = self.get_spawnpoints()
-        good_spwn_pts = [spwn_pts[4], spwn_pts[5], spwn_pts[9], spwn_pts[10], spwn_pts[13]]
+        good_spwn_pts = [spwn_pts[95], spwn_pts[194], spwn_pts[202], spwn_pts[122]]
+        # good_spwn_pts[0].location.z -= 1
+        dest_points = [spwn_pts[112], spwn_pts[9], spwn_pts[140], spwn_pts[7]]
 
         # spawn 10 pedestrians
         for i in range(len(good_spwn_pts)):
             pd_bp = random.choice(pd_bps)
+            print(i)
 
             # remove pedestrian spawn choice to avoid collision
             
@@ -99,8 +116,6 @@ class World:
             controller = self.__world.spawn_actor(control_bp, carla.Transform(), ped)
             controller.start()
             controller.set_max_speed(2.0)
-            destination = self.__world.get_random_location_from_navigation()
-            while destination == None:
-                destination = self.__world.get_random_location_from_navigation()
+            destination = dest_points[i]
             self.__world.tick()
-            controller.go_to_location(destination)
+            controller.go_to_location(destination.location)

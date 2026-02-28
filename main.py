@@ -2,6 +2,7 @@ from classes.vehicle import Vehicle
 from classes.world import World
 from classes.collisionRule import CollisionRule
 from classes.trafficRule import TrafficRule
+from classes.pedestrianRule import PedestrianRule
 from classes.speedOverCheck import SpeedOverCheck
 from classes.speedPerfectCheck import SpeedPerfectCheck
 from classes.speedUnderCheck import SpeedUnderCheck  
@@ -47,6 +48,7 @@ def init_actors(spawn, blueprint_lib, spts, world):
     vehicle.set_checks(checks)
 
     world.spawn_pedestrians()
+    #world.spawn_vehicles()
 
     if type(vehicle) == Vehicle and type(car) == carla.libcarla.Vehicle:
         return (vehicle, car)
