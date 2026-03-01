@@ -48,7 +48,7 @@ def init_actors(spawn, blueprint_lib, spts, world):
     vehicle.set_checks(checks)
 
     world.spawn_pedestrians()
-    #world.spawn_vehicles()
+    world.spawn_vehicles()
 
     if type(vehicle) == Vehicle and type(car) == carla.libcarla.Vehicle:
         return (vehicle, car)
