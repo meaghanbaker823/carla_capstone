@@ -2,7 +2,7 @@ from classes.rule import Rule
 
 """
 ===========
-TrafficRule Class(Rule)
+parkedRule Class(Rule)
 
 __init__(self) creates instance and initilizes attributes
     self.__
@@ -12,19 +12,20 @@ function(self) return type | description
 ===========
 """
 
-class TrafficRule(Rule):
+class ParkedRule(Rule):
     def __init__(self, sensors, car):
         super().__init__(sensors, car)
         self.__sensors = sensors
         self.__car = car
-
+        
     def rule_flag(self, traffic_lights):
-        if(traffic_lights.process_color(self.__car.get_car()) != ""):
-            return False
+        if(self.__sensors[0].get_other_actors() != []):
+
+            if(self.__sensors[0].get_detections()[-1][0].type_id[:-2].startswith('vehicle')):
+                return False
         return True
     
     def rule_follow(self, traffic_lights, limit):
-        if(traffic_lights.get_response() == "stop"):
-            return 1, 0, None
-        else:
-            return 0, limit, None
+        # pass brake as 1, speed as 0, and steering as None
+        # ARINS WORK HERE  (the 3rd argument will be the steering angle (-1 or 1))
+        return 1, 0, None

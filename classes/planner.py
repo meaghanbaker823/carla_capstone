@@ -50,9 +50,11 @@ class Planner(MAPEStep):
 
         # rules, navigation, maintain speed
         for rule in observations["rules"]:
-            self.__new_plan["brake"], limit = rule.rule_follow(observations["traffic_lights"], limit)
+            self.__new_plan["brake"], limit, self.__new_plan["steering"] = rule.rule_follow(observations["traffic_lights"], limit)
         
-        self.__new_plan["steering"] = observations["steering_angle"]
+
+        if(self.__new_plan["steering"] == None):
+            self.__new_plan["steering"] = observations["steering_angle"]
 
         self.__new_plan["throttle"] = self.maintain_speed(speed, limit, checks)
         if (self.__new_plan["throttle"] == 0):

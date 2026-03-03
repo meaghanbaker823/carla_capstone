@@ -8,14 +8,15 @@ class PedestrianRule(Rule):
 
     def rule_flag(self, traffic_lights):
         if(self.__sensors[0].get_other_actors() != []):
-            if(self.__sensors[0].get_detections()[-1].type_id[:-2]=='walker.pedestrian.'):
+            # print(self.__sensors[0].get_detections()[-1][0].type_id)
+            if(self.__sensors[0].get_detections()[-1][0].type_id[:-2].startswith('walker')):
                 return False
         return True
 
     def rule_follow(self, traffic_lights, limit):
-        # return brake as 1 and speed as 0
-        return 1,0 
-
+        # return brake as 1, speed as 0, and steering as None
+        return 1,0, None
+    
     """
 
 class ObstacleRule(Rule):

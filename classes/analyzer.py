@@ -109,11 +109,35 @@ class Analzyer(MAPEStep):
         
         return steer_input
 
+    def check_lane_options(self, lane_change):
+        try:
+            assert isinstance(lane_change, carla.libcarla.LaneChange)
+        except:
+            raise
+
+        # favor lane changes into the right lane
+        if lane_change == carla.libcarla.LaneChange.NONE:
+            return "none"
+        elif lane_change == carla.libcarla.LaneChange.Right or lane_change == carla.libcarla.LaneChange.Both:
+            return "right"
+        else:
+            return "left"
+
     def analyze(self, car, rules, detections):
         self.__old_parameters.append(self.__new_parameters)
         self.__new_parameters = [car, rules, detections]
         self.add_old_observations(self.__new_observations)
         self.__new_observations = {}
+
+        """
+        __new_observations =
+            rules:              (*classes.rules.Rule)
+            traffic_lights:     (classes.trafficLight.TrafficLight)
+            open_lane:          (string)
+            current_speed:      (int)
+            new_waypoint:       (int)
+            steering_angle:     (float)
+        """
         
         self.__new_observations["rules"] = []
         self.__new_observations["traffic_lights"] = detections["traffic_lights"]
@@ -125,6 +149,8 @@ class Analzyer(MAPEStep):
                         self.__new_observations["rules"].append(rule)
             except:
                 raise
+
+        self.__new_observations["open_lane"] = self.check_lane_options(detections["lane_info"]["lane_change"])
                     
         # unit is kilometers/hr
         self.__new_observations["current_speed"] = round(3.6 * math.sqrt(detections["current_velocity"].x ** 2 + detections["current_velocity"].y ** 2 + detections["current_velocity"].z ** 2), 0)

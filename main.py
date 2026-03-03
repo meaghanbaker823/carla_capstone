@@ -3,6 +3,7 @@ from classes.world import World
 from classes.collisionRule import CollisionRule
 from classes.trafficRule import TrafficRule
 from classes.pedestrianRule import PedestrianRule
+from classes.parkedRule import ParkedRule
 from classes.speedOverCheck import SpeedOverCheck
 from classes.speedPerfectCheck import SpeedPerfectCheck
 from classes.speedUnderCheck import SpeedUnderCheck  
@@ -40,7 +41,7 @@ def init_actors(spawn, blueprint_lib, spts, world):
     car = vehicle.get_car()
 
     # vehicle.set_sensors(transforms, car, blueprints, world, blueprint_lib)
-    rules = [CollisionRule(vehicle.get_sensors(), vehicle), TrafficRule(vehicle.get_sensors(), vehicle)]
+    rules = [CollisionRule(vehicle.get_sensors(), vehicle), TrafficRule(vehicle.get_sensors(), vehicle), ParkedRule(vehicle.get_sensors(), vehicle), PedestrianRule(vehicle.get_sensors(),vehicle)]
     vehicle.set_rules(rules)
 
     speed_threshold = 3
