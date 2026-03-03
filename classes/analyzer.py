@@ -109,19 +109,30 @@ class Analzyer(MAPEStep):
         
         return steer_input
 
-    def check_lane_options(self, lane_change):
+    # returns possible waypoint in another lane, or None if none available
+    def check_lane_options(self, waypoint_num, route, lane_change):
         try:
+            assert isinstance(waypoint_num, int)
             assert isinstance(lane_change, carla.libcarla.LaneChange)
         except:
             raise
 
+        current_waypoint = route[waypoint_num]
+
+        # how far ahead in other lane are we looking
+        step_size = 5
+
         # favor lane changes into the right lane
         if lane_change == carla.libcarla.LaneChange.NONE:
-            return "none"
+            return None
         elif lane_change == carla.libcarla.LaneChange.Right or lane_change == carla.libcarla.LaneChange.Both:
-            return "right"
+            right_lane = current_waypoint.get_right_lane()
+
+            return right_lane.next(step_size)[0]
         else:
-            return "left"
+            left_lane = current_waypoiny.get_left_lane()
+
+            return left_lane.previous(step_size)[0]
 
     def analyze(self, car, rules, detections):
         self.__old_parameters.append(self.__new_parameters)
@@ -133,7 +144,7 @@ class Analzyer(MAPEStep):
         __new_observations =
             rules:              (*classes.rules.Rule)
             traffic_lights:     (classes.trafficLight.TrafficLight)
-            open_lane:          (string)
+            open_lane:          (carla.libcarla.Waypoint | None)
             current_speed:      (int)
             new_waypoint:       (int)
             steering_angle:     (float)
@@ -150,7 +161,8 @@ class Analzyer(MAPEStep):
             except:
                 raise
 
-        self.__new_observations["open_lane"] = self.check_lane_options(detections["lane_info"]["lane_change"])
+        self.__new_observations["open_lane"] = self.check_lane_options(detections["current_waypoint_num"], 
+                detections["route"], detections["lane_info"]["lane_change"])
                     
         # unit is kilometers/hr
         self.__new_observations["current_speed"] = round(3.6 * math.sqrt(detections["current_velocity"].x ** 2 + detections["current_velocity"].y ** 2 + detections["current_velocity"].z ** 2), 0)
