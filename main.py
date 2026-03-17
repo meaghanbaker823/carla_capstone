@@ -13,6 +13,8 @@ import carla
 import time
 import traceback
 
+DT = 0.005
+
 """
 - work on checking exceptions (make them work how they should)
 - fix control flag so it works (or change it)
@@ -67,9 +69,9 @@ def main_loop(spectator, car, vehicle):
     # Move the spectator behind the vehicle
     transform = carla.Transform(car.get_transform().transform(carla.Location(x=-4,z=2.5)),car.get_transform().rotation)
     spectator.set_transform(transform)
-    time.sleep(0.005)
+    time.sleep(DT)
     try:
-        vehicle.mape_drive(30)
+        vehicle.mape_drive(30, DT)
     except:
         raise
 

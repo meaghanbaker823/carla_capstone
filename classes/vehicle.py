@@ -71,7 +71,7 @@ class Vehicle:
     def get_actors(self):
         return self.__actors
 
-    def mape_drive(self, speed_limit):     
+    def mape_drive(self, speed_limit, DT):     
         try:
             monitor_info = self.__monitor_class.monitor(self.__waypoint_num)
             self.__waypoint_num = monitor_info["current_waypoint_num"]

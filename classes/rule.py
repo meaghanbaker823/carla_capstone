@@ -15,6 +15,9 @@ class Rule():
         self.__sensors = sensors
         self.__car = car
 
+    def get_sensors(self):
+        return self.__sensors
+
     def rule_flag(self, traffic_lights):
         pass
 

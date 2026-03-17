@@ -1,4 +1,5 @@
 from classes.MAPEStep import MAPEStep
+from classes.shenRule import Shen
 
 """
 ===========
@@ -52,6 +53,10 @@ class Planner(MAPEStep):
         for rule in observations["rules"]:
             self.__new_plan["brake"], limit, self.__new_plan["steering"] = rule.rule_follow(observations["traffic_lights"], limit)
         
+        shen = Shen(observations["r"], observations["distance"], observations["current_speed"])
+        min_distance = shen.calculate_min_distance(10)
+        h = shen.calculate_safety_function(min_distance)
+        allowable_a = shen.calculate_allowable_distance(1, h, 0.005)
 
         if(self.__new_plan["steering"] == None):
             self.__new_plan["steering"] = observations["steering_angle"]

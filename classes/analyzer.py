@@ -5,6 +5,8 @@ import math
 import carla
 import numpy as np
 from classes.route_done import RouteDone
+from classes.pedestrianRule import PedestrianRule
+from classes.parkedRule import ParkedRule
 
 """
 ===========
@@ -130,7 +132,7 @@ class Analzyer(MAPEStep):
 
             return right_lane.next(step_size)[0]
         else:
-            left_lane = current_waypoiny.get_left_lane()
+            left_lane = current_waypoint.get_left_lane()
 
             return left_lane.previous(step_size)[0]
 
@@ -149,6 +151,7 @@ class Analzyer(MAPEStep):
             new_waypoint:       (int)
             steering_angle:     (float)
         """
+        self.__new_observations["r"] = 0
         
         self.__new_observations["rules"] = []
         self.__new_observations["traffic_lights"] = detections["traffic_lights"]
@@ -157,9 +160,14 @@ class Analzyer(MAPEStep):
             # if false, then rule not passed
             try:
                 if not rule.rule_flag(detections["traffic_lights"]):
-                        self.__new_observations["rules"].append(rule)
+                    self.__new_observations["rules"].append(rule)
             except:
                 raise
+
+        for rule in self.__new_observations["rules"]:
+            if(isinstance(rule, ParkedRule)):
+                self.__new_observations["distance"] = rule.get_sensors()[0].get_detections()[-1][1]
+                self.__new_observations["r"] = 1
 
         self.__new_observations["open_lane"] = self.check_lane_options(detections["current_waypoint_num"], 
                 detections["route"], detections["lane_info"]["lane_change"])
