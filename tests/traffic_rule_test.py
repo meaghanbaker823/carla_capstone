@@ -2,54 +2,55 @@ import unittest
 from unittest.mock import Mock
 # rule_flag testing
 class RuleFlag(unittest.TestCase):
-    def test_rule_flag(self):
-        # testing both branches
-        lights1 = Mock()
-        lights2 = Mock()
+    def rule_flag(self):
+        if self.lights.process_color.return_value != "":
+            return False
+        return True
+    
+    def setUp(self):
+        self.lights = Mock()
 
+
+    def test_rule_flag1(self):
         # lights 1 simulating no response needed from car
-        lights1.process_color.return_value = ""
-        # lights2 simulating a response needed from car
-        lights2.process_color.return_value = "red"
-        return_value1 = None
-        return_value2 = None
-        if lights1.process_color.return_value != "":
-            return_value1 = False
-        else:
-            return_value1 = True
-        
+        self.lights.process_color.return_value = ""
+        return_value = self.rule_flag()
 
-        if lights2.process_color.return_value != "":
-            return_value2 = False
-        else:
-            return_value2 = True
+        self.assertEqual(return_value, True)
 
-        self.assertEqual(return_value1, True)
-        self.assertEqual(return_value2, False)
+
+    def test_rule_flag2(self):
+        # light2 simulating a response needed from car
+        self.lights.process_color.return_value = "red"
+        return_value = self.rule_flag()
+        self.assertEqual(return_value, False)
         
 
 
 
 # rule_follow testing
 class RuleFollow(unittest.TestCase):
-    def test_rule_follow(self):
-        lights1 = Mock()
-        lights2 = Mock()
-
+    def setUp(self):
+        self.lights = Mock()
         # setting limit to standard speed limit
-        limit = 30
-
+        self.limit = 30
+    
+    def rule_follow(self):
+        if(self.lights.get_response() == "stop"):
+            return 1, 0, None
+        else:
+            return 0, self.limit, None
+        
+    def test_rule_follow1(self):
         # lights1 mimicing case where continue driving 
-        lights1.get_response.return_value = "drive"
+        self.lights.get_response.return_value = "drive"
+
+        self.assertEqual(self.rule_follow(), (0, 30, None))
+
+    def test_rule_follow2(self):
         # lights2 mimicing case where need to stop car
-        lights2.get_response.return_value = "stop"
-
-        lights1_return = (0, limit, None)
-        lights2_return = (1, 0, None)
-
-        self.assertEqual(lights1_return, (0, 30, None))
-        self.assertEqual(lights2_return, (1, 0, None))
-
+        self.lights.get_response.return_value = "stop"
+        self.assertEqual(self.rule_follow(), (1, 0, None))
 
 
 
