@@ -70,4 +70,4 @@ class Planner(MAPEStep):
         return self.__new_plan
     
     def notify(self):
-        return "The plan in this iteration is " + self.get_new_plan()
+        return "The plan in this iteration is " + str(self.get_new_plan())

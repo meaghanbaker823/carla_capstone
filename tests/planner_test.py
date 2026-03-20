@@ -12,8 +12,6 @@ class MaintainSpeedTesting(unittest.TestCase):
 
     
     def maintain_speed(self):
-
-
         new = 0
         for check in self.checks:
             if(check.speed_check(self.current, self.limit) != -1):
@@ -69,6 +67,15 @@ class MaintainSpeedTesting(unittest.TestCase):
 # test plan
 
 # test notify
+class NotifyTest(unittest.TestCase):
+    def notify(self):
+        return "The plan in this iteration is " + str(self.plan.get_new_plan())
+    
+    def test_notify(self):
+        self.plan = Mock()
+        self.plan.get_new_plan.return_value = {"brake": 1, "steering": 0, "throttle": None}
+
+        self.assertEqual(self.notify(), "The plan in this iteration is " + str({"brake": 1, "steering": 0, "throttle": None}))
 
 
 if __name__ == "__main__":
