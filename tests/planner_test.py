@@ -65,6 +65,46 @@ class MaintainSpeedTesting(unittest.TestCase):
         self.assertEqual(self.maintain_speed(), 0.8)
     
 # test plan
+class PlannerTest(unittest.TestCase):
+    def setUp(self):
+        self.speed = 30
+        self.new_plan = {"brake": None, "steering": None, "throttle": None}
+        self.observations = {"rules": [Mock(),], "steering_angle": 1, "distance": 20, "traffic_lights": Mock()}
+        self.checks = [Mock(), Mock(), Mock()]
+        self.limit = 30
+
+        # to interact with self. methods
+        self.planner = Mock()
+        
+    
+    def plan(self):
+        # rules, navigation, maintain speed
+        for rule in self.observations["rules"]:
+            self.new_plan["brake"], self.limit, self.new_plan["steering"] = rule.rule_follow(self.observations["traffic_lights"], self.limit)
+        
+        if(self.new_plan["steering"] == None):
+            self.new_plan["steering"] = self.observations["steering_angle"]
+
+        self.new_plan["throttle"] = self.planner.maintain_speed(self.speed, self.limit, self.checks)
+        if (self.new_plan["throttle"] == 0):
+            self.new_plan["brake"] = 1.0
+        else:
+            self.new_plan["brake"] = 0.0
+        
+        return self.new_plan
+    
+    def test_no_steer_and_throttle_zero(self):
+        self.observations["rules"][0].rule_follow.return_value = (1, 0, None)
+        self.planner.maintain_speed.return_value = 0
+
+        self.assertDictEqual(self.plan(), {"brake": 1, "steering": 1, "throttle": 0})
+
+    def test_steer_set_and_throttle_set(self):
+        self.observations["rules"][0].rule_follow.return_value = (0, self.limit, -1)
+        self.planner.maintain_speed.return_value = 0.8
+
+        self.assertDictEqual(self.plan(), {"brake": 0, "steering": -1, "throttle": 0.8})
+   
 
 # test notify
 class NotifyTest(unittest.TestCase):
