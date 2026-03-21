@@ -1,5 +1,5 @@
 from classes.MAPEStep import MAPEStep
-from classes.shenRule import Shen
+from classes.CBFRule import CBFRule
 
 """
 ===========
@@ -48,15 +48,17 @@ class Planner(MAPEStep):
         self.__old_plans.append(self.__new_plan)
         self.__new_plan = {"brake": None, "steering": None, "throttle": None}
         speed = observations["current_speed"]
+        observations["distance"] = 20
 
         # rules, navigation, maintain speed
         for rule in observations["rules"]:
             self.__new_plan["brake"], limit, self.__new_plan["steering"] = rule.rule_follow(observations["traffic_lights"], limit)
         
-        shen = Shen(observations["r"], observations["distance"], observations["current_speed"])
-        min_distance = shen.calculate_min_distance(10)
-        h = shen.calculate_safety_function(min_distance)
-        allowable_a = shen.calculate_allowable_distance(1, h, 0.005)
+        cbf = CBFRule(observations["r"], observations["distance"], observations["current_speed"])
+        min_distance = cbf.calculate_min_distance(10)
+        h = cbf.calculate_safety_function(min_distance)
+        allowable_a = cbf.calculate_allowable_distance(1, h, 0.005)
+        u = cbf.final_logic(cbf.get_u_nom(), allowable_a, 1)
 
         if(self.__new_plan["steering"] == None):
             self.__new_plan["steering"] = observations["steering_angle"]
