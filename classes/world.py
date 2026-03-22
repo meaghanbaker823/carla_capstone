@@ -62,7 +62,7 @@ class World:
 
     def init_spectator(self, spawn):
         try:
-            assert type(spawn) == carla.libcarla.Transform
+            assert isinstance(spawn, carla.libcarla.Transform)
         except:
             raise
 
