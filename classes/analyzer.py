@@ -136,7 +136,7 @@ class Analzyer(MAPEStep):
 
             return left_lane.previous(step_size)[0]
 
-    def analyze(self, car, rules, detections):
+    def analyze(self, car, rules, detections, distance):
         self.__old_parameters.append(self.__new_parameters)
         self.__new_parameters = [car, rules, detections]
         self.add_old_observations(self.__new_observations)
@@ -152,9 +152,10 @@ class Analzyer(MAPEStep):
             steering_angle:     (float)
         """
         self.__new_observations["r"] = 0
-        
         self.__new_observations["rules"] = []
         self.__new_observations["traffic_lights"] = detections["traffic_lights"]
+        self.__new_observations["distance"] = distance
+
 
         for rule in rules:
             # if false, then rule not passed
