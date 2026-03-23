@@ -1,89 +1,17 @@
-from classes.vehicle import Vehicle
 from classes.world import World
-from classes.collisionRule import CollisionRule
-from classes.trafficRule import TrafficRule
-from classes.pedestrianRule import PedestrianRule
-from classes.parkedRule import ParkedRule
-from classes.CBFRule import CBFRule
-from classes.speedOverCheck import SpeedOverCheck
-from classes.speedPerfectCheck import SpeedPerfectCheck
-from classes.speedUnderCheck import SpeedUnderCheck  
 from classes.collision_exception import CollisionErr
 from classes.route_done import RouteDone
-import carla
-import time
 import traceback
 
-DT = 0.005
-
-"""
-- work on checking exceptions (make them work how they should)
-- fix control flag so it works (or change it)
-- if MAPE is working, clean up non-MAPE
-- if extra time, clean up main
-- make sure keyboard interrupt works throughout program
-- check waypoints are advancing correctly (why is car crashing?) 
-- make car stop before collision (either make car stop and/or make program fully stop when collision happens)
-"""
-
-#initialize the list of actors
-def init_actors(spawn, blueprint_lib, spts, world):
-    try:
-        assert type(spawn) == carla.libcarla.Transform
-        assert type(blueprint_lib) == carla.libcarla.BlueprintLibrary
-        assert type(spts) == list
-        assert type(world) == World
-    except:
-        raise
-    
-    transforms = [carla.Transform(carla.Location(x=2.8, z=0.7)), carla.Transform(carla.Location(x=4.8, z=0.7)), carla.Transform(carla.Location(x=6.8, z=0.7))]
-    blueprints = [blueprint_lib.find('sensor.other.obstacle'), blueprint_lib.find('sensor.other.collision'), blueprint_lib.find('sensor.other.lane_invasion')]
-    blueprints[0].set_attribute('distance', '20.0')
-
-    vehicle = Vehicle(blueprint_lib, world.get_world(), spawn, spts[5], transforms, blueprints, world)
-    car = vehicle.get_car()
-
-    # vehicle.set_sensors(transforms, car, blueprints, world, blueprint_lib)
-    rules = [CollisionRule(vehicle.get_sensors(), vehicle), TrafficRule(vehicle.get_sensors(), vehicle), ParkedRule(vehicle.get_sensors(), vehicle), PedestrianRule(vehicle.get_sensors(),vehicle), CBFRule(0,20,0)]
-    vehicle.set_rules(rules)
-
-    speed_threshold = 3
-    checks = [SpeedOverCheck(speed_threshold), SpeedPerfectCheck(speed_threshold), SpeedUnderCheck(speed_threshold)]
-    vehicle.set_checks(checks)
-
-    world.spawn_pedestrians()
-    world.spawn_vehicles()
-
-    if type(vehicle) == Vehicle and type(car) == carla.libcarla.Vehicle:
-        return (vehicle, car)
-    else:
-        raise
-
-#repeating logic performed in the main function
-def main_loop(spectator, car, vehicle):
-    try:
-        assert type(car) == carla.libcarla.Vehicle
-        assert type(vehicle) == Vehicle
-    except:
-        raise
-
-    # Move the spectator behind the vehicle
-    transform = carla.Transform(car.get_transform().transform(carla.Location(x=-4,z=2.5)),car.get_transform().rotation)
-    spectator.set_transform(transform)
-    time.sleep(DT)
-    try:
-        vehicle.mape_drive(30, DT)
-    except:
-        raise
-
-def clear_world(client):
-    try:
-        assert type(client) == carla.libcarla.Client
-    except:
-        print(traceback.format_exc())
-
-    client.reload_world()
-    print("World cleared :)\n")
+# STATIC VARIABLES
+dt = 0.005
+extra = 5
+standard_distance = 8
+u_nom = 40
+alpha = 0.01
+max_acc = 70
+distance = 20
+scanning_distance = '20.0'
 
 def main():   
     world = World()
@@ -93,11 +21,10 @@ def main():
 
     try:
         spectator = world.init_spectator(spawn)
-
-        vehicle, car = init_actors(spawn, blueprint_lib, spts, world)
+        vehicle, car = world.init_actors(spawn, blueprint_lib, spts, world, scanning_distance, dt, extra, u_nom, alpha, max_acc, distance, standard_distance)
 
         while True:
-            main_loop(spectator, car, vehicle)
+            world.main_loop(spectator, car, vehicle, dt)
             world.get_world().tick()
 
     except CollisionErr:
@@ -109,7 +36,7 @@ def main():
     except KeyboardInterrupt:
         print(" Keyboard Interrupt")
     finally:
-        clear_world(client)
+        world.clear_world(client)
 
 if __name__ == "__main__":
     main()
