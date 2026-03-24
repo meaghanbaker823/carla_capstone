@@ -51,7 +51,7 @@ class Monitor(MAPEStep):
 
     def advance_waypoint(self, current_waypoint_num):
         try:
-            assert type(self.__car) == carla.libcarla.Vehicle
+            assert isinstance(self.__car, carla.libcarla.Vehicle)
         except:
             raise
 

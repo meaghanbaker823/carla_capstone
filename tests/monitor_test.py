@@ -1,0 +1,82 @@
+import unittest
+from unittest.mock import Mock
+
+import sys
+
+sys.path.append("..")
+
+from classes.world import World
+from classes.monitor import Monitor
+
+import carla
+
+def setUpModule():
+    global monitor
+
+    transform = [Mock(spec=carla.libcarla.Transform), Mock(spec=carla.libcarla.Transform)]
+
+    global car
+
+    car = Mock(spec=carla.libcarla.Vehicle)
+    car.get_velocity.return_value = (0, 0, 0)
+
+    blueprint = ["sensor.other.obstacle", "sensor.other.collision"]
+    world = Mock(spec=World)
+    world.get_actors.return_value = [str(car)]
+    blueprint_lib = Mock()
+    blueprint_lib.find.side_effect = ["sensor.other.obstacle", "sensor.other.collision"]
+    actors = Mock()
+    actors.filter.return_value = None
+    route = [[Mock(spec=carla.libcarla.Waypoint)]] * 10
+
+    for mock in route:
+        mock[0].transform.location = None
+
+    monitor = Monitor(transform, car, blueprint, world, blueprint_lib, actors, route)
+
+class AdvanceWaypointTest(unittest.TestCase):
+    def test_advance_waypoint_close(self):
+        car.get_transform.return_value.location.distance.return_value = 3
+
+        current_waypoint_num = 0
+
+        result = monitor.advance_waypoint(current_waypoint_num)
+
+        self.assertEqual(result, 10)
+
+    def test_advance_waypoint_far(self):
+        car.get_transform.return_value.location.distance.return_value = 6
+
+        current_waypoint_num = 0
+
+        result = monitor.advance_waypoint(current_waypoint_num)
+
+        self.assertEqual(result, 0)
+
+
+class GetLaneInfoTest(unittest.TestCase):
+    def test_get_lane_info(self):
+        waypoint = Mock(spec=carla.libcarla.Waypoint)
+
+        waypoint.lane_id = -1
+        waypoint.lane_type = "One Way"
+        waypoint.lane_change = "Both"
+        waypoint.left_lane_marking = "Dashed"
+        waypoint.right_lane_marking = "Dashed"
+
+        result = monitor.get_lane_info(waypoint)
+
+        expectation = {"lane_id": -1, "lane_type": "One Way", "lane_change": "Both", "left_lane_marking": "Dashed", "right_lane_marking": "Dashed"}
+
+        self.assertEqual(result, expectation)
+
+class MonitorTest(unittest.TestCase):
+    def test_monitor(self):
+        current_waypoint_num = 0
+
+        car.get_transform.return_value.location.distance.return_value = 6
+
+        result = monitor.monitor(current_waypoint_num)
+
+if __name__ == "__main__":
+    unittest.main()

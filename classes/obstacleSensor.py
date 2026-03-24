@@ -24,7 +24,7 @@ class ObstacleSensor(Sensor):
     def __init__(self, relative_transform, parent_actor, blueprint, world, blueprint_lib):
          # pre-condition
         try:
-            assert type(relative_transform) == carla.libcarla.Transform # relative transform must be a transform object
+            assert isinstance(relative_transform, carla.libcarla.Transform) # relative transform must be a transform object
             assert str(parent_actor) in [str(actor) for actor in world.get_actors()] # parent actor must be spawned in the world
             assert str(blueprint) == str(blueprint_lib.find('sensor.other.obstacle')) # blueprint must be obstacle detector
         except:
