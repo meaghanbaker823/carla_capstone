@@ -122,4 +122,5 @@ class Monitor(MAPEStep):
         output = "The detections in this monitor iteration are: "
         for i in self.get_new_detections():
             output += "Detection: " + i
+            output += " "
         return output

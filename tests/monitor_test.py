@@ -6,6 +6,7 @@ import sys
 sys.path.append("..")
 
 from classes.world import World
+from classes.trafficLight import TrafficLight
 from classes.monitor import Monitor
 
 import carla
@@ -27,6 +28,7 @@ def setUpModule():
     blueprint_lib.find.side_effect = ["sensor.other.obstacle", "sensor.other.collision"]
     actors = Mock()
     actors.filter.return_value = None
+    global route
     route = [[Mock(spec=carla.libcarla.Waypoint)]] * 10
 
     for mock in route:
@@ -77,6 +79,20 @@ class MonitorTest(unittest.TestCase):
         car.get_transform.return_value.location.distance.return_value = 6
 
         result = monitor.monitor(current_waypoint_num)
+
+        self.assertEqual(result["current_velocity"], (0,0,0))
+        self.assertIsInstance(result["traffic_lights"], TrafficLight)
+        self.assertEqual(result["current_waypoint_num"], 0)
+        self.assertEqual(result["route"], route)
+        self.assertIsInstance(result["lane_info"], dict)
+
+class NotifyTest(unittest.TestCase):
+    def test_notify(self):
+        result = monitor.notify()
+
+        expectation = "The detections in this monitor iteration are: Detection: current_velocity Detection: traffic_lights Detection: current_waypoint_num Detection: route Detection: lane_info "
+
+        self.assertEqual(result, expectation)
 
 if __name__ == "__main__":
     unittest.main()
