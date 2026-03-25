@@ -23,7 +23,7 @@ function(self) return type | description
 ===========
 """
 
-class Analzyer(MAPEStep):
+class Analyzer(MAPEStep):
     def __init__(self):
         self.__old_parameters = []
         self.__new_parameters = []
@@ -39,7 +39,7 @@ class Analzyer(MAPEStep):
 
     def angle_between(self, v1, v2):
         try:
-            assert type(v1) == tuple and type(v2) == tuple
+            assert isinstance(v1, tuple) and isinstance(v2, tuple)
         except:
             raise
         return math.degrees(np.arctan2(v1[1], v1[0]) - np.arctan2(v2[1], v2[0]))
@@ -47,8 +47,8 @@ class Analzyer(MAPEStep):
     # function to get angle between the car and target waypoint
     def get_angle(self, car, wp):
         try:
-            assert type(car) == carla.libcarla.Vehicle
-            assert type(wp) == carla.Waypoint
+            assert isinstance(car, carla.libcarla.Vehicle)
+            assert isinstance(wp, carla.Waypoint)
         except:
             raise
 
@@ -71,9 +71,9 @@ class Analzyer(MAPEStep):
     
     def get_proper_angle(self, car,wp_idx,rte):
         try:
-            assert type(car) == carla.libcarla.Vehicle
-            assert type(wp_idx) == int
-            assert type(rte) == list
+            assert isinstance(car, carla.libcarla.Vehicle)
+            assert isinstance(wp_idx, int)
+            assert isinstance(rte, list)
         except:
             raise
 
@@ -188,4 +188,5 @@ class Analzyer(MAPEStep):
         output = "The observations in this analyzer iteration are: "
         for i in self.get_new_observations():
             output += "Observation: " + i
+            output += " "
         return output

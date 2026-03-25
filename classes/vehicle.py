@@ -1,6 +1,6 @@
 from classes.globalRoutePlanner import GlobalRoutePlanner
 from classes.monitor import Monitor
-from classes.analyzer import Analzyer
+from classes.analyzer import Analyzer
 from classes.planner import Planner
 from classes.executor import Executor
 
@@ -42,7 +42,7 @@ class Vehicle:
     def mape_init(self, transform, blueprint, blueprint_lib):
         try:
             self.__monitor_class = Monitor(transform, self.__car, blueprint, self.__world, blueprint_lib, self.__actors, self.__route)
-            self.__analyzer_class = Analzyer()
+            self.__analyzer_class = Analyzer()
             self.__planner_class = Planner()
             self.__executor_class = Executor()
 
