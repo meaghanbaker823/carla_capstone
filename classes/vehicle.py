@@ -19,19 +19,19 @@ drive()                         | drives the car based on MAPE
 """
 control_flag = True
 class Vehicle: 
-    def __init__(self, blueprint_lib, carla_world, spawn, destination, transform, blueprint, world, DT, extra, u_nom, alpha, max_acc, distance, standard_distance):
+    def __init__(self, blueprint_lib, carla_world, spawn, destination, transform, blueprint, world, DT, extra, u_nom, alpha, max_acc, max_brake, distance, standard_distance):
         self.__car = carla_world.spawn_actor(random.choice(blueprint_lib.filter('vehicle.bmw.*')), spawn)
         self.__actors = carla_world.get_actors()
         self.__world = world
         self.__carla_world = carla_world
         self.__rules = []
-        self.__checks = []
         self.__waypoint_num = 5
         self.__DT = DT
         self.__extra = extra
         self.__u_nom = u_nom
         self.__alpha = alpha
         self.__max_acc = max_acc
+        self.__max_brake = max_brake
         self.__distance = distance
         self.__standard_distance = standard_distance
         self.__global_route_planner = GlobalRoutePlanner(self.__carla_world.get_map(), 1)
@@ -53,7 +53,7 @@ class Vehicle:
             analyzer_info = self.__analyzer_class.analyze(self.get_car(), self.get_rules(), monitor_info, self.__distance)
             self.__waypoint_num = analyzer_info["new_waypoint"]
 
-            plan_info = self.__planner_class.plan(analyzer_info, self.get_checks(), self.__DT, self.__extra, self.__u_nom, self.__alpha, self.__max_acc, self.__standard_distance)
+            plan_info = self.__planner_class.plan(analyzer_info, self.__DT, self.__extra, self.__u_nom, self.__alpha, self.__max_acc, self.__max_brake, self.__standard_distance)
 
             self.__executor_class.execute(plan_info, self.get_car())
         except:
@@ -71,12 +71,6 @@ class Vehicle:
 
     def get_sensors(self):
         return self.__monitor_class.get_sensors()
-    
-    def get_checks(self):
-        return self.__checks
-    
-    def set_checks(self, checks):
-        self.__checks = checks
   
     def get_car(self):
         return self.__car
@@ -93,7 +87,7 @@ class Vehicle:
             analyzer_info = self.__analyzer_class.analyze(self.get_car(), self.get_rules(), monitor_info, self.__distance)
             self.__waypoint_num = analyzer_info["new_waypoint"]
 
-            plan_info = self.__planner_class.plan(analyzer_info, self.get_checks(), self.__DT, self.__extra, self.__u_nom, self.__alpha, self.__max_acc, self.__standard_distance)
+            plan_info = self.__planner_class.plan(analyzer_info, self.__DT, self.__extra, self.__u_nom, self.__alpha, self.__max_acc, self.__max_brake, self.__standard_distance)
 
             self.__executor_class.execute(plan_info, self.get_car())
     

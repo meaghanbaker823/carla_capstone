@@ -32,6 +32,10 @@ class Executor(MAPEStep):
         self.__new_parameters = [plan, car]
         self.__old_actions.append(self.__new_action)
         self.__new_action = {"brake": plan["brake"], "steering": plan["steering"], "throttle": plan["throttle"]}
+        print("Throttle:", plan["throttle"])
+        print("Brake:", plan["brake"])
+        print("Ang: ", plan["steering"])
+
                     
         car.apply_control(carla.VehicleControl(throttle = plan["throttle"] ,steer = plan["steering"], brake = plan["brake"]))
 

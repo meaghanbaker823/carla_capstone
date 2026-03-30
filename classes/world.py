@@ -3,9 +3,6 @@ from classes.trafficRule import TrafficRule
 from classes.pedestrianRule import PedestrianRule
 from classes.parkedRule import ParkedRule
 from classes.CBFRule import CBFRule
-from classes.speedOverCheck import SpeedOverCheck
-from classes.speedPerfectCheck import SpeedPerfectCheck
-from classes.speedUnderCheck import SpeedUnderCheck
 from classes.vehicle import Vehicle
 
 import traceback
@@ -130,7 +127,7 @@ class World:
             controller.go_to_location(destination.location)
 
     #initialize the list of actors
-    def init_actors(self, spawn, blueprint_lib, spts, world, scanning_distance, dt, extra, u_nom, alpha, max_acc, distance, standard_distance):
+    def init_actors(self, spawn, blueprint_lib, spts, world, scanning_distance, dt, extra, u_nom, alpha, max_acc, max_brake, distance, standard_distance):
         try:
             assert type(spawn) == carla.libcarla.Transform
             assert type(blueprint_lib) == carla.libcarla.BlueprintLibrary
@@ -143,19 +140,15 @@ class World:
         blueprints = [blueprint_lib.find('sensor.other.obstacle'), blueprint_lib.find('sensor.other.collision'), blueprint_lib.find('sensor.other.lane_invasion')]
         blueprints[0].set_attribute('distance', scanning_distance)
 
-        vehicle = Vehicle(blueprint_lib, world.get_world(), spawn, spts[5], transforms, blueprints, world, dt, extra, u_nom, alpha, max_acc, distance, standard_distance)
+        vehicle = Vehicle(blueprint_lib, world.get_world(), spawn, spts[5], transforms, blueprints, world, dt, extra, u_nom, alpha, max_acc, max_brake, distance, standard_distance)
         car = vehicle.get_car()
 
         # vehicle.set_sensors(transforms, car, blueprints, world, blueprint_lib)
         rules = [CollisionRule(vehicle.get_sensors(), vehicle), TrafficRule(vehicle.get_sensors(), vehicle), ParkedRule(vehicle.get_sensors(), vehicle), PedestrianRule(vehicle.get_sensors(),vehicle), CBFRule(0,20,0)]
         vehicle.set_rules(rules)
 
-        speed_threshold = 3
-        checks = [SpeedOverCheck(speed_threshold), SpeedPerfectCheck(speed_threshold), SpeedUnderCheck(speed_threshold)]
-        vehicle.set_checks(checks)
-
         world.spawn_pedestrians()
-        world.spawn_vehicles()
+        # world.spawn_vehicles()
 
         if type(vehicle) == Vehicle and type(car) == carla.libcarla.Vehicle:
             return (vehicle, car)

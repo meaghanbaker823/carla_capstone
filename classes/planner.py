@@ -22,54 +22,37 @@ class Planner(MAPEStep):
 
     def get_new_plan(self):
         return self.__new_plan
-    
-    def maintain_speed(self, current, limit, checks):
-        try:
-            assert current >= 0
-        except:
-            raise
 
-        new = 0
-
-        for check in checks:
-            if(check.speed_check(current, limit) != -1):
-                new = check.speed_check(current, limit)
-                break
-        
-        try:
-            assert 0 <= new <= 1
-        except:
-            raise
-        return new
-
-    def plan(self, observations, checks, DT, extra, u_nom, alpha, max_acc, standard_distance):
+    def plan(self, observations, DT, extra, u_nom, alpha, max_acc, max_brake, standard_distance):
         self.__old_parameters.append(self.__new_parameters)
-        self.__new_parameters = [observations, checks]
+        self.__new_parameters = [observations]
         self.__old_plans.append(self.__new_plan)
         self.__new_plan = {"brake": None, "steering": None, "throttle": None}
-        speed = observations["current_speed"]
-        limit = None
+        new_speed = None
 
         # rules, navigation, maintain speed
         for rule in observations["rules"]:
-            self.__new_plan["brake"], limit, self.__new_plan["steering"] = rule.rule_follow(observations["traffic_lights"], limit)
+            self.__new_plan["brake"], new_speed, self.__new_plan["steering"] = rule.rule_follow(observations["traffic_lights"], new_speed)
         
         if(self.__new_plan["steering"] == None):
             self.__new_plan["steering"] = observations["steering_angle"]
         
-        if(limit == None):
-            cbf = CBFRule(observations["r"], observations["current_speed"], observations["distance"])
+        speed = observations["current_speed"] / 3.6
+    
+        if(new_speed == None):
+            cbf = CBFRule(observations["r"], speed, observations["distance"])
             min_distance = cbf.calculate_min_distance(standard_distance, extra)
             h = cbf.calculate_safety_function(min_distance)
-            allowable_a = abs(cbf.calculate_allowable_distance(alpha, h, DT))
-            limit = cbf.final_logic(u_nom, allowable_a, max_acc)
+            allowable_a = cbf.calculate_allowable_distance(alpha, h, DT)
+            new_speed = cbf.final_logic(u_nom, allowable_a, max_acc, max_brake)        
 
-
-        self.__new_plan["throttle"] = self.maintain_speed(speed, limit, checks)
-        if (self.__new_plan["throttle"] == 0):
-            self.__new_plan["brake"] = 1.0
+        print("Speed: ", speed)
+        if new_speed > 0:
+            self.__new_plan["throttle"] = new_speed
+            self.__new_plan["brake"] = 0
         else:
-            self.__new_plan["brake"] = 0.0
+            self.__new_plan["throttle"] = 0
+            self.__new_plan["brake"] = 1
         
         return self.__new_plan
     

@@ -27,4 +27,4 @@ class TrafficRule(Rule):
         if(traffic_lights.get_response() == "stop"):
             return 1, 0, None
         else:
-            return 0, limit, None
+            return 0, None, None

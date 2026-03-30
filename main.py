@@ -5,12 +5,13 @@ import traceback
 
 # STATIC VARIABLES
 dt = 0.005
-extra = 5
+extra = 6
 standard_distance = 8
-u_nom = 40
-alpha = 0.01
-max_acc = 70
-distance = 20
+u_nom = 1
+alpha = 1.5
+max_acc = 3
+max_brake = 6
+distance = 16
 scanning_distance = '20.0'
 
 def main():   
@@ -21,7 +22,7 @@ def main():
 
     try:
         spectator = world.init_spectator(spawn)
-        vehicle, car = world.init_actors(spawn, blueprint_lib, spts, world, scanning_distance, dt, extra, u_nom, alpha, max_acc, distance, standard_distance)
+        vehicle, car = world.init_actors(spawn, blueprint_lib, spts, world, scanning_distance, dt, standard_distance, u_nom, alpha, max_acc, max_brake, distance, extra)
 
         while True:
             world.main_loop(spectator, car, vehicle, dt)
@@ -40,3 +41,41 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""
+================================================================
+# Parameters
+DT = 0.05
+D0 = 8.0     # nominal safe distance (m)
+D_EXTRA = 6.0
+ALPHA = 1.5
+MAX_ACCEL = 3.0        # m/s^2
+MAX_BRAKE_DECEL = 6.0  # m/s^2
+ 
+# Nominal acceleration (throttle) for cruise
+u_nom = 1.0
+ 
+# Compute safety function
+d = distance_to_crosswalk(vehicle)
+d_min = D0 + occlusion_risk(vehicle) * D_EXTRA
+h = d - d_min
+ 
+v = get_speed(vehicle)
+ 
+# Compute maximum allowed acceleration for CBF
+u_cbf = (ALPHA * h - v) / DT
+ 
+# Clamp with nominal and actuator limits
+u = min(u_nom, u_cbf, MAX_ACCEL)
+u = max(u, -MAX_BRAKE_DECEL)
+ 
+# Map to CARLA controls
+if u >= 0:
+    throttle = u / MAX_ACCEL
+    brake = 0.0
+else:
+    throttle = 0.0
+    brake = min(-u / MAX_BRAKE_DECEL, 1.0)
+ 
+vehicle.apply_control(carla.VehicleControl(throttle=throttle, brake=brake))
+"""
