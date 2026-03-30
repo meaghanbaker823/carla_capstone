@@ -144,11 +144,11 @@ class Analyzer(MAPEStep):
         # get the slope and insert it into slope variable
         # find the y-intercpet and then pick the side of the waypoint from direction
         slope = 1
-        c = 2
-        d = (x + (y - c) * slope) / 1 + slope**2
+        y_int = 2
+        d = (x + (y - y_int) * slope) / 1 + slope**2
 
         waypoint.x = 2 * d - x
-        waypoint.y = d * slope - y + 2 * c    
+        waypoint.y = d * slope - y + 2 * y_int    
 
         return waypoint
 
