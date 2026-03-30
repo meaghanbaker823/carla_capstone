@@ -12,13 +12,18 @@ class RuleFlag(unittest.TestCase):
         self.lights = Mock()
         self.sensors = [Mock(),]
         self.lights = Mock()
+        self.detections = [[Mock(),],]
+        self.sensors[0].get_detections.return_value = self.detections
+
 
     # other actors not empty, starts with vehicle -> returns False
     def test_case_one(self):
+        self.detections[-1][0].type_id = "vehicle.ford.mustang"
         self.assertEqual(self.rule_flag(self.lights), False)
+
     # other actors not empty, not a vehicle -> returns True
-    
     def test_case_two(self):
+        self.detections[-1][0].type_id = "walker.pedestrian.0001"
         self.sensors[0].get_other_actors.return_value = [Mock(),]
         self.assertEqual(self.rule_flag(self.lights), True)
 

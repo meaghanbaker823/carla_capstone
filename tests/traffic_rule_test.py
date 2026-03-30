@@ -1,29 +1,30 @@
 import unittest
 from unittest.mock import Mock
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from classes.trafficRule import TrafficRule
+
 # rule_flag testing
-class RuleFlag(unittest.TestCase):
-    def rule_flag(self):
-        if self.lights.process_color.return_value != "":
-            return False
-        return True
-    
+class RuleFlag(unittest.TestCase):    
     def setUp(self):
+        self.sensors = [Mock(), Mock()]
+        self.car = Mock()
+        self.rule = TrafficRule(self.sensors, self.car)
         self.lights = Mock()
+        self.limit = 30
 
 
     def test_rule_flag1(self):
         # lights 1 simulating no response needed from car
         self.lights.process_color.return_value = ""
-        return_value = self.rule_flag()
-
-        self.assertEqual(return_value, True)
+        self.assertEqual(self.rule.rule_flag(self.lights), False)
 
 
     def test_rule_flag2(self):
         # light2 simulating a response needed from car
         self.lights.process_color.return_value = "red"
-        return_value = self.rule_flag()
-        self.assertEqual(return_value, False)
+        self.assertEqual(self.rule.rule_flag(self.lights), False)
         
 
 
@@ -31,26 +32,21 @@ class RuleFlag(unittest.TestCase):
 # rule_follow testing
 class RuleFollow(unittest.TestCase):
     def setUp(self):
+        self.sensors = [Mock(), Mock()]
+        self.car = Mock()
+        self.rule = TrafficRule(self.sensors, self.car)
         self.lights = Mock()
-        # setting limit to standard speed limit
         self.limit = 30
     
-    def rule_follow(self):
-        if(self.lights.get_response() == "stop"):
-            return 1, 0, None
-        else:
-            return 0, self.limit, None
-        
     def test_rule_follow1(self):
         # lights1 mimicing case where continue driving 
         self.lights.get_response.return_value = "drive"
-
-        self.assertEqual(self.rule_follow(), (0, 30, None))
+        self.assertEqual(self.rule.rule_follow(self.lights, self.limit), (0, 30, None))
 
     def test_rule_follow2(self):
         # lights2 mimicing case where need to stop car
         self.lights.get_response.return_value = "stop"
-        self.assertEqual(self.rule_follow(), (1, 0, None))
+        self.assertEqual(self.rule.rule_follow(self.lights, self.limit), (1, 0, None))
 
 
 
