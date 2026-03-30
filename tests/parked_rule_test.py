@@ -46,10 +46,6 @@ class RuleFollow(unittest.TestCase):
     def test_rule_follow1(self):
         self.assertEqual(self.rule.rule_follow(self.lights, self.limit), (None, None, None))
 
-    
-
-
-
 
 
 if __name__ == "__main__":
