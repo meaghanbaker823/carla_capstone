@@ -38,7 +38,7 @@ class TrafficLight():
 
     def process_color(self, car):
         try:
-            assert type(car) == carla.libcarla.Vehicle
+            assert isinstance(car, carla.libcarla.Vehicle)
         except:
             raise
 
@@ -72,8 +72,8 @@ class TrafficLight():
     
     def is_light_close(self, car_check, light_check, target_distance, target_angle):
         try:
-            assert type(car_check) == carla.Vehicle
-            assert type(light_check) == carla.TrafficLight
+            assert isinstance(car_check,  carla.Vehicle)
+            assert isinstance(light_check, carla.TrafficLight)
             assert target_distance >= 0
             assert -180 <= target_angle <= 180
         except:

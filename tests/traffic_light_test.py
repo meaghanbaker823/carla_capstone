@@ -1,30 +1,22 @@
 import unittest
 from unittest.mock import Mock
 import math
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from classes.trafficLight import TrafficLight
+import carla
 
 class ProcessColorTest(unittest.TestCase):
-
-    def lights_to_test(self):
-        for light in self.lights.get_lights:
-            if light.is_light_close():
-                old_color = light.get_color()
-                light.get_color.return_value = self.new_color
-
-                if old_color != light.get_color():
-                    light.get_response.return_value = self.new_response
-                    break
-
-            else:
-                light.get_response.return_value = "" 
-
     def setUp(self):
-        self.car = Mock()
+        self.car = Mock(spec = carla.libcarla.Vehicle)
         self.lights = Mock()
         self.lights.length = 3
-        self.lights.get_lights = [Mock()]
+        self.lights.get_lights = [Mock(),]
 
         self.new_color = 'Red'
         self.new_response = "stop"
+        self.traffic_light =TrafficLight(self.lights)
 
 
     def test_light0(self):
@@ -33,8 +25,7 @@ class ProcessColorTest(unittest.TestCase):
         self.lights.get_lights[0].get_color.return_value = "Red"
         self.lights.get_lights[0].get_response.return_value = ""
 
-        self.lights_to_test() 
-
+        self.traffic_light.process_color(self.car)
         self.assertEqual(self.lights.get_lights[0].get_response(), "")        
 
     def test_light1(self):
