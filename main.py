@@ -23,6 +23,7 @@ def main():
     try:
         spectator = world.init_spectator(spawn)
         vehicle, car = world.init_actors(spawn, blueprint_lib, spts, world, scanning_distance, dt, standard_distance, u_nom, alpha, max_acc, max_brake, distance, extra)
+        
 
         while True:
             world.main_loop(spectator, car, vehicle, dt)
