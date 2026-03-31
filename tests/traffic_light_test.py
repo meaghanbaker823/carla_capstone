@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import Mock
+from unittest.mock import patch
 import math
 import sys
 import os
@@ -10,40 +11,52 @@ import carla
 class ProcessColorTest(unittest.TestCase):
     def setUp(self):
         self.car = Mock(spec = carla.libcarla.Vehicle)
-        self.lights = Mock()
-        self.lights.length = 3
-        self.lights.get_lights = [Mock(),]
+        self.lights = [Mock(),]
+        self.lights[0].length = 3
 
         self.new_color = 'Red'
         self.new_response = "stop"
-        self.traffic_light =TrafficLight(self.lights)
+        with patch("carla.ActorList") as mock_actor_list:
+            mock_actor_list.filter.return_value = self.lights
+            self.traffic_light = TrafficLight(mock_actor_list)
+        
+    @patch.object(TrafficLight, "is_light_close")
+    def test_light0(self, mock_is_light_close):
+        # test going from red to red
+        mock_is_light_close.return_value = True
+        mock_state = Mock()
+        mock_state.name = "Red"
+        self.lights[0].get_state.return_value = mock_state
+        self.traffic_light.set_color("Red")
+        
+        self.assertEqual(self.traffic_light.process_color(self.car), "")        
 
 
-    def test_light0(self):
-        # setting all of the api call values for the mock object
-        self.lights.get_lights[0].is_light_close.return_value = True
-        self.lights.get_lights[0].get_color.return_value = "Red"
-        self.lights.get_lights[0].get_response.return_value = ""
+    @patch.object(TrafficLight, "is_light_close")
+    def test_light1(self, mock_is_light_close):
+        # test going from Green to red
+        mock_is_light_close.return_value = True
+        # sets new color
+        mock_state = Mock()
+        mock_state.name = "Red"
+        self.lights[0].get_state.return_value = mock_state
+        # sets old color
+        self.traffic_light.set_color("Green")
+        
+        self.assertEqual(self.traffic_light.process_color(self.car), "stop") 
 
-        self.traffic_light.process_color(self.car)
-        self.assertEqual(self.lights.get_lights[0].get_response(), "")        
-
-    def test_light1(self):
-        self.lights.get_lights[0].is_light_close.return_value = True
-        self.lights.get_lights[0].get_color.return_value = "Green"
-        self.lights.get_lights[0].get_response.return_value = ""
-
-        self.lights_to_test()
-
-        self.assertEqual(self.lights.get_lights[0].get_response(), 'stop')
-
-    def test_light2(self):
-        self.lights.get_lights[0].is_light_close.return_value = False
-        self.lights.get_lights[0].get_color.return_value = "Yellow"
-        self.lights.get_lights[0].get_response.return_value = ""
-
-        self.lights_to_test()
-        self.assertEqual(self.lights.get_lights[0].get_response(), "")
+    @patch.object(TrafficLight, "is_light_close")
+    def test_light2(self, mock_is_light_close):
+        # test going from yellow to red
+        mock_is_light_close.return_value = False
+        # sets new color
+        mock_state = Mock()
+        mock_state.name = "Red"
+        self.lights[0].get_state.return_value = mock_state
+        # sets old color
+        self.traffic_light.set_color("Red")
+        
+        self.assertEqual(self.traffic_light.process_color(self.car), "") 
     
 # react to color
 class ReactToColorTest(unittest.TestCase):
