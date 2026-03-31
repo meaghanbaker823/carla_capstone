@@ -15,5 +15,5 @@ class MAPEStep():
         self.__old_steps = []
         self.__new_step = ""
 
-    def notify():
+    def notify(self):
         return True

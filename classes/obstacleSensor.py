@@ -56,7 +56,7 @@ class ObstacleSensor(Sensor):
     # with event, add to list of detections
     def obstacle_detect(self, event):
         try:
-            assert type(event) == carla.libcarla.ObstacleDetectionEvent
+            assert isinstance(event, carla.libcarla.ObstacleDetectionEvent)
         except:
             raise
 
