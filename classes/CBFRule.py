@@ -6,7 +6,6 @@ class CBFRule():
 
 
     def calculate_min_distance(self, extra, standard_distance):
-        print("std dist: ", standard_distance)
         return standard_distance + (self.__r * extra)
     
     def calculate_safety_function(self, min_distance):

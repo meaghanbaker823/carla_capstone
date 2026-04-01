@@ -69,7 +69,7 @@ class Analyzer(MAPEStep):
         corrected_deg = self.correct_angle(degrees)
         return corrected_deg
     
-    def get_proper_angle(self, car,wp_idx,rte):
+    def get_proper_angle(self, car,wp_idx, rte):
         try:
             assert isinstance(car, carla.libcarla.Vehicle)
             assert isinstance(wp_idx, int)
@@ -122,29 +122,37 @@ class Analyzer(MAPEStep):
         new_route = route
         swerve_range = 10
 
-        # favor lane changes into the right lane
+        # favor lane changes into the right lane (currently left for implementation)
         if lane_change == carla.libcarla.LaneChange.NONE:
+            print("no lane_change")
             return new_route
-        elif lane_change == carla.libcarla.LaneChange.Left or lane_change == carla.libcarla.LaneChange.Both:
+        if lane_change == carla.libcarla.LaneChange.Left or lane_change == carla.libcarla.LaneChange.Both:
             for i in range(swerve_range):
                 swerve_point = i + waypoint_num
                 new_route[swerve_point] = self.swerve(route[swerve_point], "left")
             return new_route
         else:
+            print("else lane ")
             for i in range(swerve_range):
                 swerve_point = i + waypoint_num
                 new_route[swerve_point] = self.swerve(route[swerve_point], "right")
             return new_route        
         
 
-    def swerve(waypoint, direction):
+    def swerve(self, waypoint, direction):
+        point = waypoint.transform()
+
         # reflect over the sloped line (y-intercept is determined by the direction)
-        x = waypoint.x
-        y = waypoint.y
+        x = waypoint[0]
+        y = waypoint[1]
         # get the slope and insert it into slope variable
         # find the y-intercpet and then pick the side of the waypoint from direction
-        slope = 1
-        y_int = 2
+        if direction == "right":
+            turn = 1
+        else: 
+            turn = -1
+        slope = 1 * turn
+        y_int = 2 
         d = (x + (y - y_int) * slope) / 1 + slope**2
 
         waypoint.x = 2 * d - x
@@ -172,21 +180,28 @@ class Analyzer(MAPEStep):
         self.__new_observations["traffic_lights"] = detections["traffic_lights"]
         self.__new_observations["distance"] = distance
         new_route = detections["route"]
-
         for rule in rules:
             # if false, then rule not passed
             try:
-                if not rule.rule_flag(detections["traffic_lights"]):
+                if not rule.rule_flag(detections["traffic_lights"]): 
                     self.__new_observations["rules"].append(rule)
             except:
                 raise
 
+        
         for rule in self.__new_observations["rules"]:
             if(isinstance(rule, ParkedRule)):
                 self.__new_observations["distance"] = rule.get_sensors()[0].get_detections()[-1][1]
                 self.__new_observations["r"] = 1
                 new_route = self.check_lane_options(detections["current_waypoint_num"], detections["route"], detections["lane_info"]["lane_change"])
+                # if fix_route != new_route:
+                #     for i in range(10):
+                #         swerve_point = i + waypoint_num
+                #         fix_route[swerve_point] = self.swerve(new_route[swerve_point], "right")
+                #     new_route = fix_route
                     
+                    
+
         # unit is kilometers/hr
         self.__new_observations["current_speed"] = round(3.6 * math.sqrt(detections["current_velocity"].x ** 2 + detections["current_velocity"].y ** 2 + detections["current_velocity"].z ** 2), 0)
 
