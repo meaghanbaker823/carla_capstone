@@ -1,4 +1,4 @@
-class CBFRule():
+class CBF():
     def __init__(self, r, s, distance):
         self.__r = r
         self.__distance = distance
@@ -12,19 +12,11 @@ class CBFRule():
         return self.__distance - min_distance
     
     def calculate_allowable_distance(self, alpha, h, DT):
-        print("h: ", h)
         return (((alpha * h) - self.__s) / DT/1000)
 
     def final_logic(self, u_nom, u_cbf, max_acc, max_brake):
         print("CBF VALUE: ",u_cbf)
         return max(min(u_nom, u_cbf, max_acc), -1 * (max_brake))
-    
-    def rule_follow(self, traffic_lights, limit):
-        return 0, None, None
-    
-    def rule_flag(self, traffic_lights):
-        return True
-
 
 """ 
 TODO 

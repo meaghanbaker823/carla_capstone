@@ -1,5 +1,5 @@
 from classes.MAPEStep import MAPEStep
-from classes.CBFRule import CBFRule
+from classes.CBF import CBF
 
 """
 ===========
@@ -28,23 +28,19 @@ class Planner(MAPEStep):
         self.__new_parameters = [observations]
         self.__old_plans.append(self.__new_plan)
         self.__new_plan = {"brake": None, "steering": None, "throttle": None}
-        new_speed = None
 
-        # rules, navigation, maintain speed
-        for rule in observations["rules"]:
-            self.__new_plan["brake"], new_speed, self.__new_plan["steering"] = rule.rule_follow(observations["traffic_lights"], new_speed)
+        if(observations["rules"] == 0):
+            observations["distance"] = 2
         
-        if(self.__new_plan["steering"] == None):
-            self.__new_plan["steering"] = observations["steering_angle"]
+        self.__new_plan["steering"] = observations["steering_angle"]
         
         speed = observations["current_speed"] / 3.6
-    
-        if(new_speed == None):
-            cbf = CBFRule(observations["r"], speed, observations["distance"])
-            min_distance = cbf.calculate_min_distance(standard_distance, extra)
-            h = cbf.calculate_safety_function(min_distance)
-            allowable_a = cbf.calculate_allowable_distance(alpha, h, DT)
-            new_speed = cbf.final_logic(u_nom, allowable_a, max_acc, max_brake)        
+
+        cbf = CBF(observations["r"], speed, observations["distance"])
+        min_distance = cbf.calculate_min_distance(standard_distance, extra)
+        h = cbf.calculate_safety_function(min_distance)
+        allowable_a = cbf.calculate_allowable_distance(alpha, h, DT)
+        new_speed = cbf.final_logic(u_nom, allowable_a, max_acc, max_brake)        
 
         print("Speed: ", speed)
         if new_speed > 0:

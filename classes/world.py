@@ -2,7 +2,6 @@ from classes.collisionRule import CollisionRule
 from classes.trafficRule import TrafficRule
 from classes.pedestrianRule import PedestrianRule
 from classes.parkedRule import ParkedRule
-from classes.CBFRule import CBFRule
 from classes.vehicle import Vehicle
 
 import traceback
@@ -85,10 +84,10 @@ class World:
     
     def spawn_vehicles(self):
       # vehicle blueprints
-        v_bps = self.get_blueprints().filter("vehicle.*")
+        v_bps = self.get_blueprints().filter("vehicle.mercedes*")
 
         spwn_pts = self.get_spawnpoints()
-        v_spwn_pts = [spwn_pts[13], spwn_pts[117], spwn_pts[114], spwn_pts[141]]  
+        v_spwn_pts = [spwn_pts[13], spwn_pts[104], spwn_pts[141]]  
         
         for i in range(len(v_spwn_pts)):
             v_bp = random.choice(v_bps)
@@ -144,11 +143,11 @@ class World:
         car = vehicle.get_car()
 
         # vehicle.set_sensors(transforms, car, blueprints, world, blueprint_lib)
-        rules = [CollisionRule(vehicle.get_sensors(), vehicle), TrafficRule(vehicle.get_sensors(), vehicle), ParkedRule(vehicle.get_sensors(), vehicle), PedestrianRule(vehicle.get_sensors(),vehicle), CBFRule(0,20,0)]
+        rules = [CollisionRule(vehicle.get_sensors(), vehicle), PedestrianRule(vehicle.get_sensors(),vehicle), TrafficRule(vehicle.get_sensors(), vehicle), ParkedRule(vehicle.get_sensors(), vehicle)]
         vehicle.set_rules(rules)
 
         world.spawn_pedestrians()
-        # world.spawn_vehicles()
+        world.spawn_vehicles()
 
         if type(vehicle) == Vehicle and type(car) == carla.libcarla.Vehicle:
             return (vehicle, car)

@@ -37,12 +37,12 @@ class Vehicle:
         self.__global_route_planner = GlobalRoutePlanner(self.__carla_world.get_map(), 1)
         self.__route = self.__global_route_planner.trace_route(spawn.location, destination.location)
         self.mape_init(transform, blueprint, blueprint_lib)
-        self.draw_route()
+        self.draw_route(self.__route)
 
     def mape_init(self, transform, blueprint, blueprint_lib):
         try:
             self.__monitor_class = Monitor(transform, self.__car, blueprint, self.__world, blueprint_lib, self.__actors, self.__route)
-            self.__analyzer_class = Analyzer()
+            self.__analyzer_class = Analyzer(self.__carla_world)
             self.__planner_class = Planner()
             self.__executor_class = Executor()
 
@@ -59,9 +59,9 @@ class Vehicle:
         except:
             raise
 
-    def draw_route(self):
-        for waypoint in self.__route:
-            self.__carla_world.debug.draw_string(waypoint[0].transform.location, '^', draw_shadow = False, color = carla.Color(r = 0, g = 0, b = 255), life_time = 90.0, persistent_lines = True)
+    def draw_route(self, route):
+        for waypoint in route:
+            self.__carla_world.debug.draw_string(waypoint[0].transform.location, '^', draw_shadow = False, color = carla.Color(r = 0, g = 0, b = 255), life_time = 5.0, persistent_lines = True)
     
     def get_rules(self):
         return self.__rules

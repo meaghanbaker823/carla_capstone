@@ -23,8 +23,8 @@ class TrafficRule(Rule):
             return False
         return True
     
-    def rule_follow(self, traffic_lights, limit):
+    def rule_follow(self, traffic_lights):
         if(traffic_lights.get_response() == "stop"):
-            return 1, 0, None
+            return 0
         else:
-            return 0, None, None
+            return 1

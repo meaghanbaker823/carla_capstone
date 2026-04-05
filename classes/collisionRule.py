@@ -23,6 +23,6 @@ class CollisionRule(Rule):
             raise CollisionErr("")
         return True
     
-    def rule_follow(self, traffic_lights, limit):
+    def rule_follow(self, traffic_lights):
         # pass brake as 1, speed as 0, and steering as None
-        return 1, 0, None
+        return 0

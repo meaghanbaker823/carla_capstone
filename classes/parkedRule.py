@@ -25,13 +25,7 @@ class ParkedRule(Rule):
                 return False
         return True
     
-    def rule_follow(self, traffic_lights, limit):
+    def rule_follow(self, traffic_lights):
         # pass brake as 1, speed as 0, and steering as None
-        # ARINS WORK HERE  (the 3rd argument will be the steering angle (-1 or 1))
 
-        # call another class which would adjust waypoints (know what current waypoint is)
-        # iterate through current_waypoint to static distance of (size of car) shift x or y so waypoints are left of car
-        # reflect x and y values into the other lane (think mathematically)
-        # change parked car to random mercedes
-
-        return None, None, None
+        return 1
