@@ -126,18 +126,20 @@ class CorrectAngleTest(unittest.TestCase):
         self.assertEqual(result, 10)
 
 class CheckLaneOptionTest(unittest.TestCase):
-    def test_check_lane_options_none(self):
+    @patch.object(Analyzer, "swerve")
+    def test_check_lane_options_none(self, mock_swerve):
         waypoint_num = 0
-        route = [[Mock(spec=carla.libcarla.Waypoint)]]
+        route = [[Mock(spec=carla.libcarla.Waypoint)]] * 10
         lane_change = carla.libcarla.LaneChange.NONE
 
         result = analyzer.check_lane_options(waypoint_num, route, lane_change)
 
-        self.assertEqual(result, None)
-    
-    def test_check_lane_options_right(self):
+        self.assertEqual(result, route)
+
+    @patch.object(Analyzer, "swerve")
+    def test_check_lane_options_right(self, mock_swerve):
         waypoint_num = 0
-        route = [Mock(spec=carla.libcarla.Waypoint)]
+        route = [Mock(spec=carla.libcarla.Waypoint)] * 10
         lane_change = carla.libcarla.LaneChange.Right
 
         right_lane = Mock()
@@ -147,11 +149,12 @@ class CheckLaneOptionTest(unittest.TestCase):
 
         result = analyzer.check_lane_options(waypoint_num, route, lane_change)
 
-        self.assertEqual(result, "success")
+        self.assertEqual(result, [mock_swerve.return_value]*10)
 
-    def test_check_lane_options_both(self):
+    @patch.object(Analyzer, "swerve")
+    def test_check_lane_options_both(self, mock_swerve):
         waypoint_num = 0
-        route = [Mock(spec=carla.libcarla.Waypoint)]
+        route = [Mock(spec=carla.libcarla.Waypoint)] * 10
         lane_change = carla.libcarla.LaneChange.Both
 
         right_lane = Mock()
@@ -161,11 +164,12 @@ class CheckLaneOptionTest(unittest.TestCase):
 
         result = analyzer.check_lane_options(waypoint_num, route, lane_change)
 
-        self.assertEqual(result, "success")
+        self.assertEqual(result, [mock_swerve.return_value]*10)
 
-    def test_check_lane_options_left(self):
+    @patch.object(Analyzer, "swerve")
+    def test_check_lane_options_left(self, mock_swerve):
         waypoint_num = 0
-        route = [Mock(spec=carla.libcarla.Waypoint)]
+        route = [Mock(spec=carla.libcarla.Waypoint)] * 10
         lane_change = carla.libcarla.LaneChange.Left
 
         left_lane = Mock()
@@ -175,7 +179,8 @@ class CheckLaneOptionTest(unittest.TestCase):
 
         result = analyzer.check_lane_options(waypoint_num, route, lane_change)
 
-        self.assertEqual(result, "success")
+        self.assertEqual(result, [mock_swerve.return_value]*10)
+
 class AnalyzeTest(unittest.TestCase):
     @patch.object(Analyzer, "get_proper_angle")
     @patch.object(Analyzer, "check_lane_options")
@@ -212,7 +217,6 @@ class AnalyzeTest(unittest.TestCase):
         self.assertEqual(result["rules"][0], rules[1])
         self.assertEqual(result["traffic_lights"], None)
         self.assertEqual(result["distance"], 0)
-        self.assertEqual(result["open_lane"], True)
         self.assertEqual(result["current_speed"], 6)
         self.assertEqual(result["new_waypoint"], 0)
         self.assertEqual(result["steering_angle"], 0)
@@ -221,7 +225,7 @@ class NotifyTest(unittest.TestCase):
     def test_notify(self):
         result = analyzer.notify()
 
-        expectation = "The observations in this analyzer iteration are: Observation: r Observation: rules Observation: traffic_lights Observation: distance Observation: open_lane Observation: current_speed Observation: new_waypoint Observation: steering_angle "
+        expectation = "The observations in this analyzer iteration are: Observation: r Observation: rules Observation: traffic_lights Observation: distance Observation: current_speed Observation: new_waypoint Observation: steering_angle "
         self.assertEqual(result, expectation)
 
 if __name__ == "__main__":
