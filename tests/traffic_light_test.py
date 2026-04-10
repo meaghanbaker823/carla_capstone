@@ -54,7 +54,7 @@ class ProcessColorTest(unittest.TestCase):
         mock_state.name = "Red"
         self.lights[0].get_state.return_value = mock_state
         # sets old color
-        self.traffic_light.set_color("Red")
+        self.traffic_light.set_color("Yellow")
         
         self.assertEqual(self.traffic_light.process_color(self.car), "") 
     
