@@ -3,6 +3,8 @@ from classes.monitor import Monitor
 from classes.analyzer import Analyzer
 from classes.planner import Planner
 from classes.executor import Executor
+import matplotlib.pyplot as plt
+
 
 import random
 import carla
@@ -35,6 +37,7 @@ class Vehicle:
         self.__distance = distance
         self.__standard_distance = standard_distance
         self.__global_route_planner = GlobalRoutePlanner(self.__carla_world.get_map(), 1)
+        self.__route = self.__global_route_planner.trace_route(spawn.location, destination.location)
         self.__route = self.__global_route_planner.trace_route(spawn.location, destination.location)
         self.mape_init(transform, blueprint, blueprint_lib)
         self.draw_route(self.__route)

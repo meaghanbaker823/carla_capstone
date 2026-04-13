@@ -5,14 +5,14 @@ import traceback
 
 # STATIC VARIABLES
 dt = 0.005
-extra = 6
+extra = 3
 standard_distance = 8
 u_nom = 1
 alpha = 1.5
 max_acc = 3
 max_brake = 6
 distance = 16
-scanning_distance = '20.0'
+scanning_distance = '35.0'
 
 def main():   
     world = World()

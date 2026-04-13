@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module agents.tools.misc</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="agents.html"><font color="#ffffff">agents</font></a>.<a href="agents.tools.html"><font color="#ffffff">tools</font></a>.misc</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/cae-user/group3AV/carla_capstone/agents/tools/misc.py">/home/cae-user/group3AV/carla_capstone/agents/tools/misc.py</a></font></td></tr></table>
+    <p><tt>Module&nbsp;with&nbsp;auxiliary&nbsp;functions.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="carla.html">carla</a><br>
+</td><td width="25%" valign=top><a href="math.html">math</a><br>
+</td><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-compute_distance"><strong>compute_distance</strong></a>(location_1, location_2)</dt><dd><tt>Euclidean&nbsp;distance&nbsp;between&nbsp;3D&nbsp;points<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:param&nbsp;location_1,&nbsp;location_2:&nbsp;3D&nbsp;points</tt></dd></dl>
+ <dl><dt><a name="-compute_magnitude_angle"><strong>compute_magnitude_angle</strong></a>(target_location, current_location, orientation)</dt><dd><tt>Compute&nbsp;relative&nbsp;angle&nbsp;and&nbsp;distance&nbsp;between&nbsp;a&nbsp;target_location&nbsp;and&nbsp;a&nbsp;current_location<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:param&nbsp;target_location:&nbsp;location&nbsp;of&nbsp;the&nbsp;target&nbsp;object<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:param&nbsp;current_location:&nbsp;location&nbsp;of&nbsp;the&nbsp;reference&nbsp;object<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:param&nbsp;orientation:&nbsp;orientation&nbsp;of&nbsp;the&nbsp;reference&nbsp;object<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:return:&nbsp;a&nbsp;tuple&nbsp;composed&nbsp;by&nbsp;the&nbsp;distance&nbsp;to&nbsp;the&nbsp;object&nbsp;and&nbsp;the&nbsp;angle&nbsp;between&nbsp;both&nbsp;objects</tt></dd></dl>
+ <dl><dt><a name="-distance_vehicle"><strong>distance_vehicle</strong></a>(waypoint, vehicle_transform)</dt><dd><tt>Returns&nbsp;the&nbsp;2D&nbsp;distance&nbsp;from&nbsp;a&nbsp;waypoint&nbsp;to&nbsp;a&nbsp;vehicle<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:param&nbsp;waypoint:&nbsp;actual&nbsp;waypoint<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:param&nbsp;vehicle_transform:&nbsp;transform&nbsp;of&nbsp;the&nbsp;target&nbsp;vehicle</tt></dd></dl>
+ <dl><dt><a name="-draw_waypoints"><strong>draw_waypoints</strong></a>(world, waypoints, z=0.5)</dt><dd><tt>Draw&nbsp;a&nbsp;list&nbsp;of&nbsp;waypoints&nbsp;at&nbsp;a&nbsp;certain&nbsp;height&nbsp;given&nbsp;in&nbsp;z.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:param&nbsp;world:&nbsp;carla.world&nbsp;object<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:param&nbsp;waypoints:&nbsp;list&nbsp;or&nbsp;iterable&nbsp;container&nbsp;with&nbsp;the&nbsp;waypoints&nbsp;to&nbsp;draw<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:param&nbsp;z:&nbsp;height&nbsp;in&nbsp;meters</tt></dd></dl>
+ <dl><dt><a name="-get_speed"><strong>get_speed</strong></a>(vehicle)</dt><dd><tt>Compute&nbsp;speed&nbsp;of&nbsp;a&nbsp;vehicle&nbsp;in&nbsp;Km/h.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:param&nbsp;vehicle:&nbsp;the&nbsp;vehicle&nbsp;for&nbsp;which&nbsp;speed&nbsp;is&nbsp;calculated<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:return:&nbsp;speed&nbsp;as&nbsp;a&nbsp;float&nbsp;in&nbsp;Km/h</tt></dd></dl>
+ <dl><dt><a name="-get_trafficlight_trigger_location"><strong>get_trafficlight_trigger_location</strong></a>(traffic_light)</dt><dd><tt>Calculates&nbsp;the&nbsp;yaw&nbsp;of&nbsp;the&nbsp;waypoint&nbsp;that&nbsp;represents&nbsp;the&nbsp;trigger&nbsp;volume&nbsp;of&nbsp;the&nbsp;traffic&nbsp;light</tt></dd></dl>
+ <dl><dt><a name="-is_within_distance"><strong>is_within_distance</strong></a>(target_transform, reference_transform, max_distance, angle_interval=None)</dt><dd><tt>Check&nbsp;if&nbsp;a&nbsp;location&nbsp;is&nbsp;both&nbsp;within&nbsp;a&nbsp;certain&nbsp;distance&nbsp;from&nbsp;a&nbsp;reference&nbsp;object.<br>
+By&nbsp;using&nbsp;'angle_interval',&nbsp;the&nbsp;angle&nbsp;between&nbsp;the&nbsp;location&nbsp;and&nbsp;reference&nbsp;transform<br>
+will&nbsp;also&nbsp;be&nbsp;tkaen&nbsp;into&nbsp;account,&nbsp;being&nbsp;0&nbsp;a&nbsp;location&nbsp;in&nbsp;front&nbsp;and&nbsp;180,&nbsp;one&nbsp;behind.<br>
+&nbsp;<br>
+:param&nbsp;target_transform:&nbsp;location&nbsp;of&nbsp;the&nbsp;target&nbsp;object<br>
+:param&nbsp;reference_transform:&nbsp;location&nbsp;of&nbsp;the&nbsp;reference&nbsp;object<br>
+:param&nbsp;max_distance:&nbsp;maximum&nbsp;allowed&nbsp;distance<br>
+:param&nbsp;angle_interval:&nbsp;only&nbsp;locations&nbsp;between&nbsp;[min,&nbsp;max]&nbsp;angles&nbsp;will&nbsp;be&nbsp;considered.&nbsp;This&nbsp;isn't&nbsp;checked&nbsp;by&nbsp;default.<br>
+:return:&nbsp;boolean</tt></dd></dl>
+ <dl><dt><a name="-positive"><strong>positive</strong></a>(num)</dt><dd><tt>Return&nbsp;the&nbsp;given&nbsp;number&nbsp;if&nbsp;positive,&nbsp;else&nbsp;0<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:param&nbsp;num:&nbsp;value&nbsp;to&nbsp;check</tt></dd></dl>
+ <dl><dt><a name="-vector"><strong>vector</strong></a>(location_1, location_2)</dt><dd><tt>Returns&nbsp;the&nbsp;unit&nbsp;vector&nbsp;from&nbsp;location_1&nbsp;to&nbsp;location_2<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:param&nbsp;location_1,&nbsp;location_2:&nbsp;carla.Location&nbsp;objects</tt></dd></dl>
+</td></tr></table>
+</body></html>

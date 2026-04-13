@@ -118,6 +118,7 @@ class World:
 
             ped = self.__world.spawn_actor(pd_bp, spawn)
             control_bp = self.get_blueprints().find('controller.ai.walker')
+
             controller = self.__world.spawn_actor(control_bp, carla.Transform(), ped)
             controller.start()
             controller.set_max_speed(2.0)
@@ -173,7 +174,7 @@ class World:
             raise
 
         # Move the spectator behind the vehicle
-        transform = carla.Transform(car.get_transform().transform(carla.Location(x=-4,z=2.5)),car.get_transform().rotation)
+        transform = carla.Transform(car.get_transform().transform(carla.Location(x=-3,z=4)),car.get_transform().rotation(carla.Rotation(pitch=-40)))
         spectator.set_transform(transform)
         time.sleep(DT)
         try:
