@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>classes.world API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>classes.world</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="classes.world.World"><code class="flex name class">
+<span>class <span class="ident">World</span></span>
+<span>(</span><span>world_map='town01')</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class World:
+    def __init__(self, world_map=&#39;town01&#39;):
+        self.__client = carla.Client(&#39;localhost&#39;, 2000)
+        self.__client.set_timeout(60.0)
+
+        cur_map = os.path.basename(self.__client.get_world().get_map().name)
+        cur_map = cur_map[0].lower() + cur_map[1:]
+
+        if world_map == cur_map:
+            self.__world = self.__client.get_world()
+        else:
+            self.__world = self.__client.load_world(world_map)
+
+    def get_client(self):
+        return self.__client
+
+    def get_world(self):
+        return self.__world
+
+    def get_map(self):
+        return self.__world.get_map()
+    
+    def get_actors(self):
+        return self.__world.get_actors()
+
+    def change_map(self, world_map=&#39;town10HD_Opt&#39;):
+        return self.__world.load_world(world_map)
+
+    def get_blueprints(self):
+        return self.__world.get_blueprint_library()
+
+    def get_spawnpoints(self):
+        return self.__world.get_map().get_spawn_points()
+
+    def init_world(self):
+        return (self.__client,
+            self.get_spawnpoints(),
+            self.get_spawnpoints()[142],
+            self.get_blueprints())
+
+    def init_spectator(self, spawn):
+        try:
+            assert isinstance(spawn, carla.libcarla.Transform)
+        except:
+            raise
+
+        spectator = self.__world.get_spectator()
+        spectator.set_transform(carla.Transform(carla.Location(x = spawn.location.x, y = spawn.location.y, z = spawn.location.z + 60)))
+
+        if type(spectator) == carla.libcarla.Actor:
+            return spectator
+        else:
+            raise
+    
+    def spawn_vehicles(self):
+      # vehicle blueprints
+        v_bps = self.get_blueprints().filter(&#34;vehicle.mercedes*&#34;)
+
+        spwn_pts = self.get_spawnpoints()
+        v_spwn_pts = [spwn_pts[13], spwn_pts[104], spwn_pts[141]]  
+        
+        for i in range(len(v_spwn_pts)):
+            v_bp = random.choice(v_bps)
+            spawn = v_spwn_pts[i]
+
+            self.__world.spawn_actor(v_bp, spawn)
+            
+    def spawn_pedestrians(self): 
+        # pedestrian blueprints
+        pd_bps = self.get_blueprints().filter(&#34;walker.pedestrian.*&#34;)
+        spwn_pts = self.get_spawnpoints()
+        good_spwn_pts = [spwn_pts[95], spwn_pts[102], spwn_pts[202], spwn_pts[116]]
+        # good_spwn_pts[0].location.z -= 1
+        dest_points = [spwn_pts[203], spwn_pts[112], spwn_pts[7], spwn_pts[115]]
+
+        # spawn 10 pedestrians
+        for i in range(len(good_spwn_pts)):
+            pd_bp = random.choice(pd_bps)
+            print(i)
+
+            # remove pedestrian spawn choice to avoid collision
+            
+            spawn = carla.Transform()
+            # at 10
+            # choose random location, then remove that spawnpoint to avoid pedestrians from not spawning
+
+            spawn.location = (good_spwn_pts[i]).location
+
+            ped = self.__world.spawn_actor(pd_bp, spawn)
+            control_bp = self.get_blueprints().find(&#39;controller.ai.walker&#39;)
+
+            controller = self.__world.spawn_actor(control_bp, carla.Transform(), ped)
+            controller.start()
+            controller.set_max_speed(2.0)
+            destination = dest_points[i]
+            self.__world.tick()
+            controller.go_to_location(destination.location)
+
+    #initialize the list of actors
+    def init_actors(self, spawn, blueprint_lib, spts, world, scanning_distance, dt, extra, u_nom, alpha, max_acc, max_brake, distance, standard_distance):
+        try:
+            assert type(spawn) == carla.libcarla.Transform
+            assert type(blueprint_lib) == carla.libcarla.BlueprintLibrary
+            assert type(spts) == list
+            assert type(world) == World
+        except:
+            raise
+        
+        transforms = [carla.Transform(carla.Location(x=2.8, z=0.7)), carla.Transform(carla.Location(x=4.8, z=0.7)), carla.Transform(carla.Location(x=6.8, z=0.7))]
+        blueprints = [blueprint_lib.find(&#39;sensor.other.obstacle&#39;), blueprint_lib.find(&#39;sensor.other.collision&#39;), blueprint_lib.find(&#39;sensor.other.lane_invasion&#39;)]
+        blueprints[0].set_attribute(&#39;distance&#39;, scanning_distance)
+
+        vehicle = Vehicle(blueprint_lib, world.get_world(), spawn, spts[5], transforms, blueprints, world, dt, extra, u_nom, alpha, max_acc, max_brake, distance, standard_distance)
+        car = vehicle.get_car()
+
+        # vehicle.set_sensors(transforms, car, blueprints, world, blueprint_lib)
+        rules = [CollisionRule(vehicle.get_sensors(), vehicle), PedestrianRule(vehicle.get_sensors(),vehicle), TrafficRule(vehicle.get_sensors(), vehicle), ParkedRule(vehicle.get_sensors(), vehicle)]
+        vehicle.set_rules(rules)
+
+        world.spawn_pedestrians()
+        world.spawn_vehicles()
+
+        if type(vehicle) == Vehicle and type(car) == carla.libcarla.Vehicle:
+            return (vehicle, car)
+        else:
+            raise
+
+    def clear_world(self, client):
+        try:
+            assert type(client) == carla.libcarla.Client
+        except:
+            print(traceback.format_exc())
+
+        client.reload_world()
+        print(&#34;World cleared :)\n&#34;)
+
+
+    #repeating logic performed in the main function
+    def main_loop(self, spectator, car, vehicle, DT):
+        try:
+            assert type(car) == carla.libcarla.Vehicle
+            assert type(vehicle) == Vehicle
+        except:
+            raise
+
+        # Move the spectator behind the vehicle
+        car_rotation = car.get_transform().rotation
+        transform = carla.Transform(car.get_transform().transform(carla.Location(x=-3,z=5)), carla.Rotation(car_rotation.pitch - 30.0, car_rotation.yaw, car_rotation.roll))
+        spectator.set_transform(transform)
+        time.sleep(DT)
+        try:
+            vehicle.mape_drive()
+        except:
+            raise</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Methods</h3>
+<dl>
+<dt id="classes.world.World.change_map"><code class="name flex">
+<span>def <span class="ident">change_map</span></span>(<span>self, world_map='town10HD_Opt')</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def change_map(self, world_map=&#39;town10HD_Opt&#39;):
+    return self.__world.load_world(world_map)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.world.World.clear_world"><code class="name flex">
+<span>def <span class="ident">clear_world</span></span>(<span>self, client)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def clear_world(self, client):
+    try:
+        assert type(client) == carla.libcarla.Client
+    except:
+        print(traceback.format_exc())
+
+    client.reload_world()
+    print(&#34;World cleared :)\n&#34;)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.world.World.get_actors"><code class="name flex">
+<span>def <span class="ident">get_actors</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_actors(self):
+    return self.__world.get_actors()</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.world.World.get_blueprints"><code class="name flex">
+<span>def <span class="ident">get_blueprints</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_blueprints(self):
+    return self.__world.get_blueprint_library()</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.world.World.get_client"><code class="name flex">
+<span>def <span class="ident">get_client</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_client(self):
+    return self.__client</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.world.World.get_map"><code class="name flex">
+<span>def <span class="ident">get_map</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_map(self):
+    return self.__world.get_map()</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.world.World.get_spawnpoints"><code class="name flex">
+<span>def <span class="ident">get_spawnpoints</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_spawnpoints(self):
+    return self.__world.get_map().get_spawn_points()</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.world.World.get_world"><code class="name flex">
+<span>def <span class="ident">get_world</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_world(self):
+    return self.__world</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.world.World.init_actors"><code class="name flex">
+<span>def <span class="ident">init_actors</span></span>(<span>self,<br>spawn,<br>blueprint_lib,<br>spts,<br>world,<br>scanning_distance,<br>dt,<br>extra,<br>u_nom,<br>alpha,<br>max_acc,<br>max_brake,<br>distance,<br>standard_distance)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def init_actors(self, spawn, blueprint_lib, spts, world, scanning_distance, dt, extra, u_nom, alpha, max_acc, max_brake, distance, standard_distance):
+    try:
+        assert type(spawn) == carla.libcarla.Transform
+        assert type(blueprint_lib) == carla.libcarla.BlueprintLibrary
+        assert type(spts) == list
+        assert type(world) == World
+    except:
+        raise
+    
+    transforms = [carla.Transform(carla.Location(x=2.8, z=0.7)), carla.Transform(carla.Location(x=4.8, z=0.7)), carla.Transform(carla.Location(x=6.8, z=0.7))]
+    blueprints = [blueprint_lib.find(&#39;sensor.other.obstacle&#39;), blueprint_lib.find(&#39;sensor.other.collision&#39;), blueprint_lib.find(&#39;sensor.other.lane_invasion&#39;)]
+    blueprints[0].set_attribute(&#39;distance&#39;, scanning_distance)
+
+    vehicle = Vehicle(blueprint_lib, world.get_world(), spawn, spts[5], transforms, blueprints, world, dt, extra, u_nom, alpha, max_acc, max_brake, distance, standard_distance)
+    car = vehicle.get_car()
+
+    # vehicle.set_sensors(transforms, car, blueprints, world, blueprint_lib)
+    rules = [CollisionRule(vehicle.get_sensors(), vehicle), PedestrianRule(vehicle.get_sensors(),vehicle), TrafficRule(vehicle.get_sensors(), vehicle), ParkedRule(vehicle.get_sensors(), vehicle)]
+    vehicle.set_rules(rules)
+
+    world.spawn_pedestrians()
+    world.spawn_vehicles()
+
+    if type(vehicle) == Vehicle and type(car) == carla.libcarla.Vehicle:
+        return (vehicle, car)
+    else:
+        raise</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.world.World.init_spectator"><code class="name flex">
+<span>def <span class="ident">init_spectator</span></span>(<span>self, spawn)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def init_spectator(self, spawn):
+    try:
+        assert isinstance(spawn, carla.libcarla.Transform)
+    except:
+        raise
+
+    spectator = self.__world.get_spectator()
+    spectator.set_transform(carla.Transform(carla.Location(x = spawn.location.x, y = spawn.location.y, z = spawn.location.z + 60)))
+
+    if type(spectator) == carla.libcarla.Actor:
+        return spectator
+    else:
+        raise</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.world.World.init_world"><code class="name flex">
+<span>def <span class="ident">init_world</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def init_world(self):
+    return (self.__client,
+        self.get_spawnpoints(),
+        self.get_spawnpoints()[142],
+        self.get_blueprints())</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.world.World.main_loop"><code class="name flex">
+<span>def <span class="ident">main_loop</span></span>(<span>self, spectator, car, vehicle, DT)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def main_loop(self, spectator, car, vehicle, DT):
+    try:
+        assert type(car) == carla.libcarla.Vehicle
+        assert type(vehicle) == Vehicle
+    except:
+        raise
+
+    # Move the spectator behind the vehicle
+    car_rotation = car.get_transform().rotation
+    transform = carla.Transform(car.get_transform().transform(carla.Location(x=-3,z=5)), carla.Rotation(car_rotation.pitch - 30.0, car_rotation.yaw, car_rotation.roll))
+    spectator.set_transform(transform)
+    time.sleep(DT)
+    try:
+        vehicle.mape_drive()
+    except:
+        raise</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.world.World.spawn_pedestrians"><code class="name flex">
+<span>def <span class="ident">spawn_pedestrians</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def spawn_pedestrians(self): 
+    # pedestrian blueprints
+    pd_bps = self.get_blueprints().filter(&#34;walker.pedestrian.*&#34;)
+    spwn_pts = self.get_spawnpoints()
+    good_spwn_pts = [spwn_pts[95], spwn_pts[102], spwn_pts[202], spwn_pts[116]]
+    # good_spwn_pts[0].location.z -= 1
+    dest_points = [spwn_pts[203], spwn_pts[112], spwn_pts[7], spwn_pts[115]]
+
+    # spawn 10 pedestrians
+    for i in range(len(good_spwn_pts)):
+        pd_bp = random.choice(pd_bps)
+        print(i)
+
+        # remove pedestrian spawn choice to avoid collision
+        
+        spawn = carla.Transform()
+        # at 10
+        # choose random location, then remove that spawnpoint to avoid pedestrians from not spawning
+
+        spawn.location = (good_spwn_pts[i]).location
+
+        ped = self.__world.spawn_actor(pd_bp, spawn)
+        control_bp = self.get_blueprints().find(&#39;controller.ai.walker&#39;)
+
+        controller = self.__world.spawn_actor(control_bp, carla.Transform(), ped)
+        controller.start()
+        controller.set_max_speed(2.0)
+        destination = dest_points[i]
+        self.__world.tick()
+        controller.go_to_location(destination.location)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.world.World.spawn_vehicles"><code class="name flex">
+<span>def <span class="ident">spawn_vehicles</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def spawn_vehicles(self):
+  # vehicle blueprints
+    v_bps = self.get_blueprints().filter(&#34;vehicle.mercedes*&#34;)
+
+    spwn_pts = self.get_spawnpoints()
+    v_spwn_pts = [spwn_pts[13], spwn_pts[104], spwn_pts[141]]  
+    
+    for i in range(len(v_spwn_pts)):
+        v_bp = random.choice(v_bps)
+        spawn = v_spwn_pts[i]
+
+        self.__world.spawn_actor(v_bp, spawn)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="classes" href="index.html">classes</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="classes.world.World" href="#classes.world.World">World</a></code></h4>
+<ul class="two-column">
+<li><code><a title="classes.world.World.change_map" href="#classes.world.World.change_map">change_map</a></code></li>
+<li><code><a title="classes.world.World.clear_world" href="#classes.world.World.clear_world">clear_world</a></code></li>
+<li><code><a title="classes.world.World.get_actors" href="#classes.world.World.get_actors">get_actors</a></code></li>
+<li><code><a title="classes.world.World.get_blueprints" href="#classes.world.World.get_blueprints">get_blueprints</a></code></li>
+<li><code><a title="classes.world.World.get_client" href="#classes.world.World.get_client">get_client</a></code></li>
+<li><code><a title="classes.world.World.get_map" href="#classes.world.World.get_map">get_map</a></code></li>
+<li><code><a title="classes.world.World.get_spawnpoints" href="#classes.world.World.get_spawnpoints">get_spawnpoints</a></code></li>
+<li><code><a title="classes.world.World.get_world" href="#classes.world.World.get_world">get_world</a></code></li>
+<li><code><a title="classes.world.World.init_actors" href="#classes.world.World.init_actors">init_actors</a></code></li>
+<li><code><a title="classes.world.World.init_spectator" href="#classes.world.World.init_spectator">init_spectator</a></code></li>
+<li><code><a title="classes.world.World.init_world" href="#classes.world.World.init_world">init_world</a></code></li>
+<li><code><a title="classes.world.World.main_loop" href="#classes.world.World.main_loop">main_loop</a></code></li>
+<li><code><a title="classes.world.World.spawn_pedestrians" href="#classes.world.World.spawn_pedestrians">spawn_pedestrians</a></code></li>
+<li><code><a title="classes.world.World.spawn_vehicles" href="#classes.world.World.spawn_vehicles">spawn_vehicles</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

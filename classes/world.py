@@ -174,7 +174,8 @@ class World:
             raise
 
         # Move the spectator behind the vehicle
-        transform = carla.Transform(car.get_transform().transform(carla.Location(x=-3,z=4)),car.get_transform().rotation(carla.Rotation(pitch=-40)))
+        car_rotation = car.get_transform().rotation
+        transform = carla.Transform(car.get_transform().transform(carla.Location(x=-3,z=5)), carla.Rotation(car_rotation.pitch - 30.0, car_rotation.yaw, car_rotation.roll))
         spectator.set_transform(transform)
         time.sleep(DT)
         try:

@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>classes.analyzer API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>classes.analyzer</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="classes.analyzer.Analyzer"><code class="flex name class">
+<span>class <span class="ident">Analyzer</span></span>
+<span>(</span><span>carla_world)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Analyzer(MAPEStep):
+    def __init__(self, carla_world):
+        self.__carla_world = carla_world
+        self.__old_parameters = []
+        self.__new_parameters = []
+        self.__new_observations = []
+        self.__old_observations = []
+
+    def get_new_observations(self):
+        return self.__new_observations
+
+    
+    def add_old_observations(self, observations):
+        self.__old_observations.append(observations)
+
+    def angle_between(self, v1, v2):
+        try:
+            assert isinstance(v1, tuple) and isinstance(v2, tuple)
+        except:
+            raise
+
+        vector_difference = np.arctan2(v1[1], v1[0]) - np.arctan2(v2[1], v2[0])
+
+        while vector_difference &gt; math.pi:
+            vector_difference -= 2 * math.pi
+
+        while vector_difference &lt; -math.pi:
+            vector_difference += 2 * math.pi
+        return math.degrees(vector_difference)
+
+    # function to get angle between the car and target waypoint
+    def get_angle(self, car, wp):
+        try:
+            assert isinstance(car, carla.libcarla.Vehicle)
+            assert isinstance(wp, carla.Waypoint)
+        except:
+            raise
+
+        vehicle_pos = car.get_transform()
+        car_x = vehicle_pos.location.x
+        car_y = vehicle_pos.location.y
+        wp_x = wp.transform.location.x
+        wp_y = wp.transform.location.y
+        
+        # vector to waypoint
+        x = (wp_x - car_x)/((wp_y - car_y) ** 2 + (wp_x - car_x) ** 2) ** 0.5
+        y = (wp_y - car_y)/((wp_y - car_y) ** 2 + (wp_x - car_x) ** 2) ** 0.5
+        
+        #car vector
+        car_vector = vehicle_pos.get_forward_vector()
+        degrees = self.angle_between((x, y),(car_vector.x, car_vector.y))
+
+        corrected_deg = self.correct_angle(degrees)
+        return corrected_deg
+    
+    def get_proper_angle(self, car,wp_idx, rte, inverse_flag):
+        try:
+            assert isinstance(car, carla.libcarla.Vehicle)
+            assert isinstance(wp_idx, int)
+            assert isinstance(rte, list)
+        except:
+            raise
+        if (inverse_flag):
+            invert = -1
+        else: 
+            invert = 1 
+        # create a list of angles to next 5 waypoints starting with current
+        next_angle_list = []
+        for i in range(10):
+            if wp_idx + i * 3 &lt; len(rte) - 1:
+                next_angle_list.append(self.get_angle(car, rte[wp_idx + i*3][0]))
+        idx = 0
+        while idx &lt; len(next_angle_list) - 2 and abs(next_angle_list[idx]) &gt; 40:
+            idx += 1
+        try:
+            return wp_idx + idx * 3, next_angle_list[idx] * invert
+        except:
+            raise RouteDone(&#34;Route complete :)&#34;)
+    
+    
+    def correct_angle(self, degrees):
+        try:
+            assert (-360 &lt;= degrees &lt;= 360)
+        except:
+            raise
+
+        degree_constraint = AngleConstraint(-300, 300, 360)
+        fixed_deg = degree_constraint.clamp(degrees)
+
+        # limit steering to max angle 50 degrees
+        steer_constraint = AngleConstraint(-50, 50, 0)
+        steer_input = steer_constraint.max_steer(fixed_deg)
+
+        try:
+            assert (-50 &lt;= steer_input &lt;= 50)
+        except:
+            raise
+        
+        return steer_input
+
+    # returns possible waypoint in another lane, or None if none available
+    def check_lane_options(self, waypoint_num, route, lane_change):
+        try:
+            assert isinstance(waypoint_num, int)
+            assert isinstance(lane_change, carla.libcarla.LaneChange)
+        except:
+            raise
+
+        new_route = route
+        swerve_range = 44
+        start = 11
+        force_shift = True
+
+        if(force_shift):
+            for i in range(start, swerve_range):
+                swerve_point = i + waypoint_num
+                if(swerve_point == (len(new_route) - 1)):
+                    break
+                new_route[swerve_point] = self.swerve(route[swerve_point], &#34;left&#34;)
+            return new_route
+
+        # favor lane changes into the right lane (currently left for implementation)
+        if lane_change == carla.libcarla.LaneChange.NONE:
+            return new_route
+            
+        if lane_change == carla.libcarla.LaneChange.Left or lane_change == carla.libcarla.LaneChange.Both:
+            for i in range(start, swerve_range):
+                swerve_point = i + waypoint_num
+                if(swerve_point == (len(new_route) - 1)):
+                    break
+                new_route[swerve_point] = self.swerve(route[swerve_point], &#34;left&#34;)
+            return new_route
+        else:
+            for i in range(start, swerve_range):
+                swerve_point = i + waypoint_num
+                if(swerve_point == (len(new_route) - 1)):
+                    break
+                new_route[swerve_point] = self.swerve(route[swerve_point], &#34;right&#34;)
+            return new_route        
+        
+
+    def swerve(self, waypoint, direction):
+
+        w_x = waypoint[0].transform.location.x
+        w_y = waypoint[0].transform.location.y
+        w_z = waypoint[0].transform.location.z
+
+        vector = waypoint[0].transform.rotation.get_right_vector()
+        z = w_z
+
+        if(direction == &#34;right&#34;):
+            x = w_x + (2 * vector.x)
+            y = w_y + (2 * vector.y)
+        else:
+            x = w_x - (2 * vector.x)
+            y = w_y - (2 * vector.y)
+
+        new_location = carla.Location(x, y, z)
+        new_waypoint = self.__carla_world.get_map().get_waypoint(new_location, project_to_road=True, lane_type=carla.LaneType.Driving)
+
+        return (new_waypoint, waypoint[1])
+
+    def analyze(self, car, rules, detections, distance):
+        self.__old_parameters.append(self.__new_parameters)
+        self.__new_parameters = [car, rules, detections]
+        self.add_old_observations(self.__new_observations)
+        self.__new_observations = {}
+        inverse_flag = False
+
+        &#34;&#34;&#34;
+        __new_observations =
+            rules:              (*classes.rules.Rule)
+            traffic_lights:     (classes.trafficLight.TrafficLight)
+            open_lane:          (carla.libcarla.Waypoint | None)
+            current_speed:      (int)
+            new_waypoint:       (int)
+            steering_angle:     (float)
+        &#34;&#34;&#34;
+        self.__new_observations[&#34;r&#34;] = 0
+        self.__new_observations[&#34;rules&#34;] = 1
+        self.__new_observations[&#34;traffic_lights&#34;] = detections[&#34;traffic_lights&#34;]
+        self.__new_observations[&#34;distance&#34;] = distance
+        new_route = detections[&#34;route&#34;]
+        for rule in reversed(rules):
+            # if false, then rule not passed
+
+            # collision, pedestrian, traffic light, parkedRule
+            try:
+                if not rule.rule_flag(detections[&#34;traffic_lights&#34;]):
+                    self.__new_observations[&#34;rules&#34;] = rule.rule_follow(detections[&#34;traffic_lights&#34;])
+                    if isinstance(rule, ParkedRule):
+                        self.__new_observations[&#34;distance&#34;] = rule.get_sensors()[0].get_detections()[-1][1]
+                        self.__new_observations[&#34;r&#34;] = 1
+
+                        new_route = self.check_lane_options(detections[&#34;current_waypoint_num&#34;], detections[&#34;route&#34;], detections[&#34;lane_info&#34;][&#34;lane_change&#34;])
+                        
+                        for waypoint in new_route:
+                            self.__carla_world.debug.draw_string(waypoint[0].transform.location, &#39;O&#39;, draw_shadow = False, color = carla.Color(r = 255, g = 0, b = 255), life_time = 10000.0, persistent_lines = True)
+
+    
+            except:
+                raise
+
+        # unit is kilometers/hr
+        self.__new_observations[&#34;current_speed&#34;] = round(3.6 * math.sqrt(detections[&#34;current_velocity&#34;].x ** 2 + detections[&#34;current_velocity&#34;].y ** 2 + detections[&#34;current_velocity&#34;].z ** 2), 0)
+
+        waypoint_num, steering_angle = self.get_proper_angle(car, detections[&#34;current_waypoint_num&#34;], new_route, inverse_flag)
+      
+        self.__new_observations[&#34;new_waypoint&#34;] = waypoint_num
+        self.__new_observations[&#34;steering_angle&#34;] = steering_angle / 75
+        print(&#34;Steering angle: &#34;, self.__new_observations[&#34;steering_angle&#34;])
+
+        # the information that the planner needs
+        return self.__new_observations
+    
+    def notify(self):
+        output = &#34;The observations in this analyzer iteration are: &#34;
+        for i in self.get_new_observations():
+            output += &#34;Observation: &#34; + i
+            output += &#34; &#34;
+        return output</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="classes.MAPEStep.MAPEStep" href="MAPEStep.html#classes.MAPEStep.MAPEStep">MAPEStep</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="classes.analyzer.Analyzer.add_old_observations"><code class="name flex">
+<span>def <span class="ident">add_old_observations</span></span>(<span>self, observations)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_old_observations(self, observations):
+    self.__old_observations.append(observations)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.analyzer.Analyzer.analyze"><code class="name flex">
+<span>def <span class="ident">analyze</span></span>(<span>self, car, rules, detections, distance)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def analyze(self, car, rules, detections, distance):
+    self.__old_parameters.append(self.__new_parameters)
+    self.__new_parameters = [car, rules, detections]
+    self.add_old_observations(self.__new_observations)
+    self.__new_observations = {}
+    inverse_flag = False
+
+    &#34;&#34;&#34;
+    __new_observations =
+        rules:              (*classes.rules.Rule)
+        traffic_lights:     (classes.trafficLight.TrafficLight)
+        open_lane:          (carla.libcarla.Waypoint | None)
+        current_speed:      (int)
+        new_waypoint:       (int)
+        steering_angle:     (float)
+    &#34;&#34;&#34;
+    self.__new_observations[&#34;r&#34;] = 0
+    self.__new_observations[&#34;rules&#34;] = 1
+    self.__new_observations[&#34;traffic_lights&#34;] = detections[&#34;traffic_lights&#34;]
+    self.__new_observations[&#34;distance&#34;] = distance
+    new_route = detections[&#34;route&#34;]
+    for rule in reversed(rules):
+        # if false, then rule not passed
+
+        # collision, pedestrian, traffic light, parkedRule
+        try:
+            if not rule.rule_flag(detections[&#34;traffic_lights&#34;]):
+                self.__new_observations[&#34;rules&#34;] = rule.rule_follow(detections[&#34;traffic_lights&#34;])
+                if isinstance(rule, ParkedRule):
+                    self.__new_observations[&#34;distance&#34;] = rule.get_sensors()[0].get_detections()[-1][1]
+                    self.__new_observations[&#34;r&#34;] = 1
+
+                    new_route = self.check_lane_options(detections[&#34;current_waypoint_num&#34;], detections[&#34;route&#34;], detections[&#34;lane_info&#34;][&#34;lane_change&#34;])
+                    
+                    for waypoint in new_route:
+                        self.__carla_world.debug.draw_string(waypoint[0].transform.location, &#39;O&#39;, draw_shadow = False, color = carla.Color(r = 255, g = 0, b = 255), life_time = 10000.0, persistent_lines = True)
+
+
+        except:
+            raise
+
+    # unit is kilometers/hr
+    self.__new_observations[&#34;current_speed&#34;] = round(3.6 * math.sqrt(detections[&#34;current_velocity&#34;].x ** 2 + detections[&#34;current_velocity&#34;].y ** 2 + detections[&#34;current_velocity&#34;].z ** 2), 0)
+
+    waypoint_num, steering_angle = self.get_proper_angle(car, detections[&#34;current_waypoint_num&#34;], new_route, inverse_flag)
+  
+    self.__new_observations[&#34;new_waypoint&#34;] = waypoint_num
+    self.__new_observations[&#34;steering_angle&#34;] = steering_angle / 75
+    print(&#34;Steering angle: &#34;, self.__new_observations[&#34;steering_angle&#34;])
+
+    # the information that the planner needs
+    return self.__new_observations</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.analyzer.Analyzer.angle_between"><code class="name flex">
+<span>def <span class="ident">angle_between</span></span>(<span>self, v1, v2)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def angle_between(self, v1, v2):
+    try:
+        assert isinstance(v1, tuple) and isinstance(v2, tuple)
+    except:
+        raise
+
+    vector_difference = np.arctan2(v1[1], v1[0]) - np.arctan2(v2[1], v2[0])
+
+    while vector_difference &gt; math.pi:
+        vector_difference -= 2 * math.pi
+
+    while vector_difference &lt; -math.pi:
+        vector_difference += 2 * math.pi
+    return math.degrees(vector_difference)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.analyzer.Analyzer.check_lane_options"><code class="name flex">
+<span>def <span class="ident">check_lane_options</span></span>(<span>self, waypoint_num, route, lane_change)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_lane_options(self, waypoint_num, route, lane_change):
+    try:
+        assert isinstance(waypoint_num, int)
+        assert isinstance(lane_change, carla.libcarla.LaneChange)
+    except:
+        raise
+
+    new_route = route
+    swerve_range = 44
+    start = 11
+    force_shift = True
+
+    if(force_shift):
+        for i in range(start, swerve_range):
+            swerve_point = i + waypoint_num
+            if(swerve_point == (len(new_route) - 1)):
+                break
+            new_route[swerve_point] = self.swerve(route[swerve_point], &#34;left&#34;)
+        return new_route
+
+    # favor lane changes into the right lane (currently left for implementation)
+    if lane_change == carla.libcarla.LaneChange.NONE:
+        return new_route
+        
+    if lane_change == carla.libcarla.LaneChange.Left or lane_change == carla.libcarla.LaneChange.Both:
+        for i in range(start, swerve_range):
+            swerve_point = i + waypoint_num
+            if(swerve_point == (len(new_route) - 1)):
+                break
+            new_route[swerve_point] = self.swerve(route[swerve_point], &#34;left&#34;)
+        return new_route
+    else:
+        for i in range(start, swerve_range):
+            swerve_point = i + waypoint_num
+            if(swerve_point == (len(new_route) - 1)):
+                break
+            new_route[swerve_point] = self.swerve(route[swerve_point], &#34;right&#34;)
+        return new_route        </code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.analyzer.Analyzer.correct_angle"><code class="name flex">
+<span>def <span class="ident">correct_angle</span></span>(<span>self, degrees)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def correct_angle(self, degrees):
+    try:
+        assert (-360 &lt;= degrees &lt;= 360)
+    except:
+        raise
+
+    degree_constraint = AngleConstraint(-300, 300, 360)
+    fixed_deg = degree_constraint.clamp(degrees)
+
+    # limit steering to max angle 50 degrees
+    steer_constraint = AngleConstraint(-50, 50, 0)
+    steer_input = steer_constraint.max_steer(fixed_deg)
+
+    try:
+        assert (-50 &lt;= steer_input &lt;= 50)
+    except:
+        raise
+    
+    return steer_input</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.analyzer.Analyzer.get_angle"><code class="name flex">
+<span>def <span class="ident">get_angle</span></span>(<span>self, car, wp)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_angle(self, car, wp):
+    try:
+        assert isinstance(car, carla.libcarla.Vehicle)
+        assert isinstance(wp, carla.Waypoint)
+    except:
+        raise
+
+    vehicle_pos = car.get_transform()
+    car_x = vehicle_pos.location.x
+    car_y = vehicle_pos.location.y
+    wp_x = wp.transform.location.x
+    wp_y = wp.transform.location.y
+    
+    # vector to waypoint
+    x = (wp_x - car_x)/((wp_y - car_y) ** 2 + (wp_x - car_x) ** 2) ** 0.5
+    y = (wp_y - car_y)/((wp_y - car_y) ** 2 + (wp_x - car_x) ** 2) ** 0.5
+    
+    #car vector
+    car_vector = vehicle_pos.get_forward_vector()
+    degrees = self.angle_between((x, y),(car_vector.x, car_vector.y))
+
+    corrected_deg = self.correct_angle(degrees)
+    return corrected_deg</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.analyzer.Analyzer.get_new_observations"><code class="name flex">
+<span>def <span class="ident">get_new_observations</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_new_observations(self):
+    return self.__new_observations</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.analyzer.Analyzer.get_proper_angle"><code class="name flex">
+<span>def <span class="ident">get_proper_angle</span></span>(<span>self, car, wp_idx, rte, inverse_flag)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_proper_angle(self, car,wp_idx, rte, inverse_flag):
+    try:
+        assert isinstance(car, carla.libcarla.Vehicle)
+        assert isinstance(wp_idx, int)
+        assert isinstance(rte, list)
+    except:
+        raise
+    if (inverse_flag):
+        invert = -1
+    else: 
+        invert = 1 
+    # create a list of angles to next 5 waypoints starting with current
+    next_angle_list = []
+    for i in range(10):
+        if wp_idx + i * 3 &lt; len(rte) - 1:
+            next_angle_list.append(self.get_angle(car, rte[wp_idx + i*3][0]))
+    idx = 0
+    while idx &lt; len(next_angle_list) - 2 and abs(next_angle_list[idx]) &gt; 40:
+        idx += 1
+    try:
+        return wp_idx + idx * 3, next_angle_list[idx] * invert
+    except:
+        raise RouteDone(&#34;Route complete :)&#34;)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.analyzer.Analyzer.notify"><code class="name flex">
+<span>def <span class="ident">notify</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def notify(self):
+    output = &#34;The observations in this analyzer iteration are: &#34;
+    for i in self.get_new_observations():
+        output += &#34;Observation: &#34; + i
+        output += &#34; &#34;
+    return output</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="classes.analyzer.Analyzer.swerve"><code class="name flex">
+<span>def <span class="ident">swerve</span></span>(<span>self, waypoint, direction)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def swerve(self, waypoint, direction):
+
+    w_x = waypoint[0].transform.location.x
+    w_y = waypoint[0].transform.location.y
+    w_z = waypoint[0].transform.location.z
+
+    vector = waypoint[0].transform.rotation.get_right_vector()
+    z = w_z
+
+    if(direction == &#34;right&#34;):
+        x = w_x + (2 * vector.x)
+        y = w_y + (2 * vector.y)
+    else:
+        x = w_x - (2 * vector.x)
+        y = w_y - (2 * vector.y)
+
+    new_location = carla.Location(x, y, z)
+    new_waypoint = self.__carla_world.get_map().get_waypoint(new_location, project_to_road=True, lane_type=carla.LaneType.Driving)
+
+    return (new_waypoint, waypoint[1])</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="classes" href="index.html">classes</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="classes.analyzer.Analyzer" href="#classes.analyzer.Analyzer">Analyzer</a></code></h4>
+<ul class="">
+<li><code><a title="classes.analyzer.Analyzer.add_old_observations" href="#classes.analyzer.Analyzer.add_old_observations">add_old_observations</a></code></li>
+<li><code><a title="classes.analyzer.Analyzer.analyze" href="#classes.analyzer.Analyzer.analyze">analyze</a></code></li>
+<li><code><a title="classes.analyzer.Analyzer.angle_between" href="#classes.analyzer.Analyzer.angle_between">angle_between</a></code></li>
+<li><code><a title="classes.analyzer.Analyzer.check_lane_options" href="#classes.analyzer.Analyzer.check_lane_options">check_lane_options</a></code></li>
+<li><code><a title="classes.analyzer.Analyzer.correct_angle" href="#classes.analyzer.Analyzer.correct_angle">correct_angle</a></code></li>
+<li><code><a title="classes.analyzer.Analyzer.get_angle" href="#classes.analyzer.Analyzer.get_angle">get_angle</a></code></li>
+<li><code><a title="classes.analyzer.Analyzer.get_new_observations" href="#classes.analyzer.Analyzer.get_new_observations">get_new_observations</a></code></li>
+<li><code><a title="classes.analyzer.Analyzer.get_proper_angle" href="#classes.analyzer.Analyzer.get_proper_angle">get_proper_angle</a></code></li>
+<li><code><a title="classes.analyzer.Analyzer.notify" href="#classes.analyzer.Analyzer.notify">notify</a></code></li>
+<li><code><a title="classes.analyzer.Analyzer.swerve" href="#classes.analyzer.Analyzer.swerve">swerve</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

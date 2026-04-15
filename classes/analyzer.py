@@ -142,6 +142,8 @@ class Analyzer(MAPEStep):
         if(force_shift):
             for i in range(start, swerve_range):
                 swerve_point = i + waypoint_num
+                if(swerve_point == (len(new_route) - 1)):
+                    break
                 new_route[swerve_point] = self.swerve(route[swerve_point], "left")
             return new_route
 
@@ -152,11 +154,15 @@ class Analyzer(MAPEStep):
         if lane_change == carla.libcarla.LaneChange.Left or lane_change == carla.libcarla.LaneChange.Both:
             for i in range(start, swerve_range):
                 swerve_point = i + waypoint_num
+                if(swerve_point == (len(new_route) - 1)):
+                    break
                 new_route[swerve_point] = self.swerve(route[swerve_point], "left")
             return new_route
         else:
             for i in range(start, swerve_range):
                 swerve_point = i + waypoint_num
+                if(swerve_point == (len(new_route) - 1)):
+                    break
                 new_route[swerve_point] = self.swerve(route[swerve_point], "right")
             return new_route        
         
