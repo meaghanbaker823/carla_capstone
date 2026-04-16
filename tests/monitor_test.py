@@ -44,7 +44,7 @@ class AdvanceWaypointTest(unittest.TestCase):
 
         result = monitor.advance_waypoint(current_waypoint_num)
 
-        self.assertEqual(result, 10)
+        self.assertEqual(result, 9)
 
     def test_advance_waypoint_far(self):
         car.get_transform.return_value.location.distance.return_value = 6

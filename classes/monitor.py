@@ -55,7 +55,7 @@ class Monitor(MAPEStep):
         except:
             raise
 
-        while current_waypoint_num < len(self.__route) and self.__car.get_transform().location.distance(self.__route[current_waypoint_num][0].transform.location)<5:
+        while current_waypoint_num < len(self.__route)-1 and self.__car.get_transform().location.distance(self.__route[current_waypoint_num][0].transform.location)<5:
             current_waypoint_num += 1
         return current_waypoint_num
 

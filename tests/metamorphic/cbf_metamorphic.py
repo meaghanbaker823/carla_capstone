@@ -6,7 +6,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 from classes.CBFRule import CBFRule
 
-def calculate_relation(self, standard_distance, extra, alpha, dt, u_nom, max_acc, max_brake, cbf: CBFRule):
+def calculate_relation(standard_distance, extra, alpha, dt, u_nom, max_acc, max_brake, cbf: CBFRule):
         min_distance = standard_distance + (cbf._CBFRule__r * extra)
         h = cbf._CBFRule__distance - min_distance
         allowable_distance = (((alpha * h) - cbf._CBFRule__s) / dt/1000)
