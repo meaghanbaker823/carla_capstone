@@ -1,11 +1,9 @@
 from classes.MAPEStep import MAPEStep
-from classes.angleConstraint import AngleConstraint
 
 import math
 import carla
 import numpy as np
 import matplotlib.pyplot as plt
-from classes.route_done import RouteDone
 from classes.pedestrianRule import PedestrianRule
 from classes.collisionRule import CollisionRule
 from classes.trafficRule import TrafficRule
@@ -41,90 +39,6 @@ class Analyzer(MAPEStep):
     def add_old_observations(self, observations):
         self.__old_observations.append(observations)
 
-    def angle_between(self, v1, v2):
-        try:
-            assert isinstance(v1, tuple) and isinstance(v2, tuple)
-        except:
-            raise
-
-        vector_difference = np.arctan2(v1[1], v1[0]) - np.arctan2(v2[1], v2[0])
-
-        while vector_difference > math.pi:
-            vector_difference -= 2 * math.pi
-
-        while vector_difference < -math.pi:
-            vector_difference += 2 * math.pi
-        return math.degrees(vector_difference)
-
-    # function to get angle between the car and target waypoint
-    def get_angle(self, car, wp):
-        try:
-            assert isinstance(car, carla.libcarla.Vehicle)
-            assert isinstance(wp, carla.Waypoint)
-        except:
-            raise
-
-        vehicle_pos = car.get_transform()
-        car_x = vehicle_pos.location.x
-        car_y = vehicle_pos.location.y
-        wp_x = wp.transform.location.x
-        wp_y = wp.transform.location.y
-        
-        # vector to waypoint
-        x = (wp_x - car_x)/((wp_y - car_y) ** 2 + (wp_x - car_x) ** 2) ** 0.5
-        y = (wp_y - car_y)/((wp_y - car_y) ** 2 + (wp_x - car_x) ** 2) ** 0.5
-        
-        #car vector
-        car_vector = vehicle_pos.get_forward_vector()
-        degrees = self.angle_between((x, y),(car_vector.x, car_vector.y))
-
-        corrected_deg = self.correct_angle(degrees)
-        return corrected_deg
-    
-    def get_proper_angle(self, car,wp_idx, rte, inverse_flag):
-        try:
-            assert isinstance(car, carla.libcarla.Vehicle)
-            assert isinstance(wp_idx, int)
-            assert isinstance(rte, list)
-        except:
-            raise
-        if (inverse_flag):
-            invert = -1
-        else: 
-            invert = 1 
-        # create a list of angles to next 5 waypoints starting with current
-        next_angle_list = []
-        for i in range(10):
-            if wp_idx + i * 3 < len(rte) - 1:
-                next_angle_list.append(self.get_angle(car, rte[wp_idx + i*3][0]))
-        idx = 0
-        while idx < len(next_angle_list) - 2 and abs(next_angle_list[idx]) > 40:
-            idx += 1
-        try:
-            return wp_idx + idx * 3, next_angle_list[idx] * invert
-        except:
-            raise RouteDone("Route complete :)")
-    
-    
-    def correct_angle(self, degrees):
-        try:
-            assert (-360 <= degrees <= 360)
-        except:
-            raise
-
-        degree_constraint = AngleConstraint(-300, 300, 360)
-        fixed_deg = degree_constraint.clamp(degrees)
-
-        # limit steering to max angle 50 degrees
-        steer_constraint = AngleConstraint(-50, 50, 0)
-        steer_input = steer_constraint.max_steer(fixed_deg)
-
-        try:
-            assert (-50 <= steer_input <= 50)
-        except:
-            raise
-        
-        return steer_input
 
     # returns possible waypoint in another lane, or None if none available
     def check_lane_options(self, waypoint_num, route, lane_change):
@@ -193,7 +107,6 @@ class Analyzer(MAPEStep):
         self.__new_parameters = [car, rules, detections]
         self.add_old_observations(self.__new_observations)
         self.__new_observations = {}
-        inverse_flag = False
 
         """
         __new_observations =
@@ -208,6 +121,8 @@ class Analyzer(MAPEStep):
         self.__new_observations["rules"] = 1
         self.__new_observations["traffic_lights"] = detections["traffic_lights"]
         self.__new_observations["distance"] = distance
+        self.__new_observations["current_velocity"] = detections["current_velocity"]
+        self.__new_observations["current_waypoint_num"] = detections["current_waypoint_num"]
         new_route = detections["route"]
         for rule in reversed(rules):
             # if false, then rule not passed
@@ -221,26 +136,19 @@ class Analyzer(MAPEStep):
                         self.__new_observations["r"] = 1
 
                         new_route = self.check_lane_options(detections["current_waypoint_num"], detections["route"], detections["lane_info"]["lane_change"])
-                        
-                        for waypoint in new_route:
-                            self.__carla_world.debug.draw_string(waypoint[0].transform.location, 'O', draw_shadow = False, color = carla.Color(r = 255, g = 0, b = 255), life_time = 10000.0, persistent_lines = True)
+                        # for waypoint in new_route:
+                        #     self.__carla_world.debug.draw_string(waypoint[0].transform.location, 'O', draw_shadow = False, color = carla.Color(r = 255, g = 0, b = 255), life_time = 10000.0, persistent_lines = True)
 
     
             except:
                 raise
-
-        # unit is kilometers/hr
-        self.__new_observations["current_speed"] = round(3.6 * math.sqrt(detections["current_velocity"].x ** 2 + detections["current_velocity"].y ** 2 + detections["current_velocity"].z ** 2), 0)
-
-        waypoint_num, steering_angle = self.get_proper_angle(car, detections["current_waypoint_num"], new_route, inverse_flag)
-      
-        self.__new_observations["new_waypoint"] = waypoint_num
-        self.__new_observations["steering_angle"] = steering_angle / 75
-        print("Steering angle: ", self.__new_observations["steering_angle"])
+        
+        self.__new_observations["route"] = new_route
 
         # the information that the planner needs
         return self.__new_observations
     
+
     def notify(self):
         output = "The observations in this analyzer iteration are: "
         for i in self.get_new_observations():

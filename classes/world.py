@@ -87,7 +87,7 @@ class World:
         v_bps = self.get_blueprints().filter("vehicle.mercedes*")
 
         spwn_pts = self.get_spawnpoints()
-        v_spwn_pts = [spwn_pts[13], spwn_pts[104], spwn_pts[141]]  
+        v_spwn_pts = [spwn_pts[13]]  
         
         for i in range(len(v_spwn_pts)):
             v_bp = random.choice(v_bps)

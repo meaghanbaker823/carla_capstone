@@ -40,7 +40,7 @@ class Vehicle:
         self.__route = self.__global_route_planner.trace_route(spawn.location, destination.location)
         self.__route = self.__global_route_planner.trace_route(spawn.location, destination.location)
         self.mape_init(transform, blueprint, blueprint_lib)
-        self.draw_route(self.__route)
+        # self.draw_route(self.__route)
 
     def mape_init(self, transform, blueprint, blueprint_lib):
         try:
@@ -54,9 +54,9 @@ class Vehicle:
             self.__waypoint_num = monitor_info["current_waypoint_num"]
 
             analyzer_info = self.__analyzer_class.analyze(self.get_car(), self.get_rules(), monitor_info, self.__distance)
-            self.__waypoint_num = analyzer_info["new_waypoint"]
 
-            plan_info = self.__planner_class.plan(analyzer_info, self.__DT, self.__extra, self.__u_nom, self.__alpha, self.__max_acc, self.__max_brake, self.__standard_distance)
+            plan_info = self.__planner_class.plan(self.get_car(), analyzer_info, self.__DT, self.__extra, self.__u_nom, self.__alpha, self.__max_acc, self.__max_brake, self.__standard_distance)
+            self.__waypoint_num = plan_info["new_waypoint"]
 
             self.__executor_class.execute(plan_info, self.get_car())
         except:
@@ -88,9 +88,9 @@ class Vehicle:
             self.__waypoint_num = monitor_info["current_waypoint_num"]
 
             analyzer_info = self.__analyzer_class.analyze(self.get_car(), self.get_rules(), monitor_info, self.__distance)
-            self.__waypoint_num = analyzer_info["new_waypoint"]
 
-            plan_info = self.__planner_class.plan(analyzer_info, self.__DT, self.__extra, self.__u_nom, self.__alpha, self.__max_acc, self.__max_brake, self.__standard_distance)
+            plan_info = self.__planner_class.plan(self.get_car(), analyzer_info, self.__DT, self.__extra, self.__u_nom, self.__alpha, self.__max_acc, self.__max_brake, self.__standard_distance)
+            self.__waypoint_num = plan_info["new_waypoint"]
 
             self.__executor_class.execute(plan_info, self.get_car())
     
