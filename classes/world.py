@@ -99,10 +99,11 @@ class World:
         # pedestrian blueprints
         pd_bps = self.get_blueprints().filter("walker.pedestrian.*")
         spwn_pts = self.get_spawnpoints()
-        good_spwn_pts = [spwn_pts[95], spwn_pts[102], spwn_pts[202], spwn_pts[116]]
+        #good_spwn_pts = [spwn_pts[95], spwn_pts[102], spwn_pts[202], spwn_pts[116]]
+        good_spwn_pts = [spwn_pts[95], spwn_pts[102], spwn_pts[116]]
         # good_spwn_pts[0].location.z -= 1
-        dest_points = [spwn_pts[203], spwn_pts[112], spwn_pts[7], spwn_pts[115]]
-
+        #dest_points = [spwn_pts[203], spwn_pts[112], spwn_pts[7], spwn_pts[115]]
+        dest_points = [spwn_pts[203], spwn_pts[112], spwn_pts[115]]
         # spawn 10 pedestrians
         for i in range(len(good_spwn_pts)):
             pd_bp = random.choice(pd_bps)
