@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>classes API documentation</title>
+<title>main API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
@@ -33,102 +33,59 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Namespace <code>classes</code></h1>
+<h1 class="title">Module <code>main</code></h1>
 </header>
 <section id="section-intro">
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt><code class="name"><a title="classes.CBF" href="CBF.html">classes.CBF</a></code></dt>
+<dt id="main.main"><code class="name flex">
+<span>def <span class="ident">main</span></span>(<span>)</span>
+</code></dt>
 <dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.MAPEStep" href="MAPEStep.html">classes.MAPEStep</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.analyzer" href="analyzer.html">classes.analyzer</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.angleConstraint" href="angleConstraint.html">classes.angleConstraint</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.collisionException" href="collisionException.html">classes.collisionException</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.collisionRule" href="collisionRule.html">classes.collisionRule</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.collisionSensor" href="collisionSensor.html">classes.collisionSensor</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.executor" href="executor.html">classes.executor</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.globalRoutePlanner" href="globalRoutePlanner.html">classes.globalRoutePlanner</a></code></dt>
-<dd>
-<div class="desc"><p>This module provides GlobalRoutePlanner implementation.</p></div>
-</dd>
-<dt><code class="name"><a title="classes.monitor" href="monitor.html">classes.monitor</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.obstacleSensor" href="obstacleSensor.html">classes.obstacleSensor</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.parkedRule" href="parkedRule.html">classes.parkedRule</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.pedestrianRule" href="pedestrianRule.html">classes.pedestrianRule</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.planner" href="planner.html">classes.planner</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.routeDone" href="routeDone.html">classes.routeDone</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.rule" href="rule.html">classes.rule</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.sensor" href="sensor.html">classes.sensor</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.trafficLight" href="trafficLight.html">classes.trafficLight</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.trafficRule" href="trafficRule.html">classes.trafficRule</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.vehicle" href="vehicle.html">classes.vehicle</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="classes.world" href="world.html">classes.world</a></code></dt>
-<dd>
-<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def main():
+    &#34;&#34;&#34;
+    Controls the main function of the carla program.
+    Holds the functions that are run when the program begins.
+    Holds all of the exception handling from throughout the program.
+    &#34;&#34;&#34; 
+    world = World()
+    client, spts, spawn, blueprint_lib = world.init_world()
+
+    try:
+        spectator = world.init_spectator(spawn)
+        vehicle, car = world.init_actors(spawn, blueprint_lib, spts, world, scanning_distance, dt, standard_distance, u_nom, alpha, max_acc, max_brake, distance, extra)
+        
+
+        while True:
+            world.main_loop(spectator, car, vehicle, dt)
+            world.get_world().tick()
+
+    except CollisionErr:
+        print(&#34;Collision&#34;)
+    except RouteDone:
+        print(&#34;Route done!&#34;)
+    except Exception:
+        print(traceback.format_exc())
+    except KeyboardInterrupt:
+        print(&#34; Keyboard Interrupt&#34;)
+    finally:
+        world.clear_world(client)</code></pre>
+</details>
+<div class="desc"><p>Controls the main function of the carla program.
+Holds the functions that are run when the program begins.
+Holds all of the exception handling from throughout the program.</p></div>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
 </section>
 <section>
 </section>
@@ -138,29 +95,9 @@ el.replaceWith(d);
 <ul></ul>
 </div>
 <ul id="index">
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
-<ul>
-<li><code><a title="classes.CBF" href="CBF.html">classes.CBF</a></code></li>
-<li><code><a title="classes.MAPEStep" href="MAPEStep.html">classes.MAPEStep</a></code></li>
-<li><code><a title="classes.analyzer" href="analyzer.html">classes.analyzer</a></code></li>
-<li><code><a title="classes.angleConstraint" href="angleConstraint.html">classes.angleConstraint</a></code></li>
-<li><code><a title="classes.collisionException" href="collisionException.html">classes.collisionException</a></code></li>
-<li><code><a title="classes.collisionRule" href="collisionRule.html">classes.collisionRule</a></code></li>
-<li><code><a title="classes.collisionSensor" href="collisionSensor.html">classes.collisionSensor</a></code></li>
-<li><code><a title="classes.executor" href="executor.html">classes.executor</a></code></li>
-<li><code><a title="classes.globalRoutePlanner" href="globalRoutePlanner.html">classes.globalRoutePlanner</a></code></li>
-<li><code><a title="classes.monitor" href="monitor.html">classes.monitor</a></code></li>
-<li><code><a title="classes.obstacleSensor" href="obstacleSensor.html">classes.obstacleSensor</a></code></li>
-<li><code><a title="classes.parkedRule" href="parkedRule.html">classes.parkedRule</a></code></li>
-<li><code><a title="classes.pedestrianRule" href="pedestrianRule.html">classes.pedestrianRule</a></code></li>
-<li><code><a title="classes.planner" href="planner.html">classes.planner</a></code></li>
-<li><code><a title="classes.routeDone" href="routeDone.html">classes.routeDone</a></code></li>
-<li><code><a title="classes.rule" href="rule.html">classes.rule</a></code></li>
-<li><code><a title="classes.sensor" href="sensor.html">classes.sensor</a></code></li>
-<li><code><a title="classes.trafficLight" href="trafficLight.html">classes.trafficLight</a></code></li>
-<li><code><a title="classes.trafficRule" href="trafficRule.html">classes.trafficRule</a></code></li>
-<li><code><a title="classes.vehicle" href="vehicle.html">classes.vehicle</a></code></li>
-<li><code><a title="classes.world" href="world.html">classes.world</a></code></li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="main.main" href="#main.main">main</a></code></li>
 </ul>
 </li>
 </ul>

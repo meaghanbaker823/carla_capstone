@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>classes.sensor API documentation</title>
-<meta name="description" content="Sensor Class() …">
+<title>classes.rule API documentation</title>
+<meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -33,15 +33,9 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>classes.sensor</code></h1>
+<h1 class="title">Module <code>classes.rule</code></h1>
 </header>
 <section id="section-intro">
-<p>===========
-Sensor Class()</p>
-<p><strong>init</strong>(self) creates instance and initilizes attributes
-self.__</p>
-<p>function(self) return type | description</p>
-<p>===========</p>
 </section>
 <section>
 </section>
@@ -52,121 +46,124 @@ self.__</p>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="classes.sensor.Sensor"><code class="flex name class">
-<span>class <span class="ident">Sensor</span></span>
-<span>(</span><span>relative_transform, parent_actor, blueprint, world)</span>
+<dt id="classes.rule.Rule"><code class="flex name class">
+<span>class <span class="ident">Rule</span></span>
+<span>(</span><span>sensors, car)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class Sensor:
-    def __init__(self, relative_transform, parent_actor, blueprint, world):
-        self.__transform = relative_transform
-        self.__parent = parent_actor
-        self.__sensor = world.get_world().spawn_actor(blueprint, relative_transform, attach_to=self.__parent)
+<pre><code class="python">class Rule():
+    &#34;&#34;&#34;
+    The super class for Rules
+    &#34;&#34;&#34;
+    def __init__(self, sensors, car):
+        &#34;&#34;&#34;
+        Sets up the variables needed for the Rule class
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
+        self.__sensors = sensors
+        self.__car = car
 
-    # getters
-    def get_transform(self):
-        return self.__transform
-    def get_parent(self):
-        return self.__parent
-    def get_world(self):
-        return self.__world
-    def get_blueprint(self):
-        return self.__blueprint
-    def get_sensor(self):
-        return self.__sensor
-    
-    def listen():
+    def get_sensors(self):
+        &#34;&#34;&#34;
+        Getter for the self.__sensors variable
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
+        return self.__sensors
+
+    def rule_flag(self, traffic_lights):
+        &#34;&#34;&#34;
+        Decides if the rule flag should be raised for this cycle
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
+        pass
+
+    def rule_follow(self, traffic_lights):
+        &#34;&#34;&#34;
+        Decides how the car should follow this rule when it is triggered
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         pass</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>The super class for Rules</p>
+<p>Sets up the variables needed for the Rule class</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 <h3>Subclasses</h3>
 <ul class="hlist">
-<li><a title="classes.collisionSensor.CollisionSensor" href="collisionSensor.html#classes.collisionSensor.CollisionSensor">CollisionSensor</a></li>
-<li><a title="classes.obstacleSensor.ObstacleSensor" href="obstacleSensor.html#classes.obstacleSensor.ObstacleSensor">ObstacleSensor</a></li>
+<li><a title="classes.collisionRule.CollisionRule" href="collisionRule.html#classes.collisionRule.CollisionRule">CollisionRule</a></li>
+<li><a title="classes.parkedRule.ParkedRule" href="parkedRule.html#classes.parkedRule.ParkedRule">ParkedRule</a></li>
+<li><a title="classes.pedestrianRule.PedestrianRule" href="pedestrianRule.html#classes.pedestrianRule.PedestrianRule">PedestrianRule</a></li>
+<li><a title="classes.trafficRule.TrafficRule" href="trafficRule.html#classes.trafficRule.TrafficRule">TrafficRule</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="classes.sensor.Sensor.get_blueprint"><code class="name flex">
-<span>def <span class="ident">get_blueprint</span></span>(<span>self)</span>
+<dt id="classes.rule.Rule.get_sensors"><code class="name flex">
+<span>def <span class="ident">get_sensors</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_blueprint(self):
-    return self.__blueprint</code></pre>
+<pre><code class="python">def get_sensors(self):
+    &#34;&#34;&#34;
+    Getter for the self.__sensors variable
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
+    return self.__sensors</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Getter for the self.__sensors variable</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
-<dt id="classes.sensor.Sensor.get_parent"><code class="name flex">
-<span>def <span class="ident">get_parent</span></span>(<span>self)</span>
+<dt id="classes.rule.Rule.rule_flag"><code class="name flex">
+<span>def <span class="ident">rule_flag</span></span>(<span>self, traffic_lights)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_parent(self):
-    return self.__parent</code></pre>
-</details>
-<div class="desc"></div>
-</dd>
-<dt id="classes.sensor.Sensor.get_sensor"><code class="name flex">
-<span>def <span class="ident">get_sensor</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_sensor(self):
-    return self.__sensor</code></pre>
-</details>
-<div class="desc"></div>
-</dd>
-<dt id="classes.sensor.Sensor.get_transform"><code class="name flex">
-<span>def <span class="ident">get_transform</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_transform(self):
-    return self.__transform</code></pre>
-</details>
-<div class="desc"></div>
-</dd>
-<dt id="classes.sensor.Sensor.get_world"><code class="name flex">
-<span>def <span class="ident">get_world</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_world(self):
-    return self.__world</code></pre>
-</details>
-<div class="desc"></div>
-</dd>
-<dt id="classes.sensor.Sensor.listen"><code class="name flex">
-<span>def <span class="ident">listen</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def listen():
+<pre><code class="python">def rule_flag(self, traffic_lights):
+    &#34;&#34;&#34;
+    Decides if the rule flag should be raised for this cycle
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
     pass</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Decides if the rule flag should be raised for this cycle</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
+</dd>
+<dt id="classes.rule.Rule.rule_follow"><code class="name flex">
+<span>def <span class="ident">rule_follow</span></span>(<span>self, traffic_lights)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rule_follow(self, traffic_lights):
+    &#34;&#34;&#34;
+    Decides how the car should follow this rule when it is triggered
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<div class="desc"><p>Decides how the car should follow this rule when it is triggered</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 </dl>
 </dd>
@@ -186,14 +183,11 @@ self.__</p>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="classes.sensor.Sensor" href="#classes.sensor.Sensor">Sensor</a></code></h4>
-<ul class="two-column">
-<li><code><a title="classes.sensor.Sensor.get_blueprint" href="#classes.sensor.Sensor.get_blueprint">get_blueprint</a></code></li>
-<li><code><a title="classes.sensor.Sensor.get_parent" href="#classes.sensor.Sensor.get_parent">get_parent</a></code></li>
-<li><code><a title="classes.sensor.Sensor.get_sensor" href="#classes.sensor.Sensor.get_sensor">get_sensor</a></code></li>
-<li><code><a title="classes.sensor.Sensor.get_transform" href="#classes.sensor.Sensor.get_transform">get_transform</a></code></li>
-<li><code><a title="classes.sensor.Sensor.get_world" href="#classes.sensor.Sensor.get_world">get_world</a></code></li>
-<li><code><a title="classes.sensor.Sensor.listen" href="#classes.sensor.Sensor.listen">listen</a></code></li>
+<h4><code><a title="classes.rule.Rule" href="#classes.rule.Rule">Rule</a></code></h4>
+<ul class="">
+<li><code><a title="classes.rule.Rule.get_sensors" href="#classes.rule.Rule.get_sensors">get_sensors</a></code></li>
+<li><code><a title="classes.rule.Rule.rule_flag" href="#classes.rule.Rule.rule_flag">rule_flag</a></code></li>
+<li><code><a title="classes.rule.Rule.rule_follow" href="#classes.rule.Rule.rule_follow">rule_follow</a></code></li>
 </ul>
 </li>
 </ul>

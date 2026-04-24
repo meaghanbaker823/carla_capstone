@@ -1,22 +1,23 @@
-"""
-===========
-AngleConstraint Class()
-
-__init__(self) creates instance and initilizes attributes
-    self.__
-
-function(self) return type | description
-
-===========
-"""
-
 class AngleConstraint():
+    """
+    The class for clamping and adjusting angles
+    """
     def __init__(self, min, max, adjust):
+        """
+        Sets up the variables needed for the AngleConstraint Class
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         self.__min = min
         self.__max = max
         self.__adjust = adjust
 
     def clamp(self, degrees):
+        """
+        Clamps the angle to be adjusted by a set amount if it is outside the given maximum and minimum
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         if degrees < self.__min:
             return degrees + self.__adjust
         elif degrees > self.__max:
@@ -25,6 +26,11 @@ class AngleConstraint():
         return degrees
     
     def max_steer(self, degrees):
+        """
+        Adjusts the steering angle provided to be between the maximum and minimum inclusively
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         if degrees < self.__min:
             return self.__min
         elif degrees > self.__max:

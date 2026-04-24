@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>classes.angleConstraint API documentation</title>
-<meta name="description" content="AngleConstraint Class() …">
+<title>classes.MAPEStep API documentation</title>
+<meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -33,15 +33,9 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>classes.angleConstraint</code></h1>
+<h1 class="title">Module <code>classes.MAPEStep</code></h1>
 </header>
 <section id="section-intro">
-<p>===========
-AngleConstraint Class()</p>
-<p><strong>init</strong>(self) creates instance and initilizes attributes
-self.__</p>
-<p>function(self) return type | description</p>
-<p>===========</p>
 </section>
 <section>
 </section>
@@ -52,75 +46,67 @@ self.__</p>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="classes.angleConstraint.AngleConstraint"><code class="flex name class">
-<span>class <span class="ident">AngleConstraint</span></span>
-<span>(</span><span>min, max, adjust)</span>
+<dt id="classes.MAPEStep.MAPEStep"><code class="flex name class">
+<span>class <span class="ident">MAPEStep</span></span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class AngleConstraint():
-    def __init__(self, min, max, adjust):
-        self.__min = min
-        self.__max = max
-        self.__adjust = adjust
+<pre><code class="python">class MAPEStep():
+    &#34;&#34;&#34;
+    The superclass for each of the portions of the MAPE structure
+    &#34;&#34;&#34;
+    def __init__(self):
+        &#34;&#34;&#34;
+        Sets up the variables needed for the MAPEStep class
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
+        self.__old_steps = []
+        self.__new_step = &#34;&#34;
 
-    def clamp(self, degrees):
-        if degrees &lt; self.__min:
-            return degrees + self.__adjust
-        elif degrees &gt; self.__max:
-            return degrees - self.__adjust
-
-        return degrees
-    
-    def max_steer(self, degrees):
-        if degrees &lt; self.__min:
-            return self.__min
-        elif degrees &gt; self.__max:
-            return self.__max
-        else:
-            return degrees    </code></pre>
+    def notify(self):
+        &#34;&#34;&#34;
+        The superclass method for notifying the MAPE Step of its actions
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
+        pass</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>The superclass for each of the portions of the MAPE structure</p>
+<p>Sets up the variables needed for the MAPEStep class</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="classes.analyzer.Analyzer" href="analyzer.html#classes.analyzer.Analyzer">Analyzer</a></li>
+<li><a title="classes.executor.Executor" href="executor.html#classes.executor.Executor">Executor</a></li>
+<li><a title="classes.monitor.Monitor" href="monitor.html#classes.monitor.Monitor">Monitor</a></li>
+<li><a title="classes.planner.Planner" href="planner.html#classes.planner.Planner">Planner</a></li>
+</ul>
 <h3>Methods</h3>
 <dl>
-<dt id="classes.angleConstraint.AngleConstraint.clamp"><code class="name flex">
-<span>def <span class="ident">clamp</span></span>(<span>self, degrees)</span>
+<dt id="classes.MAPEStep.MAPEStep.notify"><code class="name flex">
+<span>def <span class="ident">notify</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def clamp(self, degrees):
-    if degrees &lt; self.__min:
-        return degrees + self.__adjust
-    elif degrees &gt; self.__max:
-        return degrees - self.__adjust
-
-    return degrees</code></pre>
+<pre><code class="python">def notify(self):
+    &#34;&#34;&#34;
+    The superclass method for notifying the MAPE Step of its actions
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
+    pass</code></pre>
 </details>
-<div class="desc"></div>
-</dd>
-<dt id="classes.angleConstraint.AngleConstraint.max_steer"><code class="name flex">
-<span>def <span class="ident">max_steer</span></span>(<span>self, degrees)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def max_steer(self, degrees):
-    if degrees &lt; self.__min:
-        return self.__min
-    elif degrees &gt; self.__max:
-        return self.__max
-    else:
-        return degrees    </code></pre>
-</details>
-<div class="desc"></div>
+<div class="desc"><p>The superclass method for notifying the MAPE Step of its actions</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 </dl>
 </dd>
@@ -140,10 +126,9 @@ self.__</p>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="classes.angleConstraint.AngleConstraint" href="#classes.angleConstraint.AngleConstraint">AngleConstraint</a></code></h4>
+<h4><code><a title="classes.MAPEStep.MAPEStep" href="#classes.MAPEStep.MAPEStep">MAPEStep</a></code></h4>
 <ul class="">
-<li><code><a title="classes.angleConstraint.AngleConstraint.clamp" href="#classes.angleConstraint.AngleConstraint.clamp">clamp</a></code></li>
-<li><code><a title="classes.angleConstraint.AngleConstraint.max_steer" href="#classes.angleConstraint.AngleConstraint.max_steer">max_steer</a></code></li>
+<li><code><a title="classes.MAPEStep.MAPEStep.notify" href="#classes.MAPEStep.MAPEStep.notify">notify</a></code></li>
 </ul>
 </li>
 </ul>

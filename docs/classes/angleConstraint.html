@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>classes.obstacleSensor API documentation</title>
+<title>classes.angleConstraint API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
@@ -33,7 +33,7 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>classes.obstacleSensor</code></h1>
+<h1 class="title">Module <code>classes.angleConstraint</code></h1>
 </header>
 <section id="section-intro">
 </section>
@@ -46,170 +46,110 @@ el.replaceWith(d);
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="classes.obstacleSensor.ObstacleSensor"><code class="flex name class">
-<span>class <span class="ident">ObstacleSensor</span></span>
-<span>(</span><span>relative_transform, parent_actor, blueprint, world, blueprint_lib)</span>
+<dt id="classes.angleConstraint.AngleConstraint"><code class="flex name class">
+<span>class <span class="ident">AngleConstraint</span></span>
+<span>(</span><span>min, max, adjust)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class ObstacleSensor(Sensor):
-    def __init__(self, relative_transform, parent_actor, blueprint, world, blueprint_lib):
-         # pre-condition
-        try:
-            assert isinstance(relative_transform, carla.libcarla.Transform) # relative transform must be a transform object
-            assert str(parent_actor) in [str(actor) for actor in world.get_actors()] # parent actor must be spawned in the world
-            assert str(blueprint) == str(blueprint_lib.find(&#39;sensor.other.obstacle&#39;)) # blueprint must be obstacle detector
-        except:
-            raise
-        super().__init__(relative_transform, parent_actor, blueprint, world)
-        self.__other_actors = []
-        self.__detections = []
+<pre><code class="python">class AngleConstraint():
+    &#34;&#34;&#34;
+    The class for clamping and adjusting angles
+    &#34;&#34;&#34;
+    def __init__(self, min, max, adjust):
+        &#34;&#34;&#34;
+        Sets up the variables needed for the AngleConstraint Class
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
+        self.__min = min
+        self.__max = max
+        self.__adjust = adjust
+
+    def clamp(self, degrees):
+        &#34;&#34;&#34;
+        Clamps the angle to be adjusted by a set amount if it is outside the given maximum and minimum
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
+        if degrees &lt; self.__min:
+            return degrees + self.__adjust
+        elif degrees &gt; self.__max:
+            return degrees - self.__adjust
+
+        return degrees
     
-    # getters
-    def get_detections(self):
-        return self.__detections
-    def get_other_actors(self):
-        return self.__other_actors
-    
-    def delete_old_detection(self):
-        detections_len = len(self.__detections)
-        oactorer_len = len(self.__other_actors)
-
-        self.__detections.pop(0)
-        self.__other_actors.pop(0)
-
-         # post condition
-        try:
-            assert len(self.__detections) == detections_len - 1
-            assert len(self.__other_actors) == oactorer_len - 1
-        except:
-            raise
-          
-    # with event, add to list of detections
-    def obstacle_detect(self, event):
-        try:
-            assert isinstance(event, carla.libcarla.ObstacleDetectionEvent)
-        except:
-            raise
-
-        detections_len = len(self.__detections)
-
-        if event.other_actor not in self.__other_actors:
-            detection = (event.other_actor, event.distance)
-            self.__detections.append(detection)
-            self.__other_actors.append(event.other_actor)
-
-             # post condition
-            try:
-                assert len(self.__detections) == detections_len + 1
-            except:
-                raise
-
-    # listen to sensor
-    def listen(self):
-        self.get_sensor().listen(lambda event: self.obstacle_detect(event))</code></pre>
+    def max_steer(self, degrees):
+        &#34;&#34;&#34;
+        Adjusts the steering angle provided to be between the maximum and minimum inclusively
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
+        if degrees &lt; self.__min:
+            return self.__min
+        elif degrees &gt; self.__max:
+            return self.__max
+        else:
+            return degrees    </code></pre>
 </details>
-<div class="desc"></div>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="classes.sensor.Sensor" href="sensor.html#classes.sensor.Sensor">Sensor</a></li>
-</ul>
+<div class="desc"><p>The class for clamping and adjusting angles</p>
+<p>Sets up the variables needed for the AngleConstraint Class</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 <h3>Methods</h3>
 <dl>
-<dt id="classes.obstacleSensor.ObstacleSensor.delete_old_detection"><code class="name flex">
-<span>def <span class="ident">delete_old_detection</span></span>(<span>self)</span>
+<dt id="classes.angleConstraint.AngleConstraint.clamp"><code class="name flex">
+<span>def <span class="ident">clamp</span></span>(<span>self, degrees)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def delete_old_detection(self):
-    detections_len = len(self.__detections)
-    oactorer_len = len(self.__other_actors)
+<pre><code class="python">def clamp(self, degrees):
+    &#34;&#34;&#34;
+    Clamps the angle to be adjusted by a set amount if it is outside the given maximum and minimum
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
+    if degrees &lt; self.__min:
+        return degrees + self.__adjust
+    elif degrees &gt; self.__max:
+        return degrees - self.__adjust
 
-    self.__detections.pop(0)
-    self.__other_actors.pop(0)
-
-     # post condition
-    try:
-        assert len(self.__detections) == detections_len - 1
-        assert len(self.__other_actors) == oactorer_len - 1
-    except:
-        raise</code></pre>
+    return degrees</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Clamps the angle to be adjusted by a set amount if it is outside the given maximum and minimum</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
-<dt id="classes.obstacleSensor.ObstacleSensor.get_detections"><code class="name flex">
-<span>def <span class="ident">get_detections</span></span>(<span>self)</span>
+<dt id="classes.angleConstraint.AngleConstraint.max_steer"><code class="name flex">
+<span>def <span class="ident">max_steer</span></span>(<span>self, degrees)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_detections(self):
-    return self.__detections</code></pre>
+<pre><code class="python">def max_steer(self, degrees):
+    &#34;&#34;&#34;
+    Adjusts the steering angle provided to be between the maximum and minimum inclusively
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
+    if degrees &lt; self.__min:
+        return self.__min
+    elif degrees &gt; self.__max:
+        return self.__max
+    else:
+        return degrees    </code></pre>
 </details>
-<div class="desc"></div>
-</dd>
-<dt id="classes.obstacleSensor.ObstacleSensor.get_other_actors"><code class="name flex">
-<span>def <span class="ident">get_other_actors</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_other_actors(self):
-    return self.__other_actors</code></pre>
-</details>
-<div class="desc"></div>
-</dd>
-<dt id="classes.obstacleSensor.ObstacleSensor.listen"><code class="name flex">
-<span>def <span class="ident">listen</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def listen(self):
-    self.get_sensor().listen(lambda event: self.obstacle_detect(event))</code></pre>
-</details>
-<div class="desc"></div>
-</dd>
-<dt id="classes.obstacleSensor.ObstacleSensor.obstacle_detect"><code class="name flex">
-<span>def <span class="ident">obstacle_detect</span></span>(<span>self, event)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def obstacle_detect(self, event):
-    try:
-        assert isinstance(event, carla.libcarla.ObstacleDetectionEvent)
-    except:
-        raise
-
-    detections_len = len(self.__detections)
-
-    if event.other_actor not in self.__other_actors:
-        detection = (event.other_actor, event.distance)
-        self.__detections.append(detection)
-        self.__other_actors.append(event.other_actor)
-
-         # post condition
-        try:
-            assert len(self.__detections) == detections_len + 1
-        except:
-            raise</code></pre>
-</details>
-<div class="desc"></div>
+<div class="desc"><p>Adjusts the steering angle provided to be between the maximum and minimum inclusively</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 </dl>
 </dd>
@@ -229,13 +169,10 @@ el.replaceWith(d);
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="classes.obstacleSensor.ObstacleSensor" href="#classes.obstacleSensor.ObstacleSensor">ObstacleSensor</a></code></h4>
+<h4><code><a title="classes.angleConstraint.AngleConstraint" href="#classes.angleConstraint.AngleConstraint">AngleConstraint</a></code></h4>
 <ul class="">
-<li><code><a title="classes.obstacleSensor.ObstacleSensor.delete_old_detection" href="#classes.obstacleSensor.ObstacleSensor.delete_old_detection">delete_old_detection</a></code></li>
-<li><code><a title="classes.obstacleSensor.ObstacleSensor.get_detections" href="#classes.obstacleSensor.ObstacleSensor.get_detections">get_detections</a></code></li>
-<li><code><a title="classes.obstacleSensor.ObstacleSensor.get_other_actors" href="#classes.obstacleSensor.ObstacleSensor.get_other_actors">get_other_actors</a></code></li>
-<li><code><a title="classes.obstacleSensor.ObstacleSensor.listen" href="#classes.obstacleSensor.ObstacleSensor.listen">listen</a></code></li>
-<li><code><a title="classes.obstacleSensor.ObstacleSensor.obstacle_detect" href="#classes.obstacleSensor.ObstacleSensor.obstacle_detect">obstacle_detect</a></code></li>
+<li><code><a title="classes.angleConstraint.AngleConstraint.clamp" href="#classes.angleConstraint.AngleConstraint.clamp">clamp</a></code></li>
+<li><code><a title="classes.angleConstraint.AngleConstraint.max_steer" href="#classes.angleConstraint.AngleConstraint.max_steer">max_steer</a></code></li>
 </ul>
 </li>
 </ul>

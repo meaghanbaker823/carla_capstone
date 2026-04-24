@@ -1,42 +1,75 @@
 import carla
 import math
 
-"""
-===========
-TrafficLight Class
-
-__init__ creates instance and creates list to manage traffic lights
-
-process_color()                  | sets color by processing the state of the light
-
-react_to_color()                 | moves the vehicle based on the color
-
-is_light_close()                 | detects if light is applicable
-
-===========
-"""
 class TrafficLight():
+    """
+    A class to collect all traffic lights that are within the range of the car and give its correct reaction
+    """
     def __init__(self, actors):
+        """
+        Initializes the variables needed for the TrafficLight class
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """        
         self.__lights = []
         self.__color = "unknown"
         self.__response = ""
         self.set_lights(actors)
 
     def get_color(self):
+        """
+        Getter for self.__color
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """   
         return self.__color
+    
     def get_lights(self):
+        """
+        Getter for self.__lights
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """   
         return self.__lights
+    
     def get_response(self):
+        """
+        Getter for self.__response
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """   
         return self.__response
     
     def set_lights(self, actors):
+        """
+        Setter for self.__lights
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """   
         self.__lights = actors.filter('traffic.traffic_light*')
+
     def set_response(self, response):
+        """
+        Setter for self.__response
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """   
         self.__response = response
+
     def set_color(self, color):
+        """
+        Setter for self.__color
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """   
         self.__color = color
 
     def process_color(self, car):
+        """
+        Processes the color of each of the traffic lights
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         try:
             assert isinstance(car, carla.libcarla.Vehicle)
         except:
@@ -57,6 +90,11 @@ class TrafficLight():
         return self.get_response()
 
     def react_to_color(self):
+        """
+        Decides what action should be taken based on the traffic color
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """   
         action = ""
         if(self.get_color() == "Green"):
             action = "drive"
@@ -71,6 +109,11 @@ class TrafficLight():
         return action
     
     def is_light_close(self, car_check, light_check, target_distance, target_angle):
+        """
+        Determines if the traffic light is close and in the right angle for the car
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """   
         try:
             assert isinstance(car_check,  carla.Vehicle)
             assert isinstance(light_check, carla.TrafficLight)

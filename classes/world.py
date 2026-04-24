@@ -10,26 +10,16 @@ import os
 import random
 import time
 
-"""
-===========
-World Class()
-    pub default_spawn   | first spawn point on map
-
-create instance to initialize client connection
-
-get_client()        | returns carla client object
-
-get_world()         | returns carla world object
-
-change_map(world_map: string)  | changes carla map
-
-get_blueprints()    | returns carla blueprint library object
-
-get_spawnpoints()   | returns list of map spawn points
-===========
-"""
 class World:
+    """
+    Holds all of the variables and methods to set up and destroy the Carla world
+    """
     def __init__(self, world_map='town01'):
+        """
+        Sets up the variables needed for the World class
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         self.__client = carla.Client('localhost', 2000)
         self.__client.set_timeout(60.0)
 
@@ -42,33 +32,77 @@ class World:
             self.__world = self.__client.load_world(world_map)
 
     def get_client(self):
+        """
+        Getter for self.__client
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         return self.__client
 
     def get_world(self):
+        """
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         return self.__world
 
     def get_map(self):
+        """
+        Getter for the map
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         return self.__world.get_map()
     
     def get_actors(self):
+        """
+        Getter for the actors
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         return self.__world.get_actors()
 
     def change_map(self, world_map='town10HD_Opt'):
+        """
+        Setter for the map
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         return self.__world.load_world(world_map)
 
     def get_blueprints(self):
+        """
+        Getter for the blueprints
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         return self.__world.get_blueprint_library()
 
     def get_spawnpoints(self):
+        """
+        Getter for the spawnpoints
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         return self.__world.get_map().get_spawn_points()
 
     def init_world(self):
+        """
+        Sets up all of the necessary parts of the world
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         return (self.__client,
             self.get_spawnpoints(),
             self.get_spawnpoints()[142],
             self.get_blueprints())
 
     def init_spectator(self, spawn):
+        """
+        Sets up the spectator for our car
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         try:
             assert isinstance(spawn, carla.libcarla.Transform)
         except:
@@ -83,6 +117,11 @@ class World:
             raise
     
     def spawn_vehicles(self):
+        """
+        Spawns the necessary vehicles into the Carla environment
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
       # vehicle blueprints
         v_bps = self.get_blueprints().filter("vehicle.mercedes*")
 
@@ -96,22 +135,28 @@ class World:
             self.__world.spawn_actor(v_bp, spawn)
             
     def spawn_pedestrians(self): 
+        """
+        Spawns the necessary pedestrians into the Carla environment
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         # pedestrian blueprints
         pd_bps = self.get_blueprints().filter("walker.pedestrian.*")
         spwn_pts = self.get_spawnpoints()
-        #good_spwn_pts = [spwn_pts[95], spwn_pts[102], spwn_pts[202], spwn_pts[116]]
+
+        static_spawn = carla.Transform()
+        static_spawn.location = spwn_pts[141].location
+        self.__world.spawn_actor(random.choice(pd_bps), static_spawn)
+
         good_spwn_pts = [spwn_pts[95], spwn_pts[102], spwn_pts[116]]
-        # good_spwn_pts[0].location.z -= 1
-        #dest_points = [spwn_pts[203], spwn_pts[112], spwn_pts[7], spwn_pts[115]]
         dest_points = [spwn_pts[203], spwn_pts[112], spwn_pts[115]]
         # spawn 10 pedestrians
         for i in range(len(good_spwn_pts)):
             pd_bp = random.choice(pd_bps)
-            print(i)
 
             # remove pedestrian spawn choice to avoid collision
-            
             spawn = carla.Transform()
+
             # at 10
             # choose random location, then remove that spawnpoint to avoid pedestrians from not spawning
 
@@ -129,6 +174,11 @@ class World:
 
     #initialize the list of actors
     def init_actors(self, spawn, blueprint_lib, spts, world, scanning_distance, dt, extra, u_nom, alpha, max_acc, max_brake, distance, standard_distance):
+        """
+        Initializes all actors in the Carla world
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """        
         try:
             assert type(spawn) == carla.libcarla.Transform
             assert type(blueprint_lib) == carla.libcarla.BlueprintLibrary
@@ -157,6 +207,11 @@ class World:
             raise
 
     def clear_world(self, client):
+        """
+        Reloads the world so that no errors occur
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """              
         try:
             assert type(client) == carla.libcarla.Client
         except:
@@ -168,6 +223,11 @@ class World:
 
     #repeating logic performed in the main function
     def main_loop(self, spectator, car, vehicle, DT):
+        """
+        Tne function which holds the functions to be repeated each cycle
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """      
         try:
             assert type(car) == carla.libcarla.Vehicle
             assert type(vehicle) == Vehicle

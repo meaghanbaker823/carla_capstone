@@ -1,19 +1,20 @@
-"""
-===========
-MAPEStep Class()
-
-__init__(self) creates instance and initilizes attributes
-    self.__
-
-function(self) return type | description
-
-===========
-"""
-
 class MAPEStep():
+    """
+    The superclass for each of the portions of the MAPE structure
+    """
     def __init__(self):
+        """
+        Sets up the variables needed for the MAPEStep class
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         self.__old_steps = []
         self.__new_step = ""
 
     def notify(self):
-        return True
+        """
+        The superclass method for notifying the MAPE Step of its actions
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
+        pass

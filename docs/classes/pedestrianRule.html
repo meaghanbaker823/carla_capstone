@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>classes.collisionRule API documentation</title>
+<title>classes.pedestrianRule API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
@@ -33,7 +33,7 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>classes.collisionRule</code></h1>
+<h1 class="title">Module <code>classes.pedestrianRule</code></h1>
 </header>
 <section id="section-intro">
 </section>
@@ -46,8 +46,8 @@ el.replaceWith(d);
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="classes.collisionRule.CollisionRule"><code class="flex name class">
-<span>class <span class="ident">CollisionRule</span></span>
+<dt id="classes.pedestrianRule.PedestrianRule"><code class="flex name class">
+<span>class <span class="ident">PedestrianRule</span></span>
 <span>(</span><span>sensors, car)</span>
 </code></dt>
 <dd>
@@ -55,29 +55,50 @@ el.replaceWith(d);
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class CollisionRule(Rule):
+<pre><code class="python">class PedestrianRule(Rule):
+    &#34;&#34;&#34;
+    The rule subclass for when a car&#39;s obstacle detector is triggered from a pedestrian
+    &#34;&#34;&#34;
     def __init__(self, sensors, car):
+        &#34;&#34;&#34;
+        Sets up the variables needed for the PedestrianRule class
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         super().__init__(sensors, car)
         self.__sensors = sensors
         self.__car = car
-        
+
     def rule_flag(self, traffic_lights):
-        if(self.__sensors[1].get_collisions() != []):
-            raise CollisionErr(&#34;&#34;)
+        &#34;&#34;&#34;
+        Decides if the rule flag should be raised for this cycle (Checks if sensor detected a walker)
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
+        if(self.__sensors[0].get_other_actors() != []):
+            if(self.__sensors[0].get_detections()[-1][0].type_id[:-2].startswith(&#39;walker&#39;)):
+                return False
         return True
-    
+
     def rule_follow(self, traffic_lights):
-        # pass brake as 1, speed as 0, and steering as None
-        return 0</code></pre>
+       &#34;&#34;&#34;
+        Decides how the car should follow this rule when it is triggered (Will tell the car to stop)
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):    
+        &#34;&#34;&#34;
+       return 0</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>The rule subclass for when a car's obstacle detector is triggered from a pedestrian</p>
+<p>Sets up the variables needed for the PedestrianRule class</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="classes.rule.Rule" href="rule.html#classes.rule.Rule">Rule</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="classes.collisionRule.CollisionRule.rule_flag"><code class="name flex">
+<dt id="classes.pedestrianRule.PedestrianRule.rule_flag"><code class="name flex">
 <span>def <span class="ident">rule_flag</span></span>(<span>self, traffic_lights)</span>
 </code></dt>
 <dd>
@@ -86,13 +107,21 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def rule_flag(self, traffic_lights):
-    if(self.__sensors[1].get_collisions() != []):
-        raise CollisionErr(&#34;&#34;)
+    &#34;&#34;&#34;
+    Decides if the rule flag should be raised for this cycle (Checks if sensor detected a walker)
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
+    if(self.__sensors[0].get_other_actors() != []):
+        if(self.__sensors[0].get_detections()[-1][0].type_id[:-2].startswith(&#39;walker&#39;)):
+            return False
     return True</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Decides if the rule flag should be raised for this cycle (Checks if sensor detected a walker)</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
-<dt id="classes.collisionRule.CollisionRule.rule_follow"><code class="name flex">
+<dt id="classes.pedestrianRule.PedestrianRule.rule_follow"><code class="name flex">
 <span>def <span class="ident">rule_follow</span></span>(<span>self, traffic_lights)</span>
 </code></dt>
 <dd>
@@ -101,12 +130,26 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def rule_follow(self, traffic_lights):
-    # pass brake as 1, speed as 0, and steering as None
-    return 0</code></pre>
+   &#34;&#34;&#34;
+    Decides how the car should follow this rule when it is triggered (Will tell the car to stop)
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):    
+    &#34;&#34;&#34;
+   return 0</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Decides how the car should follow this rule when it is triggered (Will tell the car to stop)</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="classes.rule.Rule" href="rule.html#classes.rule.Rule">Rule</a></b></code>:
+<ul class="hlist">
+<li><code><a title="classes.rule.Rule.get_sensors" href="rule.html#classes.rule.Rule.get_sensors">get_sensors</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
 </section>
@@ -124,10 +167,10 @@ el.replaceWith(d);
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="classes.collisionRule.CollisionRule" href="#classes.collisionRule.CollisionRule">CollisionRule</a></code></h4>
+<h4><code><a title="classes.pedestrianRule.PedestrianRule" href="#classes.pedestrianRule.PedestrianRule">PedestrianRule</a></code></h4>
 <ul class="">
-<li><code><a title="classes.collisionRule.CollisionRule.rule_flag" href="#classes.collisionRule.CollisionRule.rule_flag">rule_flag</a></code></li>
-<li><code><a title="classes.collisionRule.CollisionRule.rule_follow" href="#classes.collisionRule.CollisionRule.rule_follow">rule_follow</a></code></li>
+<li><code><a title="classes.pedestrianRule.PedestrianRule.rule_flag" href="#classes.pedestrianRule.PedestrianRule.rule_flag">rule_flag</a></code></li>
+<li><code><a title="classes.pedestrianRule.PedestrianRule.rule_follow" href="#classes.pedestrianRule.PedestrianRule.rule_follow">rule_follow</a></code></li>
 </ul>
 </li>
 </ul>

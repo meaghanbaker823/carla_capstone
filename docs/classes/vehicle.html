@@ -56,7 +56,15 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Vehicle: 
+    &#34;&#34;&#34;
+    The class that controls the vehicle
+    &#34;&#34;&#34;
     def __init__(self, blueprint_lib, carla_world, spawn, destination, transform, blueprint, world, DT, extra, u_nom, alpha, max_acc, max_brake, distance, standard_distance):
+        &#34;&#34;&#34;
+        Initializes the variables needed for the Vehicle class
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         self.__car = carla_world.spawn_actor(random.choice(blueprint_lib.filter(&#39;vehicle.bmw.*&#39;)), spawn)
         self.__actors = carla_world.get_actors()
         self.__world = world
@@ -73,11 +81,14 @@ el.replaceWith(d);
         self.__standard_distance = standard_distance
         self.__global_route_planner = GlobalRoutePlanner(self.__carla_world.get_map(), 1)
         self.__route = self.__global_route_planner.trace_route(spawn.location, destination.location)
-        self.__route = self.__global_route_planner.trace_route(spawn.location, destination.location)
         self.mape_init(transform, blueprint, blueprint_lib)
-        self.draw_route(self.__route)
 
     def mape_init(self, transform, blueprint, blueprint_lib):
+        &#34;&#34;&#34;
+        Sets up all of the MAPE classes and completes one cycle
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         try:
             self.__monitor_class = Monitor(transform, self.__car, blueprint, self.__world, blueprint_lib, self.__actors, self.__route)
             self.__analyzer_class = Analyzer(self.__carla_world)
@@ -89,66 +100,81 @@ el.replaceWith(d);
             self.__waypoint_num = monitor_info[&#34;current_waypoint_num&#34;]
 
             analyzer_info = self.__analyzer_class.analyze(self.get_car(), self.get_rules(), monitor_info, self.__distance)
-            self.__waypoint_num = analyzer_info[&#34;new_waypoint&#34;]
 
-            plan_info = self.__planner_class.plan(analyzer_info, self.__DT, self.__extra, self.__u_nom, self.__alpha, self.__max_acc, self.__max_brake, self.__standard_distance)
+            plan_info = self.__planner_class.plan(self.get_car(), analyzer_info, self.__DT, self.__extra, self.__u_nom, self.__alpha, self.__max_acc, self.__max_brake, self.__standard_distance)
+            self.__waypoint_num = plan_info[&#34;new_waypoint&#34;]
 
             self.__executor_class.execute(plan_info, self.get_car())
         except:
             raise
-
-    def draw_route(self, route):
-        for waypoint in route:
-            self.__carla_world.debug.draw_string(waypoint[0].transform.location, &#39;^&#39;, draw_shadow = False, color = carla.Color(r = 0, g = 0, b = 255), life_time = 5.0, persistent_lines = True)
     
     def get_rules(self):
+        &#34;&#34;&#34;
+        Getter for self.__rules
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         return self.__rules
     
     def set_rules(self, rules):
+        &#34;&#34;&#34;
+        Setter for self.__rules
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         self.__rules = rules
 
     def get_sensors(self):
+        &#34;&#34;&#34;
+        Getter for the sensors
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         return self.__monitor_class.get_sensors()
   
     def get_car(self):
+        &#34;&#34;&#34;
+        Getter for self.__car
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         return self.__car
     
     def get_actors(self):
+        &#34;&#34;&#34;
+        Getter for self.__actors
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         return self.__actors
 
-    def mape_drive(self):     
+    def mape_drive(self):  
+        &#34;&#34;&#34;
+        Walks through the MAPE structure
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;   
         try:
             monitor_info = self.__monitor_class.monitor(self.__waypoint_num)
 
             self.__waypoint_num = monitor_info[&#34;current_waypoint_num&#34;]
 
             analyzer_info = self.__analyzer_class.analyze(self.get_car(), self.get_rules(), monitor_info, self.__distance)
-            self.__waypoint_num = analyzer_info[&#34;new_waypoint&#34;]
 
-            plan_info = self.__planner_class.plan(analyzer_info, self.__DT, self.__extra, self.__u_nom, self.__alpha, self.__max_acc, self.__max_brake, self.__standard_distance)
+            plan_info = self.__planner_class.plan(self.get_car(), analyzer_info, self.__DT, self.__extra, self.__u_nom, self.__alpha, self.__max_acc, self.__max_brake, self.__standard_distance)
+            self.__waypoint_num = plan_info[&#34;new_waypoint&#34;]
 
             self.__executor_class.execute(plan_info, self.get_car())
     
         except:
             raise</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>The class that controls the vehicle</p>
+<p>Initializes the variables needed for the Vehicle class</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 <h3>Methods</h3>
 <dl>
-<dt id="classes.vehicle.Vehicle.draw_route"><code class="name flex">
-<span>def <span class="ident">draw_route</span></span>(<span>self, route)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def draw_route(self, route):
-    for waypoint in route:
-        self.__carla_world.debug.draw_string(waypoint[0].transform.location, &#39;^&#39;, draw_shadow = False, color = carla.Color(r = 0, g = 0, b = 255), life_time = 5.0, persistent_lines = True)</code></pre>
-</details>
-<div class="desc"></div>
-</dd>
 <dt id="classes.vehicle.Vehicle.get_actors"><code class="name flex">
 <span>def <span class="ident">get_actors</span></span>(<span>self)</span>
 </code></dt>
@@ -158,9 +184,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_actors(self):
+    &#34;&#34;&#34;
+    Getter for self.__actors
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
     return self.__actors</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Getter for self.__actors</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.vehicle.Vehicle.get_car"><code class="name flex">
 <span>def <span class="ident">get_car</span></span>(<span>self)</span>
@@ -171,9 +204,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_car(self):
+    &#34;&#34;&#34;
+    Getter for self.__car
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
     return self.__car</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Getter for self.__car</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.vehicle.Vehicle.get_rules"><code class="name flex">
 <span>def <span class="ident">get_rules</span></span>(<span>self)</span>
@@ -184,9 +224,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_rules(self):
+    &#34;&#34;&#34;
+    Getter for self.__rules
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
     return self.__rules</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Getter for self.__rules</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.vehicle.Vehicle.get_sensors"><code class="name flex">
 <span>def <span class="ident">get_sensors</span></span>(<span>self)</span>
@@ -197,9 +244,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_sensors(self):
+    &#34;&#34;&#34;
+    Getter for the sensors
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
     return self.__monitor_class.get_sensors()</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Getter for the sensors</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.vehicle.Vehicle.mape_drive"><code class="name flex">
 <span>def <span class="ident">mape_drive</span></span>(<span>self)</span>
@@ -209,23 +263,30 @@ el.replaceWith(d);
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def mape_drive(self):     
+<pre><code class="python">def mape_drive(self):  
+    &#34;&#34;&#34;
+    Walks through the MAPE structure
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;   
     try:
         monitor_info = self.__monitor_class.monitor(self.__waypoint_num)
 
         self.__waypoint_num = monitor_info[&#34;current_waypoint_num&#34;]
 
         analyzer_info = self.__analyzer_class.analyze(self.get_car(), self.get_rules(), monitor_info, self.__distance)
-        self.__waypoint_num = analyzer_info[&#34;new_waypoint&#34;]
 
-        plan_info = self.__planner_class.plan(analyzer_info, self.__DT, self.__extra, self.__u_nom, self.__alpha, self.__max_acc, self.__max_brake, self.__standard_distance)
+        plan_info = self.__planner_class.plan(self.get_car(), analyzer_info, self.__DT, self.__extra, self.__u_nom, self.__alpha, self.__max_acc, self.__max_brake, self.__standard_distance)
+        self.__waypoint_num = plan_info[&#34;new_waypoint&#34;]
 
         self.__executor_class.execute(plan_info, self.get_car())
 
     except:
         raise</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Walks through the MAPE structure</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.vehicle.Vehicle.mape_init"><code class="name flex">
 <span>def <span class="ident">mape_init</span></span>(<span>self, transform, blueprint, blueprint_lib)</span>
@@ -236,6 +297,11 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def mape_init(self, transform, blueprint, blueprint_lib):
+    &#34;&#34;&#34;
+    Sets up all of the MAPE classes and completes one cycle
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
     try:
         self.__monitor_class = Monitor(transform, self.__car, blueprint, self.__world, blueprint_lib, self.__actors, self.__route)
         self.__analyzer_class = Analyzer(self.__carla_world)
@@ -247,15 +313,17 @@ el.replaceWith(d);
         self.__waypoint_num = monitor_info[&#34;current_waypoint_num&#34;]
 
         analyzer_info = self.__analyzer_class.analyze(self.get_car(), self.get_rules(), monitor_info, self.__distance)
-        self.__waypoint_num = analyzer_info[&#34;new_waypoint&#34;]
 
-        plan_info = self.__planner_class.plan(analyzer_info, self.__DT, self.__extra, self.__u_nom, self.__alpha, self.__max_acc, self.__max_brake, self.__standard_distance)
+        plan_info = self.__planner_class.plan(self.get_car(), analyzer_info, self.__DT, self.__extra, self.__u_nom, self.__alpha, self.__max_acc, self.__max_brake, self.__standard_distance)
+        self.__waypoint_num = plan_info[&#34;new_waypoint&#34;]
 
         self.__executor_class.execute(plan_info, self.get_car())
     except:
         raise</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Sets up all of the MAPE classes and completes one cycle</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.vehicle.Vehicle.set_rules"><code class="name flex">
 <span>def <span class="ident">set_rules</span></span>(<span>self, rules)</span>
@@ -266,9 +334,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def set_rules(self, rules):
+    &#34;&#34;&#34;
+    Setter for self.__rules
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
     self.__rules = rules</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Setter for self.__rules</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 </dl>
 </dd>
@@ -290,7 +365,6 @@ el.replaceWith(d);
 <li>
 <h4><code><a title="classes.vehicle.Vehicle" href="#classes.vehicle.Vehicle">Vehicle</a></code></h4>
 <ul class="two-column">
-<li><code><a title="classes.vehicle.Vehicle.draw_route" href="#classes.vehicle.Vehicle.draw_route">draw_route</a></code></li>
 <li><code><a title="classes.vehicle.Vehicle.get_actors" href="#classes.vehicle.Vehicle.get_actors">get_actors</a></code></li>
 <li><code><a title="classes.vehicle.Vehicle.get_car" href="#classes.vehicle.Vehicle.get_car">get_car</a></code></li>
 <li><code><a title="classes.vehicle.Vehicle.get_rules" href="#classes.vehicle.Vehicle.get_rules">get_rules</a></code></li>

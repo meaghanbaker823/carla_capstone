@@ -56,7 +56,15 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class World:
+    &#34;&#34;&#34;
+    Holds all of the variables and methods to set up and destroy the Carla world
+    &#34;&#34;&#34;
     def __init__(self, world_map=&#39;town01&#39;):
+        &#34;&#34;&#34;
+        Sets up the variables needed for the World class
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         self.__client = carla.Client(&#39;localhost&#39;, 2000)
         self.__client.set_timeout(60.0)
 
@@ -69,33 +77,77 @@ el.replaceWith(d);
             self.__world = self.__client.load_world(world_map)
 
     def get_client(self):
+        &#34;&#34;&#34;
+        Getter for self.__client
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         return self.__client
 
     def get_world(self):
+        &#34;&#34;&#34;
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         return self.__world
 
     def get_map(self):
+        &#34;&#34;&#34;
+        Getter for the map
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         return self.__world.get_map()
     
     def get_actors(self):
+        &#34;&#34;&#34;
+        Getter for the actors
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         return self.__world.get_actors()
 
     def change_map(self, world_map=&#39;town10HD_Opt&#39;):
+        &#34;&#34;&#34;
+        Setter for the map
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         return self.__world.load_world(world_map)
 
     def get_blueprints(self):
+        &#34;&#34;&#34;
+        Getter for the blueprints
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         return self.__world.get_blueprint_library()
 
     def get_spawnpoints(self):
+        &#34;&#34;&#34;
+        Getter for the spawnpoints
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         return self.__world.get_map().get_spawn_points()
 
     def init_world(self):
+        &#34;&#34;&#34;
+        Sets up all of the necessary parts of the world
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         return (self.__client,
             self.get_spawnpoints(),
             self.get_spawnpoints()[142],
             self.get_blueprints())
 
     def init_spectator(self, spawn):
+        &#34;&#34;&#34;
+        Sets up the spectator for our car
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         try:
             assert isinstance(spawn, carla.libcarla.Transform)
         except:
@@ -110,11 +162,16 @@ el.replaceWith(d);
             raise
     
     def spawn_vehicles(self):
+        &#34;&#34;&#34;
+        Spawns the necessary vehicles into the Carla environment
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
       # vehicle blueprints
         v_bps = self.get_blueprints().filter(&#34;vehicle.mercedes*&#34;)
 
         spwn_pts = self.get_spawnpoints()
-        v_spwn_pts = [spwn_pts[13], spwn_pts[104], spwn_pts[141]]  
+        v_spwn_pts = [spwn_pts[13]]  
         
         for i in range(len(v_spwn_pts)):
             v_bp = random.choice(v_bps)
@@ -123,21 +180,28 @@ el.replaceWith(d);
             self.__world.spawn_actor(v_bp, spawn)
             
     def spawn_pedestrians(self): 
+        &#34;&#34;&#34;
+        Spawns the necessary pedestrians into the Carla environment
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         # pedestrian blueprints
         pd_bps = self.get_blueprints().filter(&#34;walker.pedestrian.*&#34;)
         spwn_pts = self.get_spawnpoints()
-        good_spwn_pts = [spwn_pts[95], spwn_pts[102], spwn_pts[202], spwn_pts[116]]
-        # good_spwn_pts[0].location.z -= 1
-        dest_points = [spwn_pts[203], spwn_pts[112], spwn_pts[7], spwn_pts[115]]
 
+        static_spawn = carla.Transform()
+        static_spawn.location = spwn_pts[141].location
+        self.__world.spawn_actor(random.choice(pd_bps), static_spawn)
+
+        good_spwn_pts = [spwn_pts[95], spwn_pts[102], spwn_pts[116]]
+        dest_points = [spwn_pts[203], spwn_pts[112], spwn_pts[115]]
         # spawn 10 pedestrians
         for i in range(len(good_spwn_pts)):
             pd_bp = random.choice(pd_bps)
-            print(i)
 
             # remove pedestrian spawn choice to avoid collision
-            
             spawn = carla.Transform()
+
             # at 10
             # choose random location, then remove that spawnpoint to avoid pedestrians from not spawning
 
@@ -155,6 +219,11 @@ el.replaceWith(d);
 
     #initialize the list of actors
     def init_actors(self, spawn, blueprint_lib, spts, world, scanning_distance, dt, extra, u_nom, alpha, max_acc, max_brake, distance, standard_distance):
+        &#34;&#34;&#34;
+        Initializes all actors in the Carla world
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;        
         try:
             assert type(spawn) == carla.libcarla.Transform
             assert type(blueprint_lib) == carla.libcarla.BlueprintLibrary
@@ -183,6 +252,11 @@ el.replaceWith(d);
             raise
 
     def clear_world(self, client):
+        &#34;&#34;&#34;
+        Reloads the world so that no errors occur
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;              
         try:
             assert type(client) == carla.libcarla.Client
         except:
@@ -194,6 +268,11 @@ el.replaceWith(d);
 
     #repeating logic performed in the main function
     def main_loop(self, spectator, car, vehicle, DT):
+        &#34;&#34;&#34;
+        Tne function which holds the functions to be repeated each cycle
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;      
         try:
             assert type(car) == carla.libcarla.Vehicle
             assert type(vehicle) == Vehicle
@@ -210,7 +289,10 @@ el.replaceWith(d);
         except:
             raise</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Holds all of the variables and methods to set up and destroy the Carla world</p>
+<p>Sets up the variables needed for the World class</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 <h3>Methods</h3>
 <dl>
 <dt id="classes.world.World.change_map"><code class="name flex">
@@ -222,9 +304,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def change_map(self, world_map=&#39;town10HD_Opt&#39;):
+    &#34;&#34;&#34;
+    Setter for the map
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
     return self.__world.load_world(world_map)</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Setter for the map</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.world.World.clear_world"><code class="name flex">
 <span>def <span class="ident">clear_world</span></span>(<span>self, client)</span>
@@ -235,6 +324,11 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def clear_world(self, client):
+    &#34;&#34;&#34;
+    Reloads the world so that no errors occur
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;              
     try:
         assert type(client) == carla.libcarla.Client
     except:
@@ -243,7 +337,9 @@ el.replaceWith(d);
     client.reload_world()
     print(&#34;World cleared :)\n&#34;)</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Reloads the world so that no errors occur</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.world.World.get_actors"><code class="name flex">
 <span>def <span class="ident">get_actors</span></span>(<span>self)</span>
@@ -254,9 +350,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_actors(self):
+    &#34;&#34;&#34;
+    Getter for the actors
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
     return self.__world.get_actors()</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Getter for the actors</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.world.World.get_blueprints"><code class="name flex">
 <span>def <span class="ident">get_blueprints</span></span>(<span>self)</span>
@@ -267,9 +370,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_blueprints(self):
+    &#34;&#34;&#34;
+    Getter for the blueprints
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
     return self.__world.get_blueprint_library()</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Getter for the blueprints</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.world.World.get_client"><code class="name flex">
 <span>def <span class="ident">get_client</span></span>(<span>self)</span>
@@ -280,9 +390,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_client(self):
+    &#34;&#34;&#34;
+    Getter for self.__client
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
     return self.__client</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Getter for self.__client</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.world.World.get_map"><code class="name flex">
 <span>def <span class="ident">get_map</span></span>(<span>self)</span>
@@ -293,9 +410,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_map(self):
+    &#34;&#34;&#34;
+    Getter for the map
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
     return self.__world.get_map()</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Getter for the map</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.world.World.get_spawnpoints"><code class="name flex">
 <span>def <span class="ident">get_spawnpoints</span></span>(<span>self)</span>
@@ -306,9 +430,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_spawnpoints(self):
+    &#34;&#34;&#34;
+    Getter for the spawnpoints
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
     return self.__world.get_map().get_spawn_points()</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Getter for the spawnpoints</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.world.World.get_world"><code class="name flex">
 <span>def <span class="ident">get_world</span></span>(<span>self)</span>
@@ -319,9 +450,14 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_world(self):
+    &#34;&#34;&#34;
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
     return self.__world</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.world.World.init_actors"><code class="name flex">
 <span>def <span class="ident">init_actors</span></span>(<span>self,<br>spawn,<br>blueprint_lib,<br>spts,<br>world,<br>scanning_distance,<br>dt,<br>extra,<br>u_nom,<br>alpha,<br>max_acc,<br>max_brake,<br>distance,<br>standard_distance)</span>
@@ -332,6 +468,11 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def init_actors(self, spawn, blueprint_lib, spts, world, scanning_distance, dt, extra, u_nom, alpha, max_acc, max_brake, distance, standard_distance):
+    &#34;&#34;&#34;
+    Initializes all actors in the Carla world
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;        
     try:
         assert type(spawn) == carla.libcarla.Transform
         assert type(blueprint_lib) == carla.libcarla.BlueprintLibrary
@@ -359,7 +500,9 @@ el.replaceWith(d);
     else:
         raise</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Initializes all actors in the Carla world</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.world.World.init_spectator"><code class="name flex">
 <span>def <span class="ident">init_spectator</span></span>(<span>self, spawn)</span>
@@ -370,6 +513,11 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def init_spectator(self, spawn):
+    &#34;&#34;&#34;
+    Sets up the spectator for our car
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
     try:
         assert isinstance(spawn, carla.libcarla.Transform)
     except:
@@ -383,7 +531,9 @@ el.replaceWith(d);
     else:
         raise</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Sets up the spectator for our car</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.world.World.init_world"><code class="name flex">
 <span>def <span class="ident">init_world</span></span>(<span>self)</span>
@@ -394,12 +544,19 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def init_world(self):
+    &#34;&#34;&#34;
+    Sets up all of the necessary parts of the world
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
     return (self.__client,
         self.get_spawnpoints(),
         self.get_spawnpoints()[142],
         self.get_blueprints())</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Sets up all of the necessary parts of the world</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.world.World.main_loop"><code class="name flex">
 <span>def <span class="ident">main_loop</span></span>(<span>self, spectator, car, vehicle, DT)</span>
@@ -410,6 +567,11 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def main_loop(self, spectator, car, vehicle, DT):
+    &#34;&#34;&#34;
+    Tne function which holds the functions to be repeated each cycle
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;      
     try:
         assert type(car) == carla.libcarla.Vehicle
         assert type(vehicle) == Vehicle
@@ -426,7 +588,9 @@ el.replaceWith(d);
     except:
         raise</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Tne function which holds the functions to be repeated each cycle</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.world.World.spawn_pedestrians"><code class="name flex">
 <span>def <span class="ident">spawn_pedestrians</span></span>(<span>self)</span>
@@ -437,21 +601,28 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def spawn_pedestrians(self): 
+    &#34;&#34;&#34;
+    Spawns the necessary pedestrians into the Carla environment
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
     # pedestrian blueprints
     pd_bps = self.get_blueprints().filter(&#34;walker.pedestrian.*&#34;)
     spwn_pts = self.get_spawnpoints()
-    good_spwn_pts = [spwn_pts[95], spwn_pts[102], spwn_pts[202], spwn_pts[116]]
-    # good_spwn_pts[0].location.z -= 1
-    dest_points = [spwn_pts[203], spwn_pts[112], spwn_pts[7], spwn_pts[115]]
 
+    static_spawn = carla.Transform()
+    static_spawn.location = spwn_pts[141].location
+    self.__world.spawn_actor(random.choice(pd_bps), static_spawn)
+
+    good_spwn_pts = [spwn_pts[95], spwn_pts[102], spwn_pts[116]]
+    dest_points = [spwn_pts[203], spwn_pts[112], spwn_pts[115]]
     # spawn 10 pedestrians
     for i in range(len(good_spwn_pts)):
         pd_bp = random.choice(pd_bps)
-        print(i)
 
         # remove pedestrian spawn choice to avoid collision
-        
         spawn = carla.Transform()
+
         # at 10
         # choose random location, then remove that spawnpoint to avoid pedestrians from not spawning
 
@@ -467,7 +638,9 @@ el.replaceWith(d);
         self.__world.tick()
         controller.go_to_location(destination.location)</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Spawns the necessary pedestrians into the Carla environment</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.world.World.spawn_vehicles"><code class="name flex">
 <span>def <span class="ident">spawn_vehicles</span></span>(<span>self)</span>
@@ -478,11 +651,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def spawn_vehicles(self):
+    &#34;&#34;&#34;
+    Spawns the necessary vehicles into the Carla environment
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
   # vehicle blueprints
     v_bps = self.get_blueprints().filter(&#34;vehicle.mercedes*&#34;)
 
     spwn_pts = self.get_spawnpoints()
-    v_spwn_pts = [spwn_pts[13], spwn_pts[104], spwn_pts[141]]  
+    v_spwn_pts = [spwn_pts[13]]  
     
     for i in range(len(v_spwn_pts)):
         v_bp = random.choice(v_bps)
@@ -490,7 +668,9 @@ el.replaceWith(d);
 
         self.__world.spawn_actor(v_bp, spawn)</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Spawns the necessary vehicles into the Carla environment</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 </dl>
 </dd>

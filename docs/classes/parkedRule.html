@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>classes.collisionSensor API documentation</title>
+<title>classes.parkedRule API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
@@ -33,7 +33,7 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>classes.collisionSensor</code></h1>
+<h1 class="title">Module <code>classes.parkedRule</code></h1>
 </header>
 <section id="section-intro">
 </section>
@@ -46,117 +46,110 @@ el.replaceWith(d);
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="classes.collisionSensor.CollisionSensor"><code class="flex name class">
-<span>class <span class="ident">CollisionSensor</span></span>
-<span>(</span><span>relative_transform, parent_actor, blueprint, world, blueprint_lib)</span>
+<dt id="classes.parkedRule.ParkedRule"><code class="flex name class">
+<span>class <span class="ident">ParkedRule</span></span>
+<span>(</span><span>sensors, car)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class CollisionSensor(Sensor):
-    def __init__(self, relative_transform, parent_actor, blueprint, world, blueprint_lib):
-         # pre-condition
-        try:
-            assert isinstance(relative_transform, carla.libcarla.Transform) # relative transform must be a transform object
-            assert str(parent_actor) in [str(actor) for actor in world.get_actors()] # parent actor must be spawned in the world
-            assert str(blueprint) == str(blueprint_lib.find(&#39;sensor.other.collision&#39;)) # blueprint must be obstacle detector
-        except:
-            raise
-
-
-        super().__init__(relative_transform, parent_actor, blueprint, world)
-        self.__collisions = []
+<pre><code class="python">class ParkedRule(Rule):
+    &#34;&#34;&#34;
+    The rule subclass for when a car&#39;s obstacle detector is triggered by a car
+    &#34;&#34;&#34;
+    def __init__(self, sensors, car):
+        &#34;&#34;&#34;
+        Sets up the variables needed for the ParkedRule class
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
+        super().__init__(sensors, car)
+        self.__sensors = sensors
+        self.__car = car
         
+    def rule_flag(self, traffic_lights):
+        &#34;&#34;&#34;
+        Decides if the rule flag should be raised for this cycle (checks if the obstacle is a vehicle)
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
+        if(self.__sensors[0].get_other_actors() != []):
+            if(self.__sensors[0].get_detections()[-1][0].type_id[:-2].startswith(&#39;vehicle&#39;)):
+                return False
+        return True
     
-    # getters
-    def get_collisions(self):
-        return self.__collisions
-    
-    # with event, add to list of detections
-    def collision_detect(self, event):
-        # try:
-        #     assert type(event) == carla.libcarla.Collision.Event
-        # except:
-        #     print(traceback.format_exc())
-
-        collisions_len = len(self.__collisions)
-        # other impulse is a change in momentum - indicates magnitute and direction in global coordinates
-        collision = (event.actor, event.other_actor, event.normal_impulse)
-        self.__collisions.append(collision)
-
-        # post condition
-        try:
-            assert len(self.__collisions) == collisions_len + 1
-        except:
-            raise
-        
-    # listen to sensor
-    def listen(self):
-        self.get_sensor().listen(lambda event: self.collision_detect(event))</code></pre>
+    def rule_follow(self, traffic_lights):
+        &#34;&#34;&#34;
+        Decides how the car should follow this rule when it is triggered (tells the car to go)
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):    
+        &#34;&#34;&#34;
+        return 1</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>The rule subclass for when a car's obstacle detector is triggered by a car</p>
+<p>Sets up the variables needed for the ParkedRule class</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="classes.sensor.Sensor" href="sensor.html#classes.sensor.Sensor">Sensor</a></li>
+<li><a title="classes.rule.Rule" href="rule.html#classes.rule.Rule">Rule</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="classes.collisionSensor.CollisionSensor.collision_detect"><code class="name flex">
-<span>def <span class="ident">collision_detect</span></span>(<span>self, event)</span>
+<dt id="classes.parkedRule.ParkedRule.rule_flag"><code class="name flex">
+<span>def <span class="ident">rule_flag</span></span>(<span>self, traffic_lights)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def collision_detect(self, event):
-    # try:
-    #     assert type(event) == carla.libcarla.Collision.Event
-    # except:
-    #     print(traceback.format_exc())
-
-    collisions_len = len(self.__collisions)
-    # other impulse is a change in momentum - indicates magnitute and direction in global coordinates
-    collision = (event.actor, event.other_actor, event.normal_impulse)
-    self.__collisions.append(collision)
-
-    # post condition
-    try:
-        assert len(self.__collisions) == collisions_len + 1
-    except:
-        raise</code></pre>
+<pre><code class="python">def rule_flag(self, traffic_lights):
+    &#34;&#34;&#34;
+    Decides if the rule flag should be raised for this cycle (checks if the obstacle is a vehicle)
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
+    if(self.__sensors[0].get_other_actors() != []):
+        if(self.__sensors[0].get_detections()[-1][0].type_id[:-2].startswith(&#39;vehicle&#39;)):
+            return False
+    return True</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Decides if the rule flag should be raised for this cycle (checks if the obstacle is a vehicle)</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
-<dt id="classes.collisionSensor.CollisionSensor.get_collisions"><code class="name flex">
-<span>def <span class="ident">get_collisions</span></span>(<span>self)</span>
+<dt id="classes.parkedRule.ParkedRule.rule_follow"><code class="name flex">
+<span>def <span class="ident">rule_follow</span></span>(<span>self, traffic_lights)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_collisions(self):
-    return self.__collisions</code></pre>
+<pre><code class="python">def rule_follow(self, traffic_lights):
+    &#34;&#34;&#34;
+    Decides how the car should follow this rule when it is triggered (tells the car to go)
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):    
+    &#34;&#34;&#34;
+    return 1</code></pre>
 </details>
-<div class="desc"></div>
-</dd>
-<dt id="classes.collisionSensor.CollisionSensor.listen"><code class="name flex">
-<span>def <span class="ident">listen</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def listen(self):
-    self.get_sensor().listen(lambda event: self.collision_detect(event))</code></pre>
-</details>
-<div class="desc"></div>
+<div class="desc"><p>Decides how the car should follow this rule when it is triggered (tells the car to go)</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="classes.rule.Rule" href="rule.html#classes.rule.Rule">Rule</a></b></code>:
+<ul class="hlist">
+<li><code><a title="classes.rule.Rule.get_sensors" href="rule.html#classes.rule.Rule.get_sensors">get_sensors</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
 </section>
@@ -174,11 +167,10 @@ el.replaceWith(d);
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="classes.collisionSensor.CollisionSensor" href="#classes.collisionSensor.CollisionSensor">CollisionSensor</a></code></h4>
+<h4><code><a title="classes.parkedRule.ParkedRule" href="#classes.parkedRule.ParkedRule">ParkedRule</a></code></h4>
 <ul class="">
-<li><code><a title="classes.collisionSensor.CollisionSensor.collision_detect" href="#classes.collisionSensor.CollisionSensor.collision_detect">collision_detect</a></code></li>
-<li><code><a title="classes.collisionSensor.CollisionSensor.get_collisions" href="#classes.collisionSensor.CollisionSensor.get_collisions">get_collisions</a></code></li>
-<li><code><a title="classes.collisionSensor.CollisionSensor.listen" href="#classes.collisionSensor.CollisionSensor.listen">listen</a></code></li>
+<li><code><a title="classes.parkedRule.ParkedRule.rule_flag" href="#classes.parkedRule.ParkedRule.rule_flag">rule_flag</a></code></li>
+<li><code><a title="classes.parkedRule.ParkedRule.rule_follow" href="#classes.parkedRule.ParkedRule.rule_follow">rule_follow</a></code></li>
 </ul>
 </li>
 </ul>

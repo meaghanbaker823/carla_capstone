@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>classes.planner API documentation</title>
+<title>classes.collisionRule API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
@@ -33,7 +33,7 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>classes.planner</code></h1>
+<h1 class="title">Module <code>classes.collisionRule</code></h1>
 </header>
 <section id="section-intro">
 </section>
@@ -46,129 +46,108 @@ el.replaceWith(d);
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="classes.planner.Planner"><code class="flex name class">
-<span>class <span class="ident">Planner</span></span>
+<dt id="classes.collisionRule.CollisionRule"><code class="flex name class">
+<span>class <span class="ident">CollisionRule</span></span>
+<span>(</span><span>sensors, car)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class Planner(MAPEStep):
-    def __init__(self):
-        self.__old_parameters = []
-        self.__new_parameters = []
-        self.__old_plans = []
-        self.__new_plan = {&#34;brake&#34;: None, &#34;steering&#34;: None, &#34;throttle&#34;: None}
-
-    def get_new_plan(self):
-        return self.__new_plan
-
-    def plan(self, observations, DT, extra, u_nom, alpha, max_acc, max_brake, standard_distance):
-        self.__old_parameters.append(self.__new_parameters)
-        self.__new_parameters = [observations]
-        self.__old_plans.append(self.__new_plan)
-        self.__new_plan = {&#34;brake&#34;: None, &#34;steering&#34;: None, &#34;throttle&#34;: None}
-
-        if(observations[&#34;rules&#34;] == 0):
-            observations[&#34;distance&#34;] = 2
+<pre><code class="python">class CollisionRule(Rule):
+    &#34;&#34;&#34;
+    The rule subclass for when a car&#39;s collision sensor is triggered
+    &#34;&#34;&#34;
+    def __init__(self, sensors, car):
+        &#34;&#34;&#34;
+        Sets up the variables needed for the CollisionRule class
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
+        super().__init__(sensors, car)
+        self.__sensors = sensors
+        self.__car = car
         
-        self.__new_plan[&#34;steering&#34;] = observations[&#34;steering_angle&#34;]
-        
-        speed = observations[&#34;current_speed&#34;] / 3.6
-
-        cbf = CBF(observations[&#34;r&#34;], speed, observations[&#34;distance&#34;])
-        min_distance = cbf.calculate_min_distance(standard_distance, extra)
-        h = cbf.calculate_safety_function(min_distance)
-        allowable_a = cbf.calculate_allowable_distance(alpha, h, DT)
-        new_speed = cbf.final_logic(u_nom, allowable_a, max_acc, max_brake)        
-
-        print(&#34;Speed: &#34;, speed)
-        if new_speed &gt; 0:
-            self.__new_plan[&#34;throttle&#34;] = new_speed
-            self.__new_plan[&#34;brake&#34;] = 0
-        else:
-            self.__new_plan[&#34;throttle&#34;] = 0
-            self.__new_plan[&#34;brake&#34;] = 1
-        
-        return self.__new_plan
+    def rule_flag(self, traffic_lights):
+        &#34;&#34;&#34;
+        Decides if the rule flag should be raised for this cycle (checks if collisions is not empty)
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
+        if(self.__sensors[1].get_collisions() != []):
+            raise CollisionErr(&#34;&#34;)
+        return True
     
-    def notify(self):
-        return &#34;The plan in this iteration is &#34; + str(self.get_new_plan())</code></pre>
+    def rule_follow(self, traffic_lights):
+        &#34;&#34;&#34;
+        Decides how the car should follow this rule when it is triggered (Will tell the car to stop)
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):     
+        &#34;&#34;&#34;
+        return 0</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>The rule subclass for when a car's collision sensor is triggered</p>
+<p>Sets up the variables needed for the CollisionRule class</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="classes.MAPEStep.MAPEStep" href="MAPEStep.html#classes.MAPEStep.MAPEStep">MAPEStep</a></li>
+<li><a title="classes.rule.Rule" href="rule.html#classes.rule.Rule">Rule</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="classes.planner.Planner.get_new_plan"><code class="name flex">
-<span>def <span class="ident">get_new_plan</span></span>(<span>self)</span>
+<dt id="classes.collisionRule.CollisionRule.rule_flag"><code class="name flex">
+<span>def <span class="ident">rule_flag</span></span>(<span>self, traffic_lights)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_new_plan(self):
-    return self.__new_plan</code></pre>
+<pre><code class="python">def rule_flag(self, traffic_lights):
+    &#34;&#34;&#34;
+    Decides if the rule flag should be raised for this cycle (checks if collisions is not empty)
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
+    if(self.__sensors[1].get_collisions() != []):
+        raise CollisionErr(&#34;&#34;)
+    return True</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Decides if the rule flag should be raised for this cycle (checks if collisions is not empty)</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
-<dt id="classes.planner.Planner.notify"><code class="name flex">
-<span>def <span class="ident">notify</span></span>(<span>self)</span>
+<dt id="classes.collisionRule.CollisionRule.rule_follow"><code class="name flex">
+<span>def <span class="ident">rule_follow</span></span>(<span>self, traffic_lights)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def notify(self):
-    return &#34;The plan in this iteration is &#34; + str(self.get_new_plan())</code></pre>
+<pre><code class="python">def rule_follow(self, traffic_lights):
+    &#34;&#34;&#34;
+    Decides how the car should follow this rule when it is triggered (Will tell the car to stop)
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):     
+    &#34;&#34;&#34;
+    return 0</code></pre>
 </details>
-<div class="desc"></div>
-</dd>
-<dt id="classes.planner.Planner.plan"><code class="name flex">
-<span>def <span class="ident">plan</span></span>(<span>self, observations, DT, extra, u_nom, alpha, max_acc, max_brake, standard_distance)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def plan(self, observations, DT, extra, u_nom, alpha, max_acc, max_brake, standard_distance):
-    self.__old_parameters.append(self.__new_parameters)
-    self.__new_parameters = [observations]
-    self.__old_plans.append(self.__new_plan)
-    self.__new_plan = {&#34;brake&#34;: None, &#34;steering&#34;: None, &#34;throttle&#34;: None}
-
-    if(observations[&#34;rules&#34;] == 0):
-        observations[&#34;distance&#34;] = 2
-    
-    self.__new_plan[&#34;steering&#34;] = observations[&#34;steering_angle&#34;]
-    
-    speed = observations[&#34;current_speed&#34;] / 3.6
-
-    cbf = CBF(observations[&#34;r&#34;], speed, observations[&#34;distance&#34;])
-    min_distance = cbf.calculate_min_distance(standard_distance, extra)
-    h = cbf.calculate_safety_function(min_distance)
-    allowable_a = cbf.calculate_allowable_distance(alpha, h, DT)
-    new_speed = cbf.final_logic(u_nom, allowable_a, max_acc, max_brake)        
-
-    print(&#34;Speed: &#34;, speed)
-    if new_speed &gt; 0:
-        self.__new_plan[&#34;throttle&#34;] = new_speed
-        self.__new_plan[&#34;brake&#34;] = 0
-    else:
-        self.__new_plan[&#34;throttle&#34;] = 0
-        self.__new_plan[&#34;brake&#34;] = 1
-    
-    return self.__new_plan</code></pre>
-</details>
-<div class="desc"></div>
+<div class="desc"><p>Decides how the car should follow this rule when it is triggered (Will tell the car to stop)</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="classes.rule.Rule" href="rule.html#classes.rule.Rule">Rule</a></b></code>:
+<ul class="hlist">
+<li><code><a title="classes.rule.Rule.get_sensors" href="rule.html#classes.rule.Rule.get_sensors">get_sensors</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
 </section>
@@ -186,11 +165,10 @@ el.replaceWith(d);
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="classes.planner.Planner" href="#classes.planner.Planner">Planner</a></code></h4>
+<h4><code><a title="classes.collisionRule.CollisionRule" href="#classes.collisionRule.CollisionRule">CollisionRule</a></code></h4>
 <ul class="">
-<li><code><a title="classes.planner.Planner.get_new_plan" href="#classes.planner.Planner.get_new_plan">get_new_plan</a></code></li>
-<li><code><a title="classes.planner.Planner.notify" href="#classes.planner.Planner.notify">notify</a></code></li>
-<li><code><a title="classes.planner.Planner.plan" href="#classes.planner.Planner.plan">plan</a></code></li>
+<li><code><a title="classes.collisionRule.CollisionRule.rule_flag" href="#classes.collisionRule.CollisionRule.rule_flag">rule_flag</a></code></li>
+<li><code><a title="classes.collisionRule.CollisionRule.rule_follow" href="#classes.collisionRule.CollisionRule.rule_follow">rule_follow</a></code></li>
 </ul>
 </li>
 </ul>

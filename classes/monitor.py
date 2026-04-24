@@ -5,20 +5,16 @@ from classes.collisionSensor import CollisionSensor
 
 import carla
 
-"""
-===========
-Monitor Class(MAPEStep)
-
-__init__(self) creates instance and initilizes attributes
-    self.__
-
-function(self) return type | description
-
-===========
-"""
-
 class Monitor(MAPEStep):
+    """
+    The Monitor portion of the MAPE Structure
+    """
     def __init__(self, transform, car, blueprint, world, blueprint_lib, actors, route):
+        """
+        Initializes the variables needed for the Monitor class
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         self.__old_parameters = []
         self.__new_parameter = None
         self.__old_detections = []
@@ -35,21 +31,51 @@ class Monitor(MAPEStep):
             sensor.listen()
 
     def add_sensors(self, sensor):
+        """
+        Add a sensor to the sensors list
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         self.__sensors.append(sensor)
 
     def get_actors(self):
+        """
+        Getter for self.__actors
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         return self.__actors
 
     def get_sensors(self):
+        """
+        Getter for self.__sensors
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         return self.__sensors
     
     def get_new_detections(self):
+        """
+        Getter for self.__new_detections
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         return self.__new_detections
     
     def add_old_detections(self, detections):
+        """
+        Add detections to the old_detections list
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         self.__old_detections.append(detections)
 
     def advance_waypoint(self, current_waypoint_num):
+        """
+        Move the waypoint to the next waypoint in the route by a certain amount
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         try:
             assert isinstance(self.__car, carla.libcarla.Vehicle)
         except:
@@ -60,6 +86,11 @@ class Monitor(MAPEStep):
         return current_waypoint_num
 
     def get_lane_info(self, waypoint):
+        """
+        Gets the lane info for a given waypoint
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         try:
             assert isinstance(waypoint, carla.libcarla.Waypoint)
         except:
@@ -84,6 +115,11 @@ class Monitor(MAPEStep):
         return lane_info
 
     def monitor(self, current_waypoint_num):
+        """
+        Completes the monitor step by collecting information
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         try:
             assert isinstance(current_waypoint_num, int)
         except:
@@ -119,6 +155,11 @@ class Monitor(MAPEStep):
         return self.__new_detections
     
     def notify(self):
+        """
+        Outputs the actions taken to the MAPE Step
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         output = "The detections in this monitor iteration are: "
         for i in self.get_new_detections():
             output += "Detection: " + i

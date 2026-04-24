@@ -3,25 +3,19 @@ from classes.monitor import Monitor
 from classes.analyzer import Analyzer
 from classes.planner import Planner
 from classes.executor import Executor
-import matplotlib.pyplot as plt
-
 
 import random
-import carla
 
-"""
-===========
-Vehicle Class
-
-__init__ creates instance and creates list to manage a vehicle
-
-drive()                         | drives the car based on MAPE
-
-===========
-"""
-control_flag = True
 class Vehicle: 
+    """
+    The class that controls the vehicle
+    """
     def __init__(self, blueprint_lib, carla_world, spawn, destination, transform, blueprint, world, DT, extra, u_nom, alpha, max_acc, max_brake, distance, standard_distance):
+        """
+        Initializes the variables needed for the Vehicle class
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         self.__car = carla_world.spawn_actor(random.choice(blueprint_lib.filter('vehicle.bmw.*')), spawn)
         self.__actors = carla_world.get_actors()
         self.__world = world
@@ -38,11 +32,14 @@ class Vehicle:
         self.__standard_distance = standard_distance
         self.__global_route_planner = GlobalRoutePlanner(self.__carla_world.get_map(), 1)
         self.__route = self.__global_route_planner.trace_route(spawn.location, destination.location)
-        self.__route = self.__global_route_planner.trace_route(spawn.location, destination.location)
         self.mape_init(transform, blueprint, blueprint_lib)
-        # self.draw_route(self.__route)
 
     def mape_init(self, transform, blueprint, blueprint_lib):
+        """
+        Sets up all of the MAPE classes and completes one cycle
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         try:
             self.__monitor_class = Monitor(transform, self.__car, blueprint, self.__world, blueprint_lib, self.__actors, self.__route)
             self.__analyzer_class = Analyzer(self.__carla_world)
@@ -61,27 +58,53 @@ class Vehicle:
             self.__executor_class.execute(plan_info, self.get_car())
         except:
             raise
-
-    def draw_route(self, route):
-        for waypoint in route:
-            self.__carla_world.debug.draw_string(waypoint[0].transform.location, '^', draw_shadow = False, color = carla.Color(r = 0, g = 0, b = 255), life_time = 5.0, persistent_lines = True)
     
     def get_rules(self):
+        """
+        Getter for self.__rules
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         return self.__rules
     
     def set_rules(self, rules):
+        """
+        Setter for self.__rules
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         self.__rules = rules
 
     def get_sensors(self):
+        """
+        Getter for the sensors
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         return self.__monitor_class.get_sensors()
   
     def get_car(self):
+        """
+        Getter for self.__car
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         return self.__car
     
     def get_actors(self):
+        """
+        Getter for self.__actors
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         return self.__actors
 
-    def mape_drive(self):     
+    def mape_drive(self):  
+        """
+        Walks through the MAPE structure
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """   
         try:
             monitor_info = self.__monitor_class.monitor(self.__waypoint_num)
 

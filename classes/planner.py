@@ -1,35 +1,40 @@
 from classes.MAPEStep import MAPEStep
 from classes.CBF import CBF
-from classes.route_done import RouteDone
+from classes.routeDone import RouteDone
 from classes.angleConstraint import AngleConstraint
 import carla
 import math
 import numpy as np
 
-
-"""
-===========
-Planner Class()
-
-__init__(self) creates instance and initilizes attributes
-    self.__
-
-function(self) return type | description
-
-===========
-"""
-
 class Planner(MAPEStep):
+    """
+    The Planner step of the MAPE Structure
+    """
     def __init__(self):
+        """
+        Initializes the variables needed for the Planner class
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         self.__old_parameters = []
         self.__new_parameters = []
         self.__old_plans = []
         self.__new_plan = {"brake": None, "steering": None, "throttle": None}
 
     def get_new_plan(self):
+        """
+        Getter for self.__new_plan
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         return self.__new_plan
     
     def angle_between(self, v1, v2):
+        """
+        Determines the angle between 2 vectors
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         try:
             assert isinstance(v1, tuple) and isinstance(v2, tuple)
         except:
@@ -46,6 +51,11 @@ class Planner(MAPEStep):
 
     # function to get angle between the car and target waypoint
     def get_angle(self, car, wp):
+        """
+        Gets the angle between a car and a waypoint
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         try:
             assert isinstance(car, carla.libcarla.Vehicle)
             assert isinstance(wp, carla.Waypoint)
@@ -69,17 +79,18 @@ class Planner(MAPEStep):
         corrected_deg = self.correct_angle(degrees)
         return corrected_deg
     
-    def get_proper_angle(self, car,wp_idx, rte, inverse_flag):
+    def get_proper_angle(self, car, wp_idx, rte):
+        """
+        Gets the propert steering angle for the vehicle
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         try:
             assert isinstance(car, carla.libcarla.Vehicle)
             assert isinstance(wp_idx, int)
             assert isinstance(rte, list)
         except:
             raise
-        if (inverse_flag):
-            invert = -1
-        else: 
-            invert = 1 
         # create a list of angles to next 5 waypoints starting with current
         next_angle_list = []
         for i in range(10):
@@ -89,12 +100,17 @@ class Planner(MAPEStep):
         while idx < len(next_angle_list) - 2 and abs(next_angle_list[idx]) > 40:
             idx += 1
         try:
-            return wp_idx + idx * 3, next_angle_list[idx] * invert
+            return wp_idx + idx * 3, next_angle_list[idx]
         except:
             raise RouteDone("Route complete :)")
     
     
     def correct_angle(self, degrees):
+        """
+        Adjusts the angle to be accurate
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         try:
             assert (-360 <= degrees <= 360)
         except:
@@ -115,23 +131,20 @@ class Planner(MAPEStep):
         return steer_input
 
     def plan(self, car, observations, DT, extra, u_nom, alpha, max_acc, max_brake, standard_distance):
+        """
+        Completes the plan step, decides what the control should be based on the environment and CBF
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         self.__old_parameters.append(self.__new_parameters)
         self.__new_parameters = [observations]
         self.__old_plans.append(self.__new_plan)
         route = observations["route"]
-        inverse_flag = False
 
         self.__new_plan = {"brake": None, "steering": None, "throttle": None}
 
-            # unit is kilometers/h
+        # unit is kilometers/h
         observations["current_speed"] = round(3.6 * math.sqrt(observations["current_velocity"].x ** 2 + observations["current_velocity"].y ** 2 + observations["current_velocity"].z ** 2), 0)
-
-        waypoint_num, steering_angle = self.get_proper_angle(car, observations["current_waypoint_num"], route, inverse_flag)
-      
-        self.__new_plan["new_waypoint"] = waypoint_num
-        observations["steering_angle"] = steering_angle / 75
-        print("Steering angle: ", observations["steering_angle"])
-
 
         if(observations["rules"] == 0):
             observations["distance"] = 2
@@ -146,15 +159,24 @@ class Planner(MAPEStep):
         allowable_a = cbf.calculate_allowable_distance(alpha, h, DT)
         new_speed = cbf.final_logic(u_nom, allowable_a, max_acc, max_brake)        
 
-        print("Speed: ", speed)
         if new_speed > 0:
             self.__new_plan["throttle"] = new_speed
             self.__new_plan["brake"] = 0
         else:
             self.__new_plan["throttle"] = 0
             self.__new_plan["brake"] = 1
+
+        waypoint_num, steering_angle = self.get_proper_angle(car, observations["current_waypoint_num"], route)
+      
+        self.__new_plan["new_waypoint"] = waypoint_num
+        observations["steering_angle"] = steering_angle / 75
         
         return self.__new_plan
     
     def notify(self):
+        """
+        Outputs the action to the MAPE Step
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         return "The plan in this iteration is " + str(self.get_new_plan())

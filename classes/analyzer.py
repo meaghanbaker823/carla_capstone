@@ -1,31 +1,19 @@
 from classes.MAPEStep import MAPEStep
-
-import math
-import carla
-import numpy as np
-import matplotlib.pyplot as plt
-from classes.pedestrianRule import PedestrianRule
-from classes.collisionRule import CollisionRule
-from classes.trafficRule import TrafficRule
 from classes.parkedRule import ParkedRule
 
-"""
-===========
-Analyzer Class()
-
-__init__(self) creates instance and initilizes attributes
-    self.__old_parameters | (list) list of parameter history
-    self.__new_parameters | (list) new parameters for this iteration
-    self.__new_observations | (list) observations from this iteration
-    self.__old_observations | (list) list of observation history
-
-function(self) return type | description
-
-===========
-"""
+import carla
 
 class Analyzer(MAPEStep):
+    """
+    The A in the MAPE structure.  Takes in the detections from monitor and decides what should be reacted to.  
+    If a car must swerve around another car, the waypoint adjustment is completed in this class.
+    """
     def __init__(self, carla_world):
+        """
+        Initializes the variables needed for the Analyzer class
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         self.__carla_world = carla_world
         self.__old_parameters = []
         self.__new_parameters = []
@@ -33,15 +21,27 @@ class Analyzer(MAPEStep):
         self.__old_observations = []
 
     def get_new_observations(self):
+        """
+        Getter method for the self.__new_observations
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         return self.__new_observations
-
     
     def add_old_observations(self, observations):
+        """
+        Setter method for the self.__old_observations
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         self.__old_observations.append(observations)
 
-
-    # returns possible waypoint in another lane, or None if none available
     def check_lane_options(self, waypoint_num, route, lane_change):
+        """
+        Checks the waypoint's lane options to decide which way to swerve
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         try:
             assert isinstance(waypoint_num, int)
             assert isinstance(lane_change, carla.libcarla.LaneChange)
@@ -82,7 +82,11 @@ class Analyzer(MAPEStep):
         
 
     def swerve(self, waypoint, direction):
-
+        """
+        Adjusts one waypoint to move twice in the direction of the vector chosen and returns the waypoint at that location
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         w_x = waypoint[0].transform.location.x
         w_y = waypoint[0].transform.location.y
         w_z = waypoint[0].transform.location.z
@@ -103,6 +107,11 @@ class Analyzer(MAPEStep):
         return (new_waypoint, waypoint[1])
 
     def analyze(self, car, rules, detections, distance):
+        """
+        Creates observations to be sent to the planner based on information from the monitor.
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         self.__old_parameters.append(self.__new_parameters)
         self.__new_parameters = [car, rules, detections]
         self.add_old_observations(self.__new_observations)
@@ -125,7 +134,6 @@ class Analyzer(MAPEStep):
         self.__new_observations["current_waypoint_num"] = detections["current_waypoint_num"]
         new_route = detections["route"]
         for rule in reversed(rules):
-            # if false, then rule not passed
 
             # collision, pedestrian, traffic light, parkedRule
             try:
@@ -136,9 +144,6 @@ class Analyzer(MAPEStep):
                         self.__new_observations["r"] = 1
 
                         new_route = self.check_lane_options(detections["current_waypoint_num"], detections["route"], detections["lane_info"]["lane_change"])
-                        # for waypoint in new_route:
-                        #     self.__carla_world.debug.draw_string(waypoint[0].transform.location, 'O', draw_shadow = False, color = carla.Color(r = 255, g = 0, b = 255), life_time = 10000.0, persistent_lines = True)
-
     
             except:
                 raise
@@ -150,6 +155,11 @@ class Analyzer(MAPEStep):
     
 
     def notify(self):
+        """
+        Formats the information from this step in this cycle to be easily read in the MAPE Step
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """
         output = "The observations in this analyzer iteration are: "
         for i in self.get_new_observations():
             output += "Observation: " + i

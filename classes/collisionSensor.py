@@ -2,27 +2,18 @@ from classes.sensor import Sensor
 
 import carla
 
-"""
-===========
-CollisionSensor Class
-
-__init__(self, relative_transform, parent_actor, blueprint, world) creates instance and initilizes attributes
-    self.__transform = where the sensor is in relation to parent
-    self.__parent = the Carla object the sensor is attached to
-    self.__sensor = the Carla sensor being created
-    self.__collisions = list of all collisions by this sensor
-
-getters for each of these attributes
-
-collision_detect(self, event) | adds collision (parent actor, other actor in collision, intensity of impact) to self.__collisions
-
-listen(self) | retreives data from sensor and calls the collision_detect method
-===========
-"""
-
 class CollisionSensor(Sensor):
+    """
+    The class for the sensor which reacts to collisions
+    """   
     def __init__(self, relative_transform, parent_actor, blueprint, world, blueprint_lib):
-         # pre-condition
+        """
+        Initializes the variables needed for the CollisionSensor class
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """ 
+        
+        # pre-condition
         try:
             assert isinstance(relative_transform, carla.libcarla.Transform) # relative transform must be a transform object
             assert str(parent_actor) in [str(actor) for actor in world.get_actors()] # parent actor must be spawned in the world
@@ -35,19 +26,21 @@ class CollisionSensor(Sensor):
         self.__collisions = []
         
     
-    # getters
     def get_collisions(self):
+        """
+        Getter for self.__collisions
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """   
         return self.__collisions
     
-    # with event, add to list of detections
     def collision_detect(self, event):
-        # try:
-        #     assert type(event) == carla.libcarla.Collision.Event
-        # except:
-        #     print(traceback.format_exc())
-
+        """
+        Adds the collision to the collision list when a collision is detected
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """   
         collisions_len = len(self.__collisions)
-        # other impulse is a change in momentum - indicates magnitute and direction in global coordinates
         collision = (event.actor, event.other_actor, event.normal_impulse)
         self.__collisions.append(collision)
 
@@ -57,6 +50,10 @@ class CollisionSensor(Sensor):
         except:
             raise
         
-    # listen to sensor
     def listen(self):
+        """
+        Starts the sensor to list with the collision_detect as it's callback function
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        """   
         self.get_sensor().listen(lambda event: self.collision_detect(event))

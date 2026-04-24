@@ -56,27 +56,74 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class TrafficLight():
+    &#34;&#34;&#34;
+    A class to collect all traffic lights that are within the range of the car and give its correct reaction
+    &#34;&#34;&#34;
     def __init__(self, actors):
+        &#34;&#34;&#34;
+        Initializes the variables needed for the TrafficLight class
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;        
         self.__lights = []
         self.__color = &#34;unknown&#34;
         self.__response = &#34;&#34;
         self.set_lights(actors)
 
     def get_color(self):
+        &#34;&#34;&#34;
+        Getter for self.__color
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;   
         return self.__color
+    
     def get_lights(self):
+        &#34;&#34;&#34;
+        Getter for self.__lights
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;   
         return self.__lights
+    
     def get_response(self):
+        &#34;&#34;&#34;
+        Getter for self.__response
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;   
         return self.__response
     
     def set_lights(self, actors):
+        &#34;&#34;&#34;
+        Setter for self.__lights
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;   
         self.__lights = actors.filter(&#39;traffic.traffic_light*&#39;)
+
     def set_response(self, response):
+        &#34;&#34;&#34;
+        Setter for self.__response
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;   
         self.__response = response
+
     def set_color(self, color):
+        &#34;&#34;&#34;
+        Setter for self.__color
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;   
         self.__color = color
 
     def process_color(self, car):
+        &#34;&#34;&#34;
+        Processes the color of each of the traffic lights
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
         try:
             assert isinstance(car, carla.libcarla.Vehicle)
         except:
@@ -97,6 +144,11 @@ el.replaceWith(d);
         return self.get_response()
 
     def react_to_color(self):
+        &#34;&#34;&#34;
+        Decides what action should be taken based on the traffic color
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;   
         action = &#34;&#34;
         if(self.get_color() == &#34;Green&#34;):
             action = &#34;drive&#34;
@@ -111,6 +163,11 @@ el.replaceWith(d);
         return action
     
     def is_light_close(self, car_check, light_check, target_distance, target_angle):
+        &#34;&#34;&#34;
+        Determines if the traffic light is close and in the right angle for the car
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;   
         try:
             assert isinstance(car_check,  carla.Vehicle)
             assert isinstance(light_check, carla.TrafficLight)
@@ -131,7 +188,10 @@ el.replaceWith(d);
 
         return ((angle_deg &lt; target_angle) and (distance &lt; target_distance))</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>A class to collect all traffic lights that are within the range of the car and give its correct reaction</p>
+<p>Initializes the variables needed for the TrafficLight class</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 <h3>Methods</h3>
 <dl>
 <dt id="classes.trafficLight.TrafficLight.get_color"><code class="name flex">
@@ -143,9 +203,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_color(self):
+    &#34;&#34;&#34;
+    Getter for self.__color
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;   
     return self.__color</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Getter for self.__color</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.trafficLight.TrafficLight.get_lights"><code class="name flex">
 <span>def <span class="ident">get_lights</span></span>(<span>self)</span>
@@ -156,9 +223,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_lights(self):
+    &#34;&#34;&#34;
+    Getter for self.__lights
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;   
     return self.__lights</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Getter for self.__lights</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.trafficLight.TrafficLight.get_response"><code class="name flex">
 <span>def <span class="ident">get_response</span></span>(<span>self)</span>
@@ -169,9 +243,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_response(self):
+    &#34;&#34;&#34;
+    Getter for self.__response
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;   
     return self.__response</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Getter for self.__response</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.trafficLight.TrafficLight.is_light_close"><code class="name flex">
 <span>def <span class="ident">is_light_close</span></span>(<span>self, car_check, light_check, target_distance, target_angle)</span>
@@ -182,6 +263,11 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def is_light_close(self, car_check, light_check, target_distance, target_angle):
+    &#34;&#34;&#34;
+    Determines if the traffic light is close and in the right angle for the car
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;   
     try:
         assert isinstance(car_check,  carla.Vehicle)
         assert isinstance(light_check, carla.TrafficLight)
@@ -202,7 +288,9 @@ el.replaceWith(d);
 
     return ((angle_deg &lt; target_angle) and (distance &lt; target_distance))</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Determines if the traffic light is close and in the right angle for the car</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.trafficLight.TrafficLight.process_color"><code class="name flex">
 <span>def <span class="ident">process_color</span></span>(<span>self, car)</span>
@@ -213,6 +301,11 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def process_color(self, car):
+    &#34;&#34;&#34;
+    Processes the color of each of the traffic lights
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
     try:
         assert isinstance(car, carla.libcarla.Vehicle)
     except:
@@ -232,7 +325,9 @@ el.replaceWith(d);
 
     return self.get_response()</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Processes the color of each of the traffic lights</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.trafficLight.TrafficLight.react_to_color"><code class="name flex">
 <span>def <span class="ident">react_to_color</span></span>(<span>self)</span>
@@ -243,6 +338,11 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def react_to_color(self):
+    &#34;&#34;&#34;
+    Decides what action should be taken based on the traffic color
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;   
     action = &#34;&#34;
     if(self.get_color() == &#34;Green&#34;):
         action = &#34;drive&#34;
@@ -256,7 +356,9 @@ el.replaceWith(d);
 
     return action</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Decides what action should be taken based on the traffic color</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.trafficLight.TrafficLight.set_color"><code class="name flex">
 <span>def <span class="ident">set_color</span></span>(<span>self, color)</span>
@@ -267,9 +369,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def set_color(self, color):
+    &#34;&#34;&#34;
+    Setter for self.__color
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;   
     self.__color = color</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Setter for self.__color</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.trafficLight.TrafficLight.set_lights"><code class="name flex">
 <span>def <span class="ident">set_lights</span></span>(<span>self, actors)</span>
@@ -280,9 +389,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def set_lights(self, actors):
+    &#34;&#34;&#34;
+    Setter for self.__lights
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;   
     self.__lights = actors.filter(&#39;traffic.traffic_light*&#39;)</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Setter for self.__lights</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.trafficLight.TrafficLight.set_response"><code class="name flex">
 <span>def <span class="ident">set_response</span></span>(<span>self, response)</span>
@@ -293,9 +409,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def set_response(self, response):
+    &#34;&#34;&#34;
+    Setter for self.__response
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;   
     self.__response = response</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Setter for self.__response</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 </dl>
 </dd>

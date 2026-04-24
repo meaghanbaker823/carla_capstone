@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>classes.trafficRule API documentation</title>
+<title>classes.CBF API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
@@ -33,7 +33,7 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>classes.trafficRule</code></h1>
+<h1 class="title">Module <code>classes.CBF</code></h1>
 </header>
 <section id="section-intro">
 </section>
@@ -46,69 +46,146 @@ el.replaceWith(d);
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="classes.trafficRule.TrafficRule"><code class="flex name class">
-<span>class <span class="ident">TrafficRule</span></span>
-<span>(</span><span>sensors, car)</span>
+<dt id="classes.CBF.CBF"><code class="flex name class">
+<span>class <span class="ident">CBF</span></span>
+<span>(</span><span>r, s, distance)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class TrafficRule(Rule):
-    def __init__(self, sensors, car):
-        super().__init__(sensors, car)
-        self.__sensors = sensors
-        self.__car = car
+<pre><code class="python">class CBF():
+    &#34;&#34;&#34;
+    The class which holds all of the values and functions necessary to complete the Control Barrier Functions
+    &#34;&#34;&#34;
+    def __init__(self, r, s, distance):
+        &#34;&#34;&#34;
+        Sets up the variables needed for the CBF function
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
+        self.__r = r
+        self.__distance = distance
+        self.__s = s
 
-    def rule_flag(self, traffic_lights):
-        if(traffic_lights.process_color(self.__car.get_car()) != &#34;&#34;):
-            return False
-        return True
+    def calculate_min_distance(self, extra, standard_distance):
+        &#34;&#34;&#34;
+        Calculates the minimum distance from the standard following distance, occlusion risk, and the extra following distance
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
+        return standard_distance + (self.__r * extra)
     
-    def rule_follow(self, traffic_lights):
-        if(traffic_lights.get_response() == &#34;stop&#34;):
-            return 0
-        else:
-            return 1</code></pre>
+    def calculate_safety_function(self, min_distance):
+        &#34;&#34;&#34;
+        Calculates the safety function by subtracting the current distance by the minimum distance
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
+        return self.__distance - min_distance
+    
+    def calculate_allowable_distance(self, alpha, h, DT):
+        &#34;&#34;&#34;
+        Calculates the u_cbf value using the equation provided by Professor Wuwei Shen
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
+        return (((alpha * h) - self.__s) / DT/1000)
+
+    def final_logic(self, u_nom, u_cbf, max_acc, max_brake):
+        &#34;&#34;&#34;
+        Clamps the final throttle/brake value to be within certain values
+        \n\tINPUT(S):
+        \n\tOUTPUT(S):
+        &#34;&#34;&#34;
+        return max(min(u_nom, u_cbf, max_acc), -1 * (max_brake))</code></pre>
 </details>
-<div class="desc"></div>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="classes.rule.Rule" href="rule.html#classes.rule.Rule">Rule</a></li>
-</ul>
+<div class="desc"><p>The class which holds all of the values and functions necessary to complete the Control Barrier Functions</p>
+<p>Sets up the variables needed for the CBF function</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 <h3>Methods</h3>
 <dl>
-<dt id="classes.trafficRule.TrafficRule.rule_flag"><code class="name flex">
-<span>def <span class="ident">rule_flag</span></span>(<span>self, traffic_lights)</span>
+<dt id="classes.CBF.CBF.calculate_allowable_distance"><code class="name flex">
+<span>def <span class="ident">calculate_allowable_distance</span></span>(<span>self, alpha, h, DT)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def rule_flag(self, traffic_lights):
-    if(traffic_lights.process_color(self.__car.get_car()) != &#34;&#34;):
-        return False
-    return True</code></pre>
+<pre><code class="python">def calculate_allowable_distance(self, alpha, h, DT):
+    &#34;&#34;&#34;
+    Calculates the u_cbf value using the equation provided by Professor Wuwei Shen
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
+    return (((alpha * h) - self.__s) / DT/1000)</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Calculates the u_cbf value using the equation provided by Professor Wuwei Shen</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
-<dt id="classes.trafficRule.TrafficRule.rule_follow"><code class="name flex">
-<span>def <span class="ident">rule_follow</span></span>(<span>self, traffic_lights)</span>
+<dt id="classes.CBF.CBF.calculate_min_distance"><code class="name flex">
+<span>def <span class="ident">calculate_min_distance</span></span>(<span>self, extra, standard_distance)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def rule_follow(self, traffic_lights):
-    if(traffic_lights.get_response() == &#34;stop&#34;):
-        return 0
-    else:
-        return 1</code></pre>
+<pre><code class="python">def calculate_min_distance(self, extra, standard_distance):
+    &#34;&#34;&#34;
+    Calculates the minimum distance from the standard following distance, occlusion risk, and the extra following distance
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
+    return standard_distance + (self.__r * extra)</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>Calculates the minimum distance from the standard following distance, occlusion risk, and the extra following distance</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
+</dd>
+<dt id="classes.CBF.CBF.calculate_safety_function"><code class="name flex">
+<span>def <span class="ident">calculate_safety_function</span></span>(<span>self, min_distance)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_safety_function(self, min_distance):
+    &#34;&#34;&#34;
+    Calculates the safety function by subtracting the current distance by the minimum distance
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
+    return self.__distance - min_distance</code></pre>
+</details>
+<div class="desc"><p>Calculates the safety function by subtracting the current distance by the minimum distance</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
+</dd>
+<dt id="classes.CBF.CBF.final_logic"><code class="name flex">
+<span>def <span class="ident">final_logic</span></span>(<span>self, u_nom, u_cbf, max_acc, max_brake)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def final_logic(self, u_nom, u_cbf, max_acc, max_brake):
+    &#34;&#34;&#34;
+    Clamps the final throttle/brake value to be within certain values
+    \n\tINPUT(S):
+    \n\tOUTPUT(S):
+    &#34;&#34;&#34;
+    return max(min(u_nom, u_cbf, max_acc), -1 * (max_brake))</code></pre>
+</details>
+<div class="desc"><p>Clamps the final throttle/brake value to be within certain values</p>
+<p>INPUT(S):</p>
+<p>OUTPUT(S):</p></div>
 </dd>
 </dl>
 </dd>
@@ -128,10 +205,12 @@ el.replaceWith(d);
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="classes.trafficRule.TrafficRule" href="#classes.trafficRule.TrafficRule">TrafficRule</a></code></h4>
+<h4><code><a title="classes.CBF.CBF" href="#classes.CBF.CBF">CBF</a></code></h4>
 <ul class="">
-<li><code><a title="classes.trafficRule.TrafficRule.rule_flag" href="#classes.trafficRule.TrafficRule.rule_flag">rule_flag</a></code></li>
-<li><code><a title="classes.trafficRule.TrafficRule.rule_follow" href="#classes.trafficRule.TrafficRule.rule_follow">rule_follow</a></code></li>
+<li><code><a title="classes.CBF.CBF.calculate_allowable_distance" href="#classes.CBF.CBF.calculate_allowable_distance">calculate_allowable_distance</a></code></li>
+<li><code><a title="classes.CBF.CBF.calculate_min_distance" href="#classes.CBF.CBF.calculate_min_distance">calculate_min_distance</a></code></li>
+<li><code><a title="classes.CBF.CBF.calculate_safety_function" href="#classes.CBF.CBF.calculate_safety_function">calculate_safety_function</a></code></li>
+<li><code><a title="classes.CBF.CBF.final_logic" href="#classes.CBF.CBF.final_logic">final_logic</a></code></li>
 </ul>
 </li>
 </ul>

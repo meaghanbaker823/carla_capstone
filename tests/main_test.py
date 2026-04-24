@@ -6,8 +6,8 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from main import main
-from classes.collision_exception import CollisionErr
-from classes.route_done import RouteDone
+from classes.collisionException import CollisionErr
+from classes.routeDone import RouteDone
 from classes.world import World
 import carla
 
