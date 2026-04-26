@@ -4,7 +4,6 @@ class Rule():
     """
     def __init__(self, sensors, car):
         """
-        Sets up the variables needed for the Rule class
         \n\tINPUT(S): sensors: a list of the sensors on the vehicle,
                       car: the carla vehicle
         \n\tOUTPUT(S): N/A

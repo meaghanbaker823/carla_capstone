@@ -6,7 +6,6 @@ class ParkedRule(Rule):
     """
     def __init__(self, sensors, car):
         """
-        Sets up the variables needed for the ParkedRule class
         \n\tINPUT(S): sensors: a list of the sensors attached to the vehicle,
                       car: the vehicle object
         \n\tOUTPUT(S): N/A

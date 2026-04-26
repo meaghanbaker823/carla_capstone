@@ -16,7 +16,6 @@ class World:
     """
     def __init__(self, world_map='town01'):
         """
-        Sets up the variables needed for the World class
         \n\tINPUT(S): world_map: [optional] world map name
         \n\tOUTPUT(S): N/A
         """

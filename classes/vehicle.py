@@ -12,7 +12,6 @@ class Vehicle:
     """
     def __init__(self, blueprint_lib, carla_world, spawn, destination, transform, blueprint, world, DT, extra, u_nom, alpha, max_acc, max_brake, distance, standard_distance):
         """
-        Initializes the variables needed for the Vehicle class
         \n\tINPUT(S): blueprint_lib: the carla blueprint library,
                       carla_world: the carla world,
                       spawn: the spawn point of the vehicle,

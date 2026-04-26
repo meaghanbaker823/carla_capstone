@@ -10,7 +10,6 @@ class Analyzer(MAPEStep):
     """
     def __init__(self, carla_world):
         """
-        Initializes the variables needed for the Analyzer class
         \n\tINPUT(S): Carla world object
         \n\tOUTPUT(S): N/A
         """

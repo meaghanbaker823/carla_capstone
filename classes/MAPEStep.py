@@ -4,7 +4,6 @@ class MAPEStep():
     """
     def __init__(self):
         """
-        Sets up the variables needed for the MAPEStep class
         \n\tINPUT(S):N/A
         \n\tOUTPUT(S): N/A
         """

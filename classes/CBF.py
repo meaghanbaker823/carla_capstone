@@ -4,7 +4,6 @@ class CBF():
     """
     def __init__(self, r, s, distance):
         """
-        Sets up the variables needed for the CBF function
         \n\tINPUT(S): r: occulusion risk,
                       s: current speed of the vehicle,
                       distance: the standard following distance

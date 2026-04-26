@@ -7,7 +7,6 @@ class TrafficLight():
     """
     def __init__(self, actors):
         """
-        Initializes the variables needed for the TrafficLight class
         \n\tINPUT(S): actors: the actors list for carla,
         \n\tOUTPUT(S): N/A
         """        

@@ -8,7 +8,6 @@ class ObstacleSensor(Sensor):
     """   
     def __init__(self, relative_transform, parent_actor, blueprint, world, blueprint_lib):
         """
-        Initializes the variables needed for the ObstacleSensor class
         \n\tINPUT(S): relative_transform: the transform object in relation to the parent actor,
                       parent_actor: the carla actor the sensor will be attached to,
                       blueprint: the blueprint for this sensor,

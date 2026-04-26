@@ -8,7 +8,6 @@ class Executor(MAPEStep):
     """
     def __init__(self):
         """
-        Initializes the variables needed for the Executor class
         \n\tINPUT(S): N/A
         \n\tOUTPUT(S): N/A
         """

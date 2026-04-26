@@ -4,7 +4,6 @@ class AngleConstraint():
     """
     def __init__(self, min, max, adjust):
         """
-        Sets up the variables needed for the AngleConstraint Class
         \n\tINPUT(S): min: the minimum angle allowed,
                       max: the maximum angle allowed,
                       adjust: the maximum the angle can change

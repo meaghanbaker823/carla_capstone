@@ -11,7 +11,6 @@ class Monitor(MAPEStep):
     """
     def __init__(self, transform, car, blueprint, world, blueprint_lib, actors, route):
         """
-        Initializes the variables needed for the Monitor class
         \n\tINPUT(S): transform: a list of relative transform for the sensors,
                       car: the carla vehicle object,
                       blueprint: a list of blueprints for the sensors,
