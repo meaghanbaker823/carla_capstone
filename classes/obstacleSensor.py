@@ -9,8 +9,12 @@ class ObstacleSensor(Sensor):
     def __init__(self, relative_transform, parent_actor, blueprint, world, blueprint_lib):
         """
         Initializes the variables needed for the ObstacleSensor class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): relative_transform: the transform object in relation to the parent actor,
+                      parent_actor: the carla actor the sensor will be attached to,
+                      blueprint: the blueprint for this sensor,
+                      world: the world object,
+                      blueprint_lib: the carla blueprint library
+        \n\tOUTPUT(S): N/A
         """   
         # pre-condition
         try:
@@ -26,24 +30,24 @@ class ObstacleSensor(Sensor):
     def get_detections(self):
         """
         Getter for self.__detections
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): returns a list of all of the detections
         """   
         return self.__detections
     
     def get_other_actors(self):
         """
         Getter for self.__other_actors
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): None
+        \n\tOUTPUT(S): returns a list of the obstacles
         """   
         return self.__other_actors
     
     def delete_old_detection(self):
         """
         Removes the first item from the detections and other actors list
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): N/A
         """   
         detections_len = len(self.__detections)
         oactorer_len = len(self.__other_actors)
@@ -61,8 +65,8 @@ class ObstacleSensor(Sensor):
     def obstacle_detect(self, event):
         """
         Adds the obstacle detection to the list
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): event: the carla ObstacleEvent 
+        \n\tOUTPUT(S): N/A
         """   
         try:
             assert isinstance(event, carla.libcarla.ObstacleDetectionEvent)
@@ -85,7 +89,7 @@ class ObstacleSensor(Sensor):
     def listen(self):
         """
         Sets up the listener for the obstacle detector with obstacle_detect as the callback function
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): N/A
         """   
         self.get_sensor().listen(lambda event: self.obstacle_detect(event))

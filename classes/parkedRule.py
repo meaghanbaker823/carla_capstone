@@ -7,8 +7,9 @@ class ParkedRule(Rule):
     def __init__(self, sensors, car):
         """
         Sets up the variables needed for the ParkedRule class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): sensors: a list of the sensors attached to the vehicle,
+                      car: the vehicle object
+        \n\tOUTPUT(S): N/A
         """
         super().__init__(sensors, car)
         self.__sensors = sensors
@@ -17,8 +18,8 @@ class ParkedRule(Rule):
     def rule_flag(self, traffic_lights):
         """
         Decides if the rule flag should be raised for this cycle (checks if the obstacle is a vehicle)
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): traffic_lights: a list of the traffic lights on the map
+        \n\tOUTPUT(S): Returns False if there is a parked car, otherwise True
         """
         if(self.__sensors[0].get_other_actors() != []):
             if(self.__sensors[0].get_detections()[-1][0].type_id[:-2].startswith('vehicle')):
@@ -28,7 +29,7 @@ class ParkedRule(Rule):
     def rule_follow(self, traffic_lights):
         """
         Decides how the car should follow this rule when it is triggered (tells the car to go)
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):    
+        \n\tINPUT(S): traffic_lights: a list of the traffic lights on the map
+        \n\tOUTPUT(S): returns 1  
         """
         return 1

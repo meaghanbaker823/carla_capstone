@@ -11,8 +11,8 @@ class Analyzer(MAPEStep):
     def __init__(self, carla_world):
         """
         Initializes the variables needed for the Analyzer class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): Carla world object
+        \n\tOUTPUT(S): N/A
         """
         self.__carla_world = carla_world
         self.__old_parameters = []
@@ -23,24 +23,26 @@ class Analyzer(MAPEStep):
     def get_new_observations(self):
         """
         Getter method for the self.__new_observations
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): new_observations: the dictionary which is passed through the MAPE steps
         """
         return self.__new_observations
     
     def add_old_observations(self, observations):
         """
         Setter method for the self.__old_observations
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): Observations dictionary (the dictionary passed through the MAPE steps)
+        \n\tOUTPUT(S): N/A
         """
         self.__old_observations.append(observations)
 
     def check_lane_options(self, waypoint_num, route, lane_change):
         """
         Checks the waypoint's lane options to decide which way to swerve
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): waypoint_num: an index of route
+                      route: the set of waypoints for the route of the vehicle
+                      lane_change: says if a lane change is possible
+        \n\tOUTPUT(S): the new route to follow
         """
         try:
             assert isinstance(waypoint_num, int)
@@ -84,8 +86,9 @@ class Analyzer(MAPEStep):
     def swerve(self, waypoint, direction):
         """
         Adjusts one waypoint to move twice in the direction of the vector chosen and returns the waypoint at that location
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): waypoint: a specific waypoint in the route
+                      direction: which direction is the lane in
+        \n\tOUTPUT(S): the new waypoint
         """
         w_x = waypoint[0].transform.location.x
         w_y = waypoint[0].transform.location.y
@@ -109,8 +112,11 @@ class Analyzer(MAPEStep):
     def analyze(self, car, rules, detections, distance):
         """
         Creates observations to be sent to the planner based on information from the monitor.
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): car: the Vehicle object
+                      rules: a list containing the various rule objects,
+                      detections: the dictionary passed through the MAPE steps
+                      distance: the standard following distance
+        \n\tOUTPUT(S): the dictionary passed between MAPE steps
         """
         self.__old_parameters.append(self.__new_parameters)
         self.__new_parameters = [car, rules, detections]

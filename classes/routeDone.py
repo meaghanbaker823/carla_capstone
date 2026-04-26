@@ -5,7 +5,7 @@ class RouteDone(Exception):
     def __init__(self, message):
         """
         Sets up the variables needed for the RouteDone class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): message: the message to be displayed when error is thrown
+        \n\tOUTPUT(S): throws this error
         """
         super().__init__(message)

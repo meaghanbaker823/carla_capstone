@@ -13,8 +13,8 @@ class Planner(MAPEStep):
     def __init__(self):
         """
         Initializes the variables needed for the Planner class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): N/A
         """
         self.__old_parameters = []
         self.__new_parameters = []
@@ -24,16 +24,17 @@ class Planner(MAPEStep):
     def get_new_plan(self):
         """
         Getter for self.__new_plan
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): the plan for vehicle controls
         """
         return self.__new_plan
     
     def angle_between(self, v1, v2):
         """
         Determines the angle between 2 vectors
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): v1: vector 1,
+                      v2: vector 2
+        \n\tOUTPUT(S): the angle between v1 and v2
         """
         try:
             assert isinstance(v1, tuple) and isinstance(v2, tuple)
@@ -53,8 +54,9 @@ class Planner(MAPEStep):
     def get_angle(self, car, wp):
         """
         Gets the angle between a car and a waypoint
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): car: the carla vehicle,
+                      wp: the carla waypoint
+        \n\tOUTPUT(S): the angle between car and wp
         """
         try:
             assert isinstance(car, carla.libcarla.Vehicle)
@@ -82,8 +84,10 @@ class Planner(MAPEStep):
     def get_proper_angle(self, car, wp_idx, rte):
         """
         Gets the propert steering angle for the vehicle
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): car: the carla vehicle,
+                      wp_idx: the current index of the route,
+                      rte: the route of the vehicle
+        \n\tOUTPUT(S): returns the new index of the route and the generated angle list
         """
         try:
             assert isinstance(car, carla.libcarla.Vehicle)
@@ -108,8 +112,8 @@ class Planner(MAPEStep):
     def correct_angle(self, degrees):
         """
         Adjusts the angle to be accurate
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): degrees: an angle to be normalized
+        \n\tOUTPUT(S): the calculated steering angle
         """
         try:
             assert (-360 <= degrees <= 360)
@@ -133,8 +137,16 @@ class Planner(MAPEStep):
     def plan(self, car, observations, DT, extra, u_nom, alpha, max_acc, max_brake, standard_distance):
         """
         Completes the plan step, decides what the control should be based on the environment and CBF
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): car: the carla vehicle,
+                      observations: the dictionary passed between MAPE steps,
+                      DT: the tick speed,
+                      extra: a multipler for CBF,
+                      u_nom: a constant for CBF,
+                      alpha: a constant for CBF,
+                      max_acc: the maximum acceleration,
+                      max_brake: the maximum brake value,
+                      standard_distance: the standard following distance for the vehicle
+        \n\tOUTPUT(S): returns the plan for the executor (a dictionary with steering angle, throttle, and brake)
         """
         self.__old_parameters.append(self.__new_parameters)
         self.__new_parameters = [observations]
@@ -176,7 +188,7 @@ class Planner(MAPEStep):
     def notify(self):
         """
         Outputs the action to the MAPE Step
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): A string containing the plan
         """
         return "The plan in this iteration is " + str(self.get_new_plan())

@@ -17,8 +17,8 @@ class World:
     def __init__(self, world_map='town01'):
         """
         Sets up the variables needed for the World class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): world_map: [optional] world map name
+        \n\tOUTPUT(S): N/A
         """
         self.__client = carla.Client('localhost', 2000)
         self.__client.set_timeout(60.0)
@@ -34,63 +34,63 @@ class World:
     def get_client(self):
         """
         Getter for self.__client
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): the carla client
         """
         return self.__client
 
     def get_world(self):
         """
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): the carla world
         """
         return self.__world
 
     def get_map(self):
         """
         Getter for the map
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): the carla map
         """
         return self.__world.get_map()
     
     def get_actors(self):
         """
         Getter for the actors
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): the carla actors list
         """
         return self.__world.get_actors()
 
     def change_map(self, world_map='town10HD_Opt'):
         """
         Setter for the map
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): the world map (optional)
+        \n\tOUTPUT(S): the new carla world object
         """
         return self.__world.load_world(world_map)
 
     def get_blueprints(self):
         """
         Getter for the blueprints
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): returns the carla blueprint libary
         """
         return self.__world.get_blueprint_library()
 
     def get_spawnpoints(self):
         """
         Getter for the spawnpoints
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): returns the carla spawnpoints for the map
         """
         return self.__world.get_map().get_spawn_points()
 
     def init_world(self):
         """
         Sets up all of the necessary parts of the world
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): returns the carla client, the world's spawnpoints, the vehicle spawn, and the carla blueprints library
         """
         return (self.__client,
             self.get_spawnpoints(),
@@ -100,8 +100,8 @@ class World:
     def init_spectator(self, spawn):
         """
         Sets up the spectator for our car
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): spawn: the spawn transform for the vehicle
+        \n\tOUTPUT(S): N/A
         """
         try:
             assert isinstance(spawn, carla.libcarla.Transform)
@@ -119,8 +119,8 @@ class World:
     def spawn_vehicles(self):
         """
         Spawns the necessary vehicles into the Carla environment
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): N/A
         """
       # vehicle blueprints
         v_bps = self.get_blueprints().filter("vehicle.mercedes*")
@@ -137,8 +137,8 @@ class World:
     def spawn_pedestrians(self): 
         """
         Spawns the necessary pedestrians into the Carla environment
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): N/A
         """
         # pedestrian blueprints
         pd_bps = self.get_blueprints().filter("walker.pedestrian.*")
@@ -176,7 +176,20 @@ class World:
     def init_actors(self, spawn, blueprint_lib, spts, world, scanning_distance, dt, extra, u_nom, alpha, max_acc, max_brake, distance, standard_distance):
         """
         Initializes all actors in the Carla world
-        \n\tINPUT(S):
+        \n\tINPUT(S): spawn: the spawn point of the vehicle,
+                      blueprint_lib: the carla blueprint library,
+                      spts: the spawnpoints for the maps,
+                      world: the world object,
+                      scanning_distance: how far ahead the vehicle looks ahead
+                      DT: the tick speed,
+                      extra: a multipler for CBF,
+                      u_nom: a constant for CBF,
+                      alpha: a constant for CBF,
+                      max_acc: the maximum acceleration,
+                      max_brake: the maximum brake value,
+                      distance: the base distance for vehicle
+                      standard_distance: the standard following distance for the vehicle
+
         \n\tOUTPUT(S):
         """        
         try:
@@ -209,8 +222,8 @@ class World:
     def clear_world(self, client):
         """
         Reloads the world so that no errors occur
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): client: the carla client
+        \n\tOUTPUT(S): N/A
         """              
         try:
             assert type(client) == carla.libcarla.Client
@@ -225,8 +238,11 @@ class World:
     def main_loop(self, spectator, car, vehicle, DT):
         """
         Tne function which holds the functions to be repeated each cycle
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): spectator: the carla spectator,
+                      car: the carla vehicle object,
+                      vehicle: the Vehicle object,
+                      DT: tick speed
+        \n\tOUTPUT(S): N/A
         """      
         try:
             assert type(car) == carla.libcarla.Vehicle

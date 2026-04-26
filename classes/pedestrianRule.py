@@ -7,8 +7,9 @@ class PedestrianRule(Rule):
     def __init__(self, sensors, car):
         """
         Sets up the variables needed for the PedestrianRule class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S):sensors: a list of the sensors attached to the vehicle,
+                      car: the vehicle object
+        \n\tOUTPUT(S): N/A
         """
         super().__init__(sensors, car)
         self.__sensors = sensors
@@ -17,8 +18,8 @@ class PedestrianRule(Rule):
     def rule_flag(self, traffic_lights):
         """
         Decides if the rule flag should be raised for this cycle (Checks if sensor detected a walker)
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): traffic_lights: a list of the traffic lights on the map
+        \n\tOUTPUT(S): Returns False if there is a pedestrian, otherwise True
         """
         if(self.__sensors[0].get_other_actors() != []):
             if(self.__sensors[0].get_detections()[-1][0].type_id[:-2].startswith('walker')):
@@ -28,7 +29,7 @@ class PedestrianRule(Rule):
     def rule_follow(self, traffic_lights):
        """
         Decides how the car should follow this rule when it is triggered (Will tell the car to stop)
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):    
+        \n\tINPUT(S): traffic_lights: a list of the traffic lights on the map
+        \n\tOUTPUT(S): returns 0 
         """
        return 0

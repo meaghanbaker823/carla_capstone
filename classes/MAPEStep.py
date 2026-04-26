@@ -5,8 +5,8 @@ class MAPEStep():
     def __init__(self):
         """
         Sets up the variables needed for the MAPEStep class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S):N/A
+        \n\tOUTPUT(S): N/A
         """
         self.__old_steps = []
         self.__new_step = ""
@@ -14,7 +14,7 @@ class MAPEStep():
     def notify(self):
         """
         The superclass method for notifying the MAPE Step of its actions
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): N/A
         """
         pass

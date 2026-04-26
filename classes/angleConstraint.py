@@ -5,8 +5,10 @@ class AngleConstraint():
     def __init__(self, min, max, adjust):
         """
         Sets up the variables needed for the AngleConstraint Class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): min: the minimum angle allowed,
+                      max: the maximum angle allowed,
+                      adjust: the maximum the angle can change
+        \n\tOUTPUT(S): N/A
         """
         self.__min = min
         self.__max = max
@@ -15,8 +17,8 @@ class AngleConstraint():
     def clamp(self, degrees):
         """
         Clamps the angle to be adjusted by a set amount if it is outside the given maximum and minimum
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): Degrees: the angle to be adjusted
+        \n\tOUTPUT(S): the adjusted angle
         """
         if degrees < self.__min:
             return degrees + self.__adjust
@@ -28,8 +30,8 @@ class AngleConstraint():
     def max_steer(self, degrees):
         """
         Adjusts the steering angle provided to be between the maximum and minimum inclusively
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): degrees: the proposed steering angle
+        \n\tOUTPUT(S): the adjusted steering angle
         """
         if degrees < self.__min:
             return self.__min

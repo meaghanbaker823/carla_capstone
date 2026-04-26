@@ -9,8 +9,8 @@ class Executor(MAPEStep):
     def __init__(self):
         """
         Initializes the variables needed for the Executor class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): N/A
         """
         self.__new_parameters = []
         self.__old_parameters = []
@@ -20,15 +20,16 @@ class Executor(MAPEStep):
     def get_new_action(self):
         """
         Getter for self.__new_action
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): the steering, throttle, and brake controls
         """
         return self.__new_action
 
     def execute(self, plan, car):
         """
         Directly applies the controls from the planner onto the Carla car
-        \n\tINPUT(S):
+        \n\tINPUT(S): plan: the steering angle, throttle, and brake controls to be applied,
+                      car: the carla vehicle object
         \n\tOUTPUT(S):
         """
         self.__old_parameters.append(self.__new_parameters)
@@ -43,7 +44,7 @@ class Executor(MAPEStep):
     def notify(self):
         """
         Formats the actions completed for the MAPE Step
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): a string saying what the current vehicle controls are
         """
         return "The brake is: " + str(self.get_new_action()["brake"]) + ", the throttle is: " + str(self.get_new_action()["throttle"]) +  ", the steering is: " + str(self.get_new_action()["steering"])

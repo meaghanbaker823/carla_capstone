@@ -12,8 +12,13 @@ class Monitor(MAPEStep):
     def __init__(self, transform, car, blueprint, world, blueprint_lib, actors, route):
         """
         Initializes the variables needed for the Monitor class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): transform: a list of relative transform for the sensors,
+                      car: the carla vehicle object,
+                      blueprint: a list of blueprints for the sensors,
+                      world: the world object,
+                      blueprint_lib: the carla blueprint library,
+                      route: the list of waypoints for the vehicle to follow
+        \n\tOUTPUT(S): N/A
         """
         self.__old_parameters = []
         self.__new_parameter = None
@@ -33,48 +38,48 @@ class Monitor(MAPEStep):
     def add_sensors(self, sensor):
         """
         Add a sensor to the sensors list
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): sesnor: which sensor to add to the vehicle
+        \n\tOUTPUT(S): N/A
         """
         self.__sensors.append(sensor)
 
     def get_actors(self):
         """
         Getter for self.__actors
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): the actors list
         """
         return self.__actors
 
     def get_sensors(self):
         """
         Getter for self.__sensors
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): The list containing the sensors
         """
         return self.__sensors
     
     def get_new_detections(self):
         """
         Getter for self.__new_detections
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): The dictionary passed between MAPE steps
         """
         return self.__new_detections
     
     def add_old_detections(self, detections):
         """
         Add detections to the old_detections list
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): detections: The dictionary passed between MAPE steps
+        \n\tOUTPUT(S): N/A
         """
         self.__old_detections.append(detections)
 
     def advance_waypoint(self, current_waypoint_num):
         """
         Move the waypoint to the next waypoint in the route by a certain amount
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): current_waypoint_num: the current index of the route
+        \n\tOUTPUT(S): the new index of the route
         """
         try:
             assert isinstance(self.__car, carla.libcarla.Vehicle)
@@ -88,8 +93,8 @@ class Monitor(MAPEStep):
     def get_lane_info(self, waypoint):
         """
         Gets the lane info for a given waypoint
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): waypoint: a carla waypoint object
+        \n\tOUTPUT(S): a dictionary containing various information about the lane
         """
         try:
             assert isinstance(waypoint, carla.libcarla.Waypoint)
@@ -117,8 +122,8 @@ class Monitor(MAPEStep):
     def monitor(self, current_waypoint_num):
         """
         Completes the monitor step by collecting information
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): current_waypoint_num: the current index of the route
+        \n\tOUTPUT(S): The dictionary passed between MAPE steps
         """
         try:
             assert isinstance(current_waypoint_num, int)
@@ -157,8 +162,8 @@ class Monitor(MAPEStep):
     def notify(self):
         """
         Outputs the actions taken to the MAPE Step
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): A string containing the all of the detections
         """
         output = "The detections in this monitor iteration are: "
         for i in self.get_new_detections():
