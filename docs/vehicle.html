@@ -61,9 +61,22 @@ el.replaceWith(d);
     &#34;&#34;&#34;
     def __init__(self, blueprint_lib, carla_world, spawn, destination, transform, blueprint, world, DT, extra, u_nom, alpha, max_acc, max_brake, distance, standard_distance):
         &#34;&#34;&#34;
-        Initializes the variables needed for the Vehicle class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): blueprint_lib: the carla blueprint library,
+                      carla_world: the carla world,
+                      spawn: the spawn point of the vehicle,
+                      destination: the destination of the vehicle,
+                      transform: a list of relative transform for the sensors,
+                      blueprint: a list of blueprints for the sensors,
+                      world: the world object,
+                      DT: the tick speed,
+                      extra: a multipler for CBF,
+                      u_nom: a constant for CBF,
+                      alpha: a constant for CBF,
+                      max_acc: the maximum acceleration,
+                      max_brake: the maximum brake value,
+                      distance: the base distance for vehicle
+                      standard_distance: the standard following distance for the vehicle
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;
         self.__car = carla_world.spawn_actor(random.choice(blueprint_lib.filter(&#39;vehicle.bmw.*&#39;)), spawn)
         self.__actors = carla_world.get_actors()
@@ -86,8 +99,10 @@ el.replaceWith(d);
     def mape_init(self, transform, blueprint, blueprint_lib):
         &#34;&#34;&#34;
         Sets up all of the MAPE classes and completes one cycle
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): transform: a list of relative transform for the sensors,
+                      blueprint: a list of blueprints for the sensors,
+                      blueprint_lib: the carla blueprint library,
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;
         try:
             self.__monitor_class = Monitor(transform, self.__car, blueprint, self.__world, blueprint_lib, self.__actors, self.__route)
@@ -111,48 +126,48 @@ el.replaceWith(d);
     def get_rules(self):
         &#34;&#34;&#34;
         Getter for self.__rules
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): the list of Rule objects the vehicle abides by
         &#34;&#34;&#34;
         return self.__rules
     
     def set_rules(self, rules):
         &#34;&#34;&#34;
         Setter for self.__rules
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): rules: a list of Rule objects the vehicle abides by
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;
         self.__rules = rules
 
     def get_sensors(self):
         &#34;&#34;&#34;
         Getter for the sensors
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): returns the list of sensors attached to the vehicle
         &#34;&#34;&#34;
         return self.__monitor_class.get_sensors()
   
     def get_car(self):
         &#34;&#34;&#34;
         Getter for self.__car
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): returns the carla vehicle object
         &#34;&#34;&#34;
         return self.__car
     
     def get_actors(self):
         &#34;&#34;&#34;
         Getter for self.__actors
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): The carla actors list
         &#34;&#34;&#34;
         return self.__actors
 
     def mape_drive(self):  
         &#34;&#34;&#34;
         Walks through the MAPE structure
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;   
         try:
             monitor_info = self.__monitor_class.monitor(self.__waypoint_num)
@@ -170,9 +185,22 @@ el.replaceWith(d);
             raise</code></pre>
 </details>
 <div class="desc"><p>The class that controls the vehicle</p>
-<p>Initializes the variables needed for the Vehicle class</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): blueprint_lib: the carla blueprint library,
+carla_world: the carla world,
+spawn: the spawn point of the vehicle,
+destination: the destination of the vehicle,
+transform: a list of relative transform for the sensors,
+blueprint: a list of blueprints for the sensors,
+world: the world object,
+DT: the tick speed,
+extra: a multipler for CBF,
+u_nom: a constant for CBF,
+alpha: a constant for CBF,
+max_acc: the maximum acceleration,
+max_brake: the maximum brake value,
+distance: the base distance for vehicle
+standard_distance: the standard following distance for the vehicle</p>
+<p>OUTPUT(S): N/A</p></div>
 <h3>Methods</h3>
 <dl>
 <dt id="classes.vehicle.Vehicle.get_actors"><code class="name flex">
@@ -186,14 +214,14 @@ el.replaceWith(d);
 <pre><code class="python">def get_actors(self):
     &#34;&#34;&#34;
     Getter for self.__actors
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): The carla actors list
     &#34;&#34;&#34;
     return self.__actors</code></pre>
 </details>
 <div class="desc"><p>Getter for self.__actors</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): The carla actors list</p></div>
 </dd>
 <dt id="classes.vehicle.Vehicle.get_car"><code class="name flex">
 <span>def <span class="ident">get_car</span></span>(<span>self)</span>
@@ -206,14 +234,14 @@ el.replaceWith(d);
 <pre><code class="python">def get_car(self):
     &#34;&#34;&#34;
     Getter for self.__car
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): returns the carla vehicle object
     &#34;&#34;&#34;
     return self.__car</code></pre>
 </details>
 <div class="desc"><p>Getter for self.__car</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): returns the carla vehicle object</p></div>
 </dd>
 <dt id="classes.vehicle.Vehicle.get_rules"><code class="name flex">
 <span>def <span class="ident">get_rules</span></span>(<span>self)</span>
@@ -226,14 +254,14 @@ el.replaceWith(d);
 <pre><code class="python">def get_rules(self):
     &#34;&#34;&#34;
     Getter for self.__rules
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): the list of Rule objects the vehicle abides by
     &#34;&#34;&#34;
     return self.__rules</code></pre>
 </details>
 <div class="desc"><p>Getter for self.__rules</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): the list of Rule objects the vehicle abides by</p></div>
 </dd>
 <dt id="classes.vehicle.Vehicle.get_sensors"><code class="name flex">
 <span>def <span class="ident">get_sensors</span></span>(<span>self)</span>
@@ -246,14 +274,14 @@ el.replaceWith(d);
 <pre><code class="python">def get_sensors(self):
     &#34;&#34;&#34;
     Getter for the sensors
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): returns the list of sensors attached to the vehicle
     &#34;&#34;&#34;
     return self.__monitor_class.get_sensors()</code></pre>
 </details>
 <div class="desc"><p>Getter for the sensors</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): returns the list of sensors attached to the vehicle</p></div>
 </dd>
 <dt id="classes.vehicle.Vehicle.mape_drive"><code class="name flex">
 <span>def <span class="ident">mape_drive</span></span>(<span>self)</span>
@@ -266,8 +294,8 @@ el.replaceWith(d);
 <pre><code class="python">def mape_drive(self):  
     &#34;&#34;&#34;
     Walks through the MAPE structure
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): N/A
     &#34;&#34;&#34;   
     try:
         monitor_info = self.__monitor_class.monitor(self.__waypoint_num)
@@ -285,8 +313,8 @@ el.replaceWith(d);
         raise</code></pre>
 </details>
 <div class="desc"><p>Walks through the MAPE structure</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): N/A</p></div>
 </dd>
 <dt id="classes.vehicle.Vehicle.mape_init"><code class="name flex">
 <span>def <span class="ident">mape_init</span></span>(<span>self, transform, blueprint, blueprint_lib)</span>
@@ -299,8 +327,10 @@ el.replaceWith(d);
 <pre><code class="python">def mape_init(self, transform, blueprint, blueprint_lib):
     &#34;&#34;&#34;
     Sets up all of the MAPE classes and completes one cycle
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): transform: a list of relative transform for the sensors,
+                  blueprint: a list of blueprints for the sensors,
+                  blueprint_lib: the carla blueprint library,
+    \n\tOUTPUT(S): N/A
     &#34;&#34;&#34;
     try:
         self.__monitor_class = Monitor(transform, self.__car, blueprint, self.__world, blueprint_lib, self.__actors, self.__route)
@@ -322,8 +352,10 @@ el.replaceWith(d);
         raise</code></pre>
 </details>
 <div class="desc"><p>Sets up all of the MAPE classes and completes one cycle</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): transform: a list of relative transform for the sensors,
+blueprint: a list of blueprints for the sensors,
+blueprint_lib: the carla blueprint library,</p>
+<p>OUTPUT(S): N/A</p></div>
 </dd>
 <dt id="classes.vehicle.Vehicle.set_rules"><code class="name flex">
 <span>def <span class="ident">set_rules</span></span>(<span>self, rules)</span>
@@ -336,14 +368,14 @@ el.replaceWith(d);
 <pre><code class="python">def set_rules(self, rules):
     &#34;&#34;&#34;
     Setter for self.__rules
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): rules: a list of Rule objects the vehicle abides by
+    \n\tOUTPUT(S): N/A
     &#34;&#34;&#34;
     self.__rules = rules</code></pre>
 </details>
 <div class="desc"><p>Setter for self.__rules</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): rules: a list of Rule objects the vehicle abides by</p>
+<p>OUTPUT(S): N/A</p></div>
 </dd>
 </dl>
 </dd>

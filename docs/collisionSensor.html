@@ -61,9 +61,12 @@ el.replaceWith(d);
     &#34;&#34;&#34;   
     def __init__(self, relative_transform, parent_actor, blueprint, world, blueprint_lib):
         &#34;&#34;&#34;
-        Initializes the variables needed for the CollisionSensor class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): relative_transform: the transform object in relation to the parent actor,
+                      parent_actor: the carla actor the sensor will be attached to,
+                      blueprint: the blueprint for this sensor,
+                      world: the world object,
+                      blueprint_lib: the carla blueprint library
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34; 
         
         # pre-condition
@@ -82,16 +85,16 @@ el.replaceWith(d);
     def get_collisions(self):
         &#34;&#34;&#34;
         Getter for self.__collisions
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): returns the list of collisions for the vehicle
         &#34;&#34;&#34;   
         return self.__collisions
     
     def collision_detect(self, event):
         &#34;&#34;&#34;
         Adds the collision to the collision list when a collision is detected
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): event: the carla CollisionEvent 
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;   
         collisions_len = len(self.__collisions)
         collision = (event.actor, event.other_actor, event.normal_impulse)
@@ -106,15 +109,18 @@ el.replaceWith(d);
     def listen(self):
         &#34;&#34;&#34;
         Starts the sensor to list with the collision_detect as it&#39;s callback function
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;   
         self.get_sensor().listen(lambda event: self.collision_detect(event))</code></pre>
 </details>
 <div class="desc"><p>The class for the sensor which reacts to collisions</p>
-<p>Initializes the variables needed for the CollisionSensor class</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): relative_transform: the transform object in relation to the parent actor,
+parent_actor: the carla actor the sensor will be attached to,
+blueprint: the blueprint for this sensor,
+world: the world object,
+blueprint_lib: the carla blueprint library</p>
+<p>OUTPUT(S): N/A</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="classes.sensor.Sensor" href="sensor.html#classes.sensor.Sensor">Sensor</a></li>
@@ -132,8 +138,8 @@ el.replaceWith(d);
 <pre><code class="python">def collision_detect(self, event):
     &#34;&#34;&#34;
     Adds the collision to the collision list when a collision is detected
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): event: the carla CollisionEvent 
+    \n\tOUTPUT(S): N/A
     &#34;&#34;&#34;   
     collisions_len = len(self.__collisions)
     collision = (event.actor, event.other_actor, event.normal_impulse)
@@ -146,8 +152,8 @@ el.replaceWith(d);
         raise</code></pre>
 </details>
 <div class="desc"><p>Adds the collision to the collision list when a collision is detected</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): event: the carla CollisionEvent </p>
+<p>OUTPUT(S): N/A</p></div>
 </dd>
 <dt id="classes.collisionSensor.CollisionSensor.get_collisions"><code class="name flex">
 <span>def <span class="ident">get_collisions</span></span>(<span>self)</span>
@@ -160,14 +166,14 @@ el.replaceWith(d);
 <pre><code class="python">def get_collisions(self):
     &#34;&#34;&#34;
     Getter for self.__collisions
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): returns the list of collisions for the vehicle
     &#34;&#34;&#34;   
     return self.__collisions</code></pre>
 </details>
 <div class="desc"><p>Getter for self.__collisions</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): returns the list of collisions for the vehicle</p></div>
 </dd>
 <dt id="classes.collisionSensor.CollisionSensor.listen"><code class="name flex">
 <span>def <span class="ident">listen</span></span>(<span>self)</span>
@@ -180,14 +186,14 @@ el.replaceWith(d);
 <pre><code class="python">def listen(self):
     &#34;&#34;&#34;
     Starts the sensor to list with the collision_detect as it&#39;s callback function
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): N/A
     &#34;&#34;&#34;   
     self.get_sensor().listen(lambda event: self.collision_detect(event))</code></pre>
 </details>
 <div class="desc"><p>Starts the sensor to list with the collision_detect as it's callback function</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): N/A</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>

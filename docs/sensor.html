@@ -61,9 +61,12 @@ el.replaceWith(d);
     &#34;&#34;&#34;   
     def __init__(self, relative_transform, parent_actor, blueprint, world):
         &#34;&#34;&#34;
-        Initializes the variables needed for the Sensor class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): relative_transform: the transform object in relation to the parent actor,
+                      parent_actor: the carla actor the sensor will be attached to,
+                      blueprint: the blueprint for this sensor,
+                      world: the world object,
+                      blueprint_lib: the carla blueprint library
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;   
         self.__transform = relative_transform
         self.__parent = parent_actor
@@ -72,55 +75,58 @@ el.replaceWith(d);
     def get_transform(self):
         &#34;&#34;&#34;
         Getter for self.__transform
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): the relative transform of the sensor to the vehicle
         &#34;&#34;&#34;   
         return self.__transform
     
     def get_parent(self):
         &#34;&#34;&#34;
         Getter for self.__parent
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): the parent actor of the sensor (the actor the sensor is attached to)
         &#34;&#34;&#34;   
         return self.__parent
     
     def get_world(self):
         &#34;&#34;&#34;
         Getter for self.__world
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): the carla world
         &#34;&#34;&#34;   
         return self.__world
     
     def get_blueprint(self):
         &#34;&#34;&#34;
         Getter for self.__blueprint
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): the blueprint for the sensor
         &#34;&#34;&#34;   
         return self.__blueprint
     
     def get_sensor(self):
         &#34;&#34;&#34;
         Getter for self.__sensor
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): returns the carla sensor object
         &#34;&#34;&#34;   
         return self.__sensor
     
     def listen():
         &#34;&#34;&#34;
         Placeholder for the listen callback functions of each sensor
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;   
         pass</code></pre>
 </details>
 <div class="desc"><p>The superclass for all other sensors</p>
-<p>Initializes the variables needed for the Sensor class</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): relative_transform: the transform object in relation to the parent actor,
+parent_actor: the carla actor the sensor will be attached to,
+blueprint: the blueprint for this sensor,
+world: the world object,
+blueprint_lib: the carla blueprint library</p>
+<p>OUTPUT(S): N/A</p></div>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="classes.collisionSensor.CollisionSensor" href="collisionSensor.html#classes.collisionSensor.CollisionSensor">CollisionSensor</a></li>
@@ -139,14 +145,14 @@ el.replaceWith(d);
 <pre><code class="python">def get_blueprint(self):
     &#34;&#34;&#34;
     Getter for self.__blueprint
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): the blueprint for the sensor
     &#34;&#34;&#34;   
     return self.__blueprint</code></pre>
 </details>
 <div class="desc"><p>Getter for self.__blueprint</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): the blueprint for the sensor</p></div>
 </dd>
 <dt id="classes.sensor.Sensor.get_parent"><code class="name flex">
 <span>def <span class="ident">get_parent</span></span>(<span>self)</span>
@@ -159,14 +165,14 @@ el.replaceWith(d);
 <pre><code class="python">def get_parent(self):
     &#34;&#34;&#34;
     Getter for self.__parent
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): the parent actor of the sensor (the actor the sensor is attached to)
     &#34;&#34;&#34;   
     return self.__parent</code></pre>
 </details>
 <div class="desc"><p>Getter for self.__parent</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): the parent actor of the sensor (the actor the sensor is attached to)</p></div>
 </dd>
 <dt id="classes.sensor.Sensor.get_sensor"><code class="name flex">
 <span>def <span class="ident">get_sensor</span></span>(<span>self)</span>
@@ -179,14 +185,14 @@ el.replaceWith(d);
 <pre><code class="python">def get_sensor(self):
     &#34;&#34;&#34;
     Getter for self.__sensor
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): returns the carla sensor object
     &#34;&#34;&#34;   
     return self.__sensor</code></pre>
 </details>
 <div class="desc"><p>Getter for self.__sensor</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): returns the carla sensor object</p></div>
 </dd>
 <dt id="classes.sensor.Sensor.get_transform"><code class="name flex">
 <span>def <span class="ident">get_transform</span></span>(<span>self)</span>
@@ -199,14 +205,14 @@ el.replaceWith(d);
 <pre><code class="python">def get_transform(self):
     &#34;&#34;&#34;
     Getter for self.__transform
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): the relative transform of the sensor to the vehicle
     &#34;&#34;&#34;   
     return self.__transform</code></pre>
 </details>
 <div class="desc"><p>Getter for self.__transform</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): the relative transform of the sensor to the vehicle</p></div>
 </dd>
 <dt id="classes.sensor.Sensor.get_world"><code class="name flex">
 <span>def <span class="ident">get_world</span></span>(<span>self)</span>
@@ -219,14 +225,14 @@ el.replaceWith(d);
 <pre><code class="python">def get_world(self):
     &#34;&#34;&#34;
     Getter for self.__world
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): the carla world
     &#34;&#34;&#34;   
     return self.__world</code></pre>
 </details>
 <div class="desc"><p>Getter for self.__world</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): the carla world</p></div>
 </dd>
 <dt id="classes.sensor.Sensor.listen"><code class="name flex">
 <span>def <span class="ident">listen</span></span>(<span>)</span>
@@ -239,14 +245,14 @@ el.replaceWith(d);
 <pre><code class="python">def listen():
     &#34;&#34;&#34;
     Placeholder for the listen callback functions of each sensor
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): N/A
     &#34;&#34;&#34;   
     pass</code></pre>
 </details>
 <div class="desc"><p>Placeholder for the listen callback functions of each sensor</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): N/A</p></div>
 </dd>
 </dl>
 </dd>

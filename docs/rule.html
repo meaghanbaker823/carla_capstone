@@ -61,9 +61,9 @@ el.replaceWith(d);
     &#34;&#34;&#34;
     def __init__(self, sensors, car):
         &#34;&#34;&#34;
-        Sets up the variables needed for the Rule class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): sensors: a list of the sensors on the vehicle,
+                      car: the carla vehicle
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;
         self.__sensors = sensors
         self.__car = car
@@ -71,31 +71,31 @@ el.replaceWith(d);
     def get_sensors(self):
         &#34;&#34;&#34;
         Getter for the self.__sensors variable
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): the list of sensors attached to the vehicle
         &#34;&#34;&#34;
         return self.__sensors
 
     def rule_flag(self, traffic_lights):
         &#34;&#34;&#34;
         Decides if the rule flag should be raised for this cycle
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): traffic_lights: a list of the traffic lights on the map
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;
         pass
 
     def rule_follow(self, traffic_lights):
         &#34;&#34;&#34;
         Decides how the car should follow this rule when it is triggered
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): traffic_lights: a list of the traffic lights on the map
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;
         pass</code></pre>
 </details>
 <div class="desc"><p>The super class for Rules</p>
-<p>Sets up the variables needed for the Rule class</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): sensors: a list of the sensors on the vehicle,
+car: the carla vehicle</p>
+<p>OUTPUT(S): N/A</p></div>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="classes.collisionRule.CollisionRule" href="collisionRule.html#classes.collisionRule.CollisionRule">CollisionRule</a></li>
@@ -116,14 +116,14 @@ el.replaceWith(d);
 <pre><code class="python">def get_sensors(self):
     &#34;&#34;&#34;
     Getter for the self.__sensors variable
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): the list of sensors attached to the vehicle
     &#34;&#34;&#34;
     return self.__sensors</code></pre>
 </details>
 <div class="desc"><p>Getter for the self.__sensors variable</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): the list of sensors attached to the vehicle</p></div>
 </dd>
 <dt id="classes.rule.Rule.rule_flag"><code class="name flex">
 <span>def <span class="ident">rule_flag</span></span>(<span>self, traffic_lights)</span>
@@ -136,14 +136,14 @@ el.replaceWith(d);
 <pre><code class="python">def rule_flag(self, traffic_lights):
     &#34;&#34;&#34;
     Decides if the rule flag should be raised for this cycle
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): traffic_lights: a list of the traffic lights on the map
+    \n\tOUTPUT(S): N/A
     &#34;&#34;&#34;
     pass</code></pre>
 </details>
 <div class="desc"><p>Decides if the rule flag should be raised for this cycle</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): traffic_lights: a list of the traffic lights on the map</p>
+<p>OUTPUT(S): N/A</p></div>
 </dd>
 <dt id="classes.rule.Rule.rule_follow"><code class="name flex">
 <span>def <span class="ident">rule_follow</span></span>(<span>self, traffic_lights)</span>
@@ -156,14 +156,14 @@ el.replaceWith(d);
 <pre><code class="python">def rule_follow(self, traffic_lights):
     &#34;&#34;&#34;
     Decides how the car should follow this rule when it is triggered
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): traffic_lights: a list of the traffic lights on the map
+    \n\tOUTPUT(S): N/A
     &#34;&#34;&#34;
     pass</code></pre>
 </details>
 <div class="desc"><p>Decides how the car should follow this rule when it is triggered</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): traffic_lights: a list of the traffic lights on the map</p>
+<p>OUTPUT(S): N/A</p></div>
 </dd>
 </dl>
 </dd>

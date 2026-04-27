@@ -61,9 +61,9 @@ el.replaceWith(d);
     &#34;&#34;&#34;
     def __init__(self, sensors, car):
         &#34;&#34;&#34;
-        Sets up the variables needed for the ParkedRule class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): sensors: a list of the sensors attached to the vehicle,
+                      car: the vehicle object
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;
         super().__init__(sensors, car)
         self.__sensors = sensors
@@ -72,8 +72,8 @@ el.replaceWith(d);
     def rule_flag(self, traffic_lights):
         &#34;&#34;&#34;
         Decides if the rule flag should be raised for this cycle (checks if the obstacle is a vehicle)
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): traffic_lights: a list of the traffic lights on the map
+        \n\tOUTPUT(S): Returns False if there is a parked car, otherwise True
         &#34;&#34;&#34;
         if(self.__sensors[0].get_other_actors() != []):
             if(self.__sensors[0].get_detections()[-1][0].type_id[:-2].startswith(&#39;vehicle&#39;)):
@@ -83,15 +83,15 @@ el.replaceWith(d);
     def rule_follow(self, traffic_lights):
         &#34;&#34;&#34;
         Decides how the car should follow this rule when it is triggered (tells the car to go)
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):    
+        \n\tINPUT(S): traffic_lights: a list of the traffic lights on the map
+        \n\tOUTPUT(S): returns 1  
         &#34;&#34;&#34;
         return 1</code></pre>
 </details>
 <div class="desc"><p>The rule subclass for when a car's obstacle detector is triggered by a car</p>
-<p>Sets up the variables needed for the ParkedRule class</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): sensors: a list of the sensors attached to the vehicle,
+car: the vehicle object</p>
+<p>OUTPUT(S): N/A</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="classes.rule.Rule" href="rule.html#classes.rule.Rule">Rule</a></li>
@@ -109,8 +109,8 @@ el.replaceWith(d);
 <pre><code class="python">def rule_flag(self, traffic_lights):
     &#34;&#34;&#34;
     Decides if the rule flag should be raised for this cycle (checks if the obstacle is a vehicle)
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): traffic_lights: a list of the traffic lights on the map
+    \n\tOUTPUT(S): Returns False if there is a parked car, otherwise True
     &#34;&#34;&#34;
     if(self.__sensors[0].get_other_actors() != []):
         if(self.__sensors[0].get_detections()[-1][0].type_id[:-2].startswith(&#39;vehicle&#39;)):
@@ -118,8 +118,8 @@ el.replaceWith(d);
     return True</code></pre>
 </details>
 <div class="desc"><p>Decides if the rule flag should be raised for this cycle (checks if the obstacle is a vehicle)</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): traffic_lights: a list of the traffic lights on the map</p>
+<p>OUTPUT(S): Returns False if there is a parked car, otherwise True</p></div>
 </dd>
 <dt id="classes.parkedRule.ParkedRule.rule_follow"><code class="name flex">
 <span>def <span class="ident">rule_follow</span></span>(<span>self, traffic_lights)</span>
@@ -132,14 +132,14 @@ el.replaceWith(d);
 <pre><code class="python">def rule_follow(self, traffic_lights):
     &#34;&#34;&#34;
     Decides how the car should follow this rule when it is triggered (tells the car to go)
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):    
+    \n\tINPUT(S): traffic_lights: a list of the traffic lights on the map
+    \n\tOUTPUT(S): returns 1  
     &#34;&#34;&#34;
     return 1</code></pre>
 </details>
 <div class="desc"><p>Decides how the car should follow this rule when it is triggered (tells the car to go)</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): traffic_lights: a list of the traffic lights on the map</p>
+<p>OUTPUT(S): returns 1</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>

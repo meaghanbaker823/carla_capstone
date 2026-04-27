@@ -60,9 +60,8 @@ el.replaceWith(d);
     &#34;&#34;&#34;
     def __init__(self):
         &#34;&#34;&#34;
-        Initializes the variables needed for the Planner class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;
         self.__old_parameters = []
         self.__new_parameters = []
@@ -72,16 +71,17 @@ el.replaceWith(d);
     def get_new_plan(self):
         &#34;&#34;&#34;
         Getter for self.__new_plan
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): the plan for vehicle controls
         &#34;&#34;&#34;
         return self.__new_plan
     
     def angle_between(self, v1, v2):
         &#34;&#34;&#34;
         Determines the angle between 2 vectors
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): v1: vector 1,
+                      v2: vector 2
+        \n\tOUTPUT(S): the angle between v1 and v2
         &#34;&#34;&#34;
         try:
             assert isinstance(v1, tuple) and isinstance(v2, tuple)
@@ -101,8 +101,9 @@ el.replaceWith(d);
     def get_angle(self, car, wp):
         &#34;&#34;&#34;
         Gets the angle between a car and a waypoint
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): car: the carla vehicle,
+                      wp: the carla waypoint
+        \n\tOUTPUT(S): the angle between car and wp
         &#34;&#34;&#34;
         try:
             assert isinstance(car, carla.libcarla.Vehicle)
@@ -130,8 +131,10 @@ el.replaceWith(d);
     def get_proper_angle(self, car, wp_idx, rte):
         &#34;&#34;&#34;
         Gets the propert steering angle for the vehicle
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): car: the carla vehicle,
+                      wp_idx: the current index of the route,
+                      rte: the route of the vehicle
+        \n\tOUTPUT(S): returns the new index of the route and the generated angle list
         &#34;&#34;&#34;
         try:
             assert isinstance(car, carla.libcarla.Vehicle)
@@ -156,8 +159,8 @@ el.replaceWith(d);
     def correct_angle(self, degrees):
         &#34;&#34;&#34;
         Adjusts the angle to be accurate
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): degrees: an angle to be normalized
+        \n\tOUTPUT(S): the calculated steering angle
         &#34;&#34;&#34;
         try:
             assert (-360 &lt;= degrees &lt;= 360)
@@ -181,8 +184,16 @@ el.replaceWith(d);
     def plan(self, car, observations, DT, extra, u_nom, alpha, max_acc, max_brake, standard_distance):
         &#34;&#34;&#34;
         Completes the plan step, decides what the control should be based on the environment and CBF
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): car: the carla vehicle,
+                      observations: the dictionary passed between MAPE steps,
+                      DT: the tick speed,
+                      extra: a multipler for CBF,
+                      u_nom: a constant for CBF,
+                      alpha: a constant for CBF,
+                      max_acc: the maximum acceleration,
+                      max_brake: the maximum brake value,
+                      standard_distance: the standard following distance for the vehicle
+        \n\tOUTPUT(S): returns the plan for the executor (a dictionary with steering angle, throttle, and brake)
         &#34;&#34;&#34;
         self.__old_parameters.append(self.__new_parameters)
         self.__new_parameters = [observations]
@@ -224,15 +235,14 @@ el.replaceWith(d);
     def notify(self):
         &#34;&#34;&#34;
         Outputs the action to the MAPE Step
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): A string containing the plan
         &#34;&#34;&#34;
         return &#34;The plan in this iteration is &#34; + str(self.get_new_plan())</code></pre>
 </details>
 <div class="desc"><p>The Planner step of the MAPE Structure</p>
-<p>Initializes the variables needed for the Planner class</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): N/A</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="classes.MAPEStep.MAPEStep" href="MAPEStep.html#classes.MAPEStep.MAPEStep">MAPEStep</a></li>
@@ -250,8 +260,9 @@ el.replaceWith(d);
 <pre><code class="python">def angle_between(self, v1, v2):
     &#34;&#34;&#34;
     Determines the angle between 2 vectors
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): v1: vector 1,
+                  v2: vector 2
+    \n\tOUTPUT(S): the angle between v1 and v2
     &#34;&#34;&#34;
     try:
         assert isinstance(v1, tuple) and isinstance(v2, tuple)
@@ -268,8 +279,9 @@ el.replaceWith(d);
     return math.degrees(vector_difference)</code></pre>
 </details>
 <div class="desc"><p>Determines the angle between 2 vectors</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): v1: vector 1,
+v2: vector 2</p>
+<p>OUTPUT(S): the angle between v1 and v2</p></div>
 </dd>
 <dt id="classes.planner.Planner.correct_angle"><code class="name flex">
 <span>def <span class="ident">correct_angle</span></span>(<span>self, degrees)</span>
@@ -282,8 +294,8 @@ el.replaceWith(d);
 <pre><code class="python">def correct_angle(self, degrees):
     &#34;&#34;&#34;
     Adjusts the angle to be accurate
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): degrees: an angle to be normalized
+    \n\tOUTPUT(S): the calculated steering angle
     &#34;&#34;&#34;
     try:
         assert (-360 &lt;= degrees &lt;= 360)
@@ -305,8 +317,8 @@ el.replaceWith(d);
     return steer_input</code></pre>
 </details>
 <div class="desc"><p>Adjusts the angle to be accurate</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): degrees: an angle to be normalized</p>
+<p>OUTPUT(S): the calculated steering angle</p></div>
 </dd>
 <dt id="classes.planner.Planner.get_angle"><code class="name flex">
 <span>def <span class="ident">get_angle</span></span>(<span>self, car, wp)</span>
@@ -319,8 +331,9 @@ el.replaceWith(d);
 <pre><code class="python">def get_angle(self, car, wp):
     &#34;&#34;&#34;
     Gets the angle between a car and a waypoint
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): car: the carla vehicle,
+                  wp: the carla waypoint
+    \n\tOUTPUT(S): the angle between car and wp
     &#34;&#34;&#34;
     try:
         assert isinstance(car, carla.libcarla.Vehicle)
@@ -346,8 +359,9 @@ el.replaceWith(d);
     return corrected_deg</code></pre>
 </details>
 <div class="desc"><p>Gets the angle between a car and a waypoint</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): car: the carla vehicle,
+wp: the carla waypoint</p>
+<p>OUTPUT(S): the angle between car and wp</p></div>
 </dd>
 <dt id="classes.planner.Planner.get_new_plan"><code class="name flex">
 <span>def <span class="ident">get_new_plan</span></span>(<span>self)</span>
@@ -360,14 +374,14 @@ el.replaceWith(d);
 <pre><code class="python">def get_new_plan(self):
     &#34;&#34;&#34;
     Getter for self.__new_plan
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): the plan for vehicle controls
     &#34;&#34;&#34;
     return self.__new_plan</code></pre>
 </details>
 <div class="desc"><p>Getter for self.__new_plan</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): the plan for vehicle controls</p></div>
 </dd>
 <dt id="classes.planner.Planner.get_proper_angle"><code class="name flex">
 <span>def <span class="ident">get_proper_angle</span></span>(<span>self, car, wp_idx, rte)</span>
@@ -380,8 +394,10 @@ el.replaceWith(d);
 <pre><code class="python">def get_proper_angle(self, car, wp_idx, rte):
     &#34;&#34;&#34;
     Gets the propert steering angle for the vehicle
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): car: the carla vehicle,
+                  wp_idx: the current index of the route,
+                  rte: the route of the vehicle
+    \n\tOUTPUT(S): returns the new index of the route and the generated angle list
     &#34;&#34;&#34;
     try:
         assert isinstance(car, carla.libcarla.Vehicle)
@@ -403,8 +419,10 @@ el.replaceWith(d);
         raise RouteDone(&#34;Route complete :)&#34;)</code></pre>
 </details>
 <div class="desc"><p>Gets the propert steering angle for the vehicle</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): car: the carla vehicle,
+wp_idx: the current index of the route,
+rte: the route of the vehicle</p>
+<p>OUTPUT(S): returns the new index of the route and the generated angle list</p></div>
 </dd>
 <dt id="classes.planner.Planner.notify"><code class="name flex">
 <span>def <span class="ident">notify</span></span>(<span>self)</span>
@@ -417,14 +435,14 @@ el.replaceWith(d);
 <pre><code class="python">def notify(self):
     &#34;&#34;&#34;
     Outputs the action to the MAPE Step
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): A string containing the plan
     &#34;&#34;&#34;
     return &#34;The plan in this iteration is &#34; + str(self.get_new_plan())</code></pre>
 </details>
 <div class="desc"><p>Outputs the action to the MAPE Step</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): A string containing the plan</p></div>
 </dd>
 <dt id="classes.planner.Planner.plan"><code class="name flex">
 <span>def <span class="ident">plan</span></span>(<span>self, car, observations, DT, extra, u_nom, alpha, max_acc, max_brake, standard_distance)</span>
@@ -437,8 +455,16 @@ el.replaceWith(d);
 <pre><code class="python">def plan(self, car, observations, DT, extra, u_nom, alpha, max_acc, max_brake, standard_distance):
     &#34;&#34;&#34;
     Completes the plan step, decides what the control should be based on the environment and CBF
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): car: the carla vehicle,
+                  observations: the dictionary passed between MAPE steps,
+                  DT: the tick speed,
+                  extra: a multipler for CBF,
+                  u_nom: a constant for CBF,
+                  alpha: a constant for CBF,
+                  max_acc: the maximum acceleration,
+                  max_brake: the maximum brake value,
+                  standard_distance: the standard following distance for the vehicle
+    \n\tOUTPUT(S): returns the plan for the executor (a dictionary with steering angle, throttle, and brake)
     &#34;&#34;&#34;
     self.__old_parameters.append(self.__new_parameters)
     self.__new_parameters = [observations]
@@ -478,8 +504,16 @@ el.replaceWith(d);
     return self.__new_plan</code></pre>
 </details>
 <div class="desc"><p>Completes the plan step, decides what the control should be based on the environment and CBF</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): car: the carla vehicle,
+observations: the dictionary passed between MAPE steps,
+DT: the tick speed,
+extra: a multipler for CBF,
+u_nom: a constant for CBF,
+alpha: a constant for CBF,
+max_acc: the maximum acceleration,
+max_brake: the maximum brake value,
+standard_distance: the standard following distance for the vehicle</p>
+<p>OUTPUT(S): returns the plan for the executor (a dictionary with steering angle, throttle, and brake)</p></div>
 </dd>
 </dl>
 </dd>

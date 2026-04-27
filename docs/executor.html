@@ -60,9 +60,8 @@ el.replaceWith(d);
     &#34;&#34;&#34;
     def __init__(self):
         &#34;&#34;&#34;
-        Initializes the variables needed for the Executor class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;
         self.__new_parameters = []
         self.__old_parameters = []
@@ -72,15 +71,16 @@ el.replaceWith(d);
     def get_new_action(self):
         &#34;&#34;&#34;
         Getter for self.__new_action
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): the steering, throttle, and brake controls
         &#34;&#34;&#34;
         return self.__new_action
 
     def execute(self, plan, car):
         &#34;&#34;&#34;
         Directly applies the controls from the planner onto the Carla car
-        \n\tINPUT(S):
+        \n\tINPUT(S): plan: the steering angle, throttle, and brake controls to be applied,
+                      car: the carla vehicle object
         \n\tOUTPUT(S):
         &#34;&#34;&#34;
         self.__old_parameters.append(self.__new_parameters)
@@ -95,15 +95,14 @@ el.replaceWith(d);
     def notify(self):
         &#34;&#34;&#34;
         Formats the actions completed for the MAPE Step
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): a string saying what the current vehicle controls are
         &#34;&#34;&#34;
         return &#34;The brake is: &#34; + str(self.get_new_action()[&#34;brake&#34;]) + &#34;, the throttle is: &#34; + str(self.get_new_action()[&#34;throttle&#34;]) +  &#34;, the steering is: &#34; + str(self.get_new_action()[&#34;steering&#34;])</code></pre>
 </details>
 <div class="desc"><p>The class for the executor step in the MAPE structure</p>
-<p>Initializes the variables needed for the Executor class</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): N/A</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="classes.MAPEStep.MAPEStep" href="MAPEStep.html#classes.MAPEStep.MAPEStep">MAPEStep</a></li>
@@ -121,7 +120,8 @@ el.replaceWith(d);
 <pre><code class="python">def execute(self, plan, car):
     &#34;&#34;&#34;
     Directly applies the controls from the planner onto the Carla car
-    \n\tINPUT(S):
+    \n\tINPUT(S): plan: the steering angle, throttle, and brake controls to be applied,
+                  car: the carla vehicle object
     \n\tOUTPUT(S):
     &#34;&#34;&#34;
     self.__old_parameters.append(self.__new_parameters)
@@ -134,7 +134,8 @@ el.replaceWith(d);
     return self.__new_action</code></pre>
 </details>
 <div class="desc"><p>Directly applies the controls from the planner onto the Carla car</p>
-<p>INPUT(S):</p>
+<p>INPUT(S): plan: the steering angle, throttle, and brake controls to be applied,
+car: the carla vehicle object</p>
 <p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.executor.Executor.get_new_action"><code class="name flex">
@@ -148,14 +149,14 @@ el.replaceWith(d);
 <pre><code class="python">def get_new_action(self):
     &#34;&#34;&#34;
     Getter for self.__new_action
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): the steering, throttle, and brake controls
     &#34;&#34;&#34;
     return self.__new_action</code></pre>
 </details>
 <div class="desc"><p>Getter for self.__new_action</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): the steering, throttle, and brake controls</p></div>
 </dd>
 <dt id="classes.executor.Executor.notify"><code class="name flex">
 <span>def <span class="ident">notify</span></span>(<span>self)</span>
@@ -168,14 +169,14 @@ el.replaceWith(d);
 <pre><code class="python">def notify(self):
     &#34;&#34;&#34;
     Formats the actions completed for the MAPE Step
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): a string saying what the current vehicle controls are
     &#34;&#34;&#34;
     return &#34;The brake is: &#34; + str(self.get_new_action()[&#34;brake&#34;]) + &#34;, the throttle is: &#34; + str(self.get_new_action()[&#34;throttle&#34;]) +  &#34;, the steering is: &#34; + str(self.get_new_action()[&#34;steering&#34;])</code></pre>
 </details>
 <div class="desc"><p>Formats the actions completed for the MAPE Step</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): a string saying what the current vehicle controls are</p></div>
 </dd>
 </dl>
 </dd>

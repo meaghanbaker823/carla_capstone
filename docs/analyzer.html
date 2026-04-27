@@ -62,9 +62,8 @@ el.replaceWith(d);
     &#34;&#34;&#34;
     def __init__(self, carla_world):
         &#34;&#34;&#34;
-        Initializes the variables needed for the Analyzer class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): Carla world object
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;
         self.__carla_world = carla_world
         self.__old_parameters = []
@@ -75,24 +74,26 @@ el.replaceWith(d);
     def get_new_observations(self):
         &#34;&#34;&#34;
         Getter method for the self.__new_observations
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): new_observations: the dictionary which is passed through the MAPE steps
         &#34;&#34;&#34;
         return self.__new_observations
     
     def add_old_observations(self, observations):
         &#34;&#34;&#34;
         Setter method for the self.__old_observations
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): Observations dictionary (the dictionary passed through the MAPE steps)
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;
         self.__old_observations.append(observations)
 
     def check_lane_options(self, waypoint_num, route, lane_change):
         &#34;&#34;&#34;
         Checks the waypoint&#39;s lane options to decide which way to swerve
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): waypoint_num: an index of route
+                      route: the set of waypoints for the route of the vehicle
+                      lane_change: says if a lane change is possible
+        \n\tOUTPUT(S): the new route to follow
         &#34;&#34;&#34;
         try:
             assert isinstance(waypoint_num, int)
@@ -136,8 +137,9 @@ el.replaceWith(d);
     def swerve(self, waypoint, direction):
         &#34;&#34;&#34;
         Adjusts one waypoint to move twice in the direction of the vector chosen and returns the waypoint at that location
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): waypoint: a specific waypoint in the route
+                      direction: which direction is the lane in
+        \n\tOUTPUT(S): the new waypoint
         &#34;&#34;&#34;
         w_x = waypoint[0].transform.location.x
         w_y = waypoint[0].transform.location.y
@@ -161,8 +163,11 @@ el.replaceWith(d);
     def analyze(self, car, rules, detections, distance):
         &#34;&#34;&#34;
         Creates observations to be sent to the planner based on information from the monitor.
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): car: the Vehicle object
+                      rules: a list containing the various rule objects,
+                      detections: the dictionary passed through the MAPE steps
+                      distance: the standard following distance
+        \n\tOUTPUT(S): the dictionary passed between MAPE steps
         &#34;&#34;&#34;
         self.__old_parameters.append(self.__new_parameters)
         self.__new_parameters = [car, rules, detections]
@@ -221,9 +226,8 @@ el.replaceWith(d);
 <div class="desc"><p>The A in the MAPE structure.
 Takes in the detections from monitor and decides what should be reacted to.<br>
 If a car must swerve around another car, the waypoint adjustment is completed in this class.</p>
-<p>Initializes the variables needed for the Analyzer class</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): Carla world object</p>
+<p>OUTPUT(S): N/A</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="classes.MAPEStep.MAPEStep" href="MAPEStep.html#classes.MAPEStep.MAPEStep">MAPEStep</a></li>
@@ -241,14 +245,14 @@ If a car must swerve around another car, the waypoint adjustment is completed in
 <pre><code class="python">def add_old_observations(self, observations):
     &#34;&#34;&#34;
     Setter method for the self.__old_observations
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): Observations dictionary (the dictionary passed through the MAPE steps)
+    \n\tOUTPUT(S): N/A
     &#34;&#34;&#34;
     self.__old_observations.append(observations)</code></pre>
 </details>
 <div class="desc"><p>Setter method for the self.__old_observations</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): Observations dictionary (the dictionary passed through the MAPE steps)</p>
+<p>OUTPUT(S): N/A</p></div>
 </dd>
 <dt id="classes.analyzer.Analyzer.analyze"><code class="name flex">
 <span>def <span class="ident">analyze</span></span>(<span>self, car, rules, detections, distance)</span>
@@ -261,8 +265,11 @@ If a car must swerve around another car, the waypoint adjustment is completed in
 <pre><code class="python">def analyze(self, car, rules, detections, distance):
     &#34;&#34;&#34;
     Creates observations to be sent to the planner based on information from the monitor.
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): car: the Vehicle object
+                  rules: a list containing the various rule objects,
+                  detections: the dictionary passed through the MAPE steps
+                  distance: the standard following distance
+    \n\tOUTPUT(S): the dictionary passed between MAPE steps
     &#34;&#34;&#34;
     self.__old_parameters.append(self.__new_parameters)
     self.__new_parameters = [car, rules, detections]
@@ -306,8 +313,11 @@ If a car must swerve around another car, the waypoint adjustment is completed in
     return self.__new_observations</code></pre>
 </details>
 <div class="desc"><p>Creates observations to be sent to the planner based on information from the monitor.</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): car: the Vehicle object
+rules: a list containing the various rule objects,
+detections: the dictionary passed through the MAPE steps
+distance: the standard following distance</p>
+<p>OUTPUT(S): the dictionary passed between MAPE steps</p></div>
 </dd>
 <dt id="classes.analyzer.Analyzer.check_lane_options"><code class="name flex">
 <span>def <span class="ident">check_lane_options</span></span>(<span>self, waypoint_num, route, lane_change)</span>
@@ -320,8 +330,10 @@ If a car must swerve around another car, the waypoint adjustment is completed in
 <pre><code class="python">def check_lane_options(self, waypoint_num, route, lane_change):
     &#34;&#34;&#34;
     Checks the waypoint&#39;s lane options to decide which way to swerve
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): waypoint_num: an index of route
+                  route: the set of waypoints for the route of the vehicle
+                  lane_change: says if a lane change is possible
+    \n\tOUTPUT(S): the new route to follow
     &#34;&#34;&#34;
     try:
         assert isinstance(waypoint_num, int)
@@ -362,8 +374,10 @@ If a car must swerve around another car, the waypoint adjustment is completed in
         return new_route        </code></pre>
 </details>
 <div class="desc"><p>Checks the waypoint's lane options to decide which way to swerve</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): waypoint_num: an index of route
+route: the set of waypoints for the route of the vehicle
+lane_change: says if a lane change is possible</p>
+<p>OUTPUT(S): the new route to follow</p></div>
 </dd>
 <dt id="classes.analyzer.Analyzer.get_new_observations"><code class="name flex">
 <span>def <span class="ident">get_new_observations</span></span>(<span>self)</span>
@@ -376,14 +390,14 @@ If a car must swerve around another car, the waypoint adjustment is completed in
 <pre><code class="python">def get_new_observations(self):
     &#34;&#34;&#34;
     Getter method for the self.__new_observations
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): new_observations: the dictionary which is passed through the MAPE steps
     &#34;&#34;&#34;
     return self.__new_observations</code></pre>
 </details>
 <div class="desc"><p>Getter method for the self.__new_observations</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): new_observations: the dictionary which is passed through the MAPE steps</p></div>
 </dd>
 <dt id="classes.analyzer.Analyzer.notify"><code class="name flex">
 <span>def <span class="ident">notify</span></span>(<span>self)</span>
@@ -420,8 +434,9 @@ If a car must swerve around another car, the waypoint adjustment is completed in
 <pre><code class="python">def swerve(self, waypoint, direction):
     &#34;&#34;&#34;
     Adjusts one waypoint to move twice in the direction of the vector chosen and returns the waypoint at that location
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): waypoint: a specific waypoint in the route
+                  direction: which direction is the lane in
+    \n\tOUTPUT(S): the new waypoint
     &#34;&#34;&#34;
     w_x = waypoint[0].transform.location.x
     w_y = waypoint[0].transform.location.y
@@ -443,8 +458,9 @@ If a car must swerve around another car, the waypoint adjustment is completed in
     return (new_waypoint, waypoint[1])</code></pre>
 </details>
 <div class="desc"><p>Adjusts one waypoint to move twice in the direction of the vector chosen and returns the waypoint at that location</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): waypoint: a specific waypoint in the route
+direction: which direction is the lane in</p>
+<p>OUTPUT(S): the new waypoint</p></div>
 </dd>
 </dl>
 </dd>

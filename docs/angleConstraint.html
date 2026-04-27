@@ -61,9 +61,10 @@ el.replaceWith(d);
     &#34;&#34;&#34;
     def __init__(self, min, max, adjust):
         &#34;&#34;&#34;
-        Sets up the variables needed for the AngleConstraint Class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): min: the minimum angle allowed,
+                      max: the maximum angle allowed,
+                      adjust: the maximum the angle can change
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;
         self.__min = min
         self.__max = max
@@ -72,8 +73,8 @@ el.replaceWith(d);
     def clamp(self, degrees):
         &#34;&#34;&#34;
         Clamps the angle to be adjusted by a set amount if it is outside the given maximum and minimum
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): Degrees: the angle to be adjusted
+        \n\tOUTPUT(S): the adjusted angle
         &#34;&#34;&#34;
         if degrees &lt; self.__min:
             return degrees + self.__adjust
@@ -85,8 +86,8 @@ el.replaceWith(d);
     def max_steer(self, degrees):
         &#34;&#34;&#34;
         Adjusts the steering angle provided to be between the maximum and minimum inclusively
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): degrees: the proposed steering angle
+        \n\tOUTPUT(S): the adjusted steering angle
         &#34;&#34;&#34;
         if degrees &lt; self.__min:
             return self.__min
@@ -96,9 +97,10 @@ el.replaceWith(d);
             return degrees    </code></pre>
 </details>
 <div class="desc"><p>The class for clamping and adjusting angles</p>
-<p>Sets up the variables needed for the AngleConstraint Class</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): min: the minimum angle allowed,
+max: the maximum angle allowed,
+adjust: the maximum the angle can change</p>
+<p>OUTPUT(S): N/A</p></div>
 <h3>Methods</h3>
 <dl>
 <dt id="classes.angleConstraint.AngleConstraint.clamp"><code class="name flex">
@@ -112,8 +114,8 @@ el.replaceWith(d);
 <pre><code class="python">def clamp(self, degrees):
     &#34;&#34;&#34;
     Clamps the angle to be adjusted by a set amount if it is outside the given maximum and minimum
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): Degrees: the angle to be adjusted
+    \n\tOUTPUT(S): the adjusted angle
     &#34;&#34;&#34;
     if degrees &lt; self.__min:
         return degrees + self.__adjust
@@ -123,8 +125,8 @@ el.replaceWith(d);
     return degrees</code></pre>
 </details>
 <div class="desc"><p>Clamps the angle to be adjusted by a set amount if it is outside the given maximum and minimum</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): Degrees: the angle to be adjusted</p>
+<p>OUTPUT(S): the adjusted angle</p></div>
 </dd>
 <dt id="classes.angleConstraint.AngleConstraint.max_steer"><code class="name flex">
 <span>def <span class="ident">max_steer</span></span>(<span>self, degrees)</span>
@@ -137,8 +139,8 @@ el.replaceWith(d);
 <pre><code class="python">def max_steer(self, degrees):
     &#34;&#34;&#34;
     Adjusts the steering angle provided to be between the maximum and minimum inclusively
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): degrees: the proposed steering angle
+    \n\tOUTPUT(S): the adjusted steering angle
     &#34;&#34;&#34;
     if degrees &lt; self.__min:
         return self.__min
@@ -148,8 +150,8 @@ el.replaceWith(d);
         return degrees    </code></pre>
 </details>
 <div class="desc"><p>Adjusts the steering angle provided to be between the maximum and minimum inclusively</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): degrees: the proposed steering angle</p>
+<p>OUTPUT(S): the adjusted steering angle</p></div>
 </dd>
 </dl>
 </dd>

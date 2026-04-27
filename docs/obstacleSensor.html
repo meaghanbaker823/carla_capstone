@@ -61,9 +61,12 @@ el.replaceWith(d);
     &#34;&#34;&#34;   
     def __init__(self, relative_transform, parent_actor, blueprint, world, blueprint_lib):
         &#34;&#34;&#34;
-        Initializes the variables needed for the ObstacleSensor class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): relative_transform: the transform object in relation to the parent actor,
+                      parent_actor: the carla actor the sensor will be attached to,
+                      blueprint: the blueprint for this sensor,
+                      world: the world object,
+                      blueprint_lib: the carla blueprint library
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;   
         # pre-condition
         try:
@@ -79,24 +82,24 @@ el.replaceWith(d);
     def get_detections(self):
         &#34;&#34;&#34;
         Getter for self.__detections
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): returns a list of all of the detections
         &#34;&#34;&#34;   
         return self.__detections
     
     def get_other_actors(self):
         &#34;&#34;&#34;
         Getter for self.__other_actors
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): None
+        \n\tOUTPUT(S): returns a list of the obstacles
         &#34;&#34;&#34;   
         return self.__other_actors
     
     def delete_old_detection(self):
         &#34;&#34;&#34;
         Removes the first item from the detections and other actors list
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;   
         detections_len = len(self.__detections)
         oactorer_len = len(self.__other_actors)
@@ -114,8 +117,8 @@ el.replaceWith(d);
     def obstacle_detect(self, event):
         &#34;&#34;&#34;
         Adds the obstacle detection to the list
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): event: the carla ObstacleEvent 
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;   
         try:
             assert isinstance(event, carla.libcarla.ObstacleDetectionEvent)
@@ -138,15 +141,18 @@ el.replaceWith(d);
     def listen(self):
         &#34;&#34;&#34;
         Sets up the listener for the obstacle detector with obstacle_detect as the callback function
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;   
         self.get_sensor().listen(lambda event: self.obstacle_detect(event))</code></pre>
 </details>
 <div class="desc"><p>Class that will handle obstacle detections</p>
-<p>Initializes the variables needed for the ObstacleSensor class</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): relative_transform: the transform object in relation to the parent actor,
+parent_actor: the carla actor the sensor will be attached to,
+blueprint: the blueprint for this sensor,
+world: the world object,
+blueprint_lib: the carla blueprint library</p>
+<p>OUTPUT(S): N/A</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="classes.sensor.Sensor" href="sensor.html#classes.sensor.Sensor">Sensor</a></li>
@@ -164,8 +170,8 @@ el.replaceWith(d);
 <pre><code class="python">def delete_old_detection(self):
     &#34;&#34;&#34;
     Removes the first item from the detections and other actors list
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): N/A
     &#34;&#34;&#34;   
     detections_len = len(self.__detections)
     oactorer_len = len(self.__other_actors)
@@ -181,8 +187,8 @@ el.replaceWith(d);
         raise</code></pre>
 </details>
 <div class="desc"><p>Removes the first item from the detections and other actors list</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): N/A</p></div>
 </dd>
 <dt id="classes.obstacleSensor.ObstacleSensor.get_detections"><code class="name flex">
 <span>def <span class="ident">get_detections</span></span>(<span>self)</span>
@@ -195,14 +201,14 @@ el.replaceWith(d);
 <pre><code class="python">def get_detections(self):
     &#34;&#34;&#34;
     Getter for self.__detections
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): returns a list of all of the detections
     &#34;&#34;&#34;   
     return self.__detections</code></pre>
 </details>
 <div class="desc"><p>Getter for self.__detections</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): returns a list of all of the detections</p></div>
 </dd>
 <dt id="classes.obstacleSensor.ObstacleSensor.get_other_actors"><code class="name flex">
 <span>def <span class="ident">get_other_actors</span></span>(<span>self)</span>
@@ -215,14 +221,14 @@ el.replaceWith(d);
 <pre><code class="python">def get_other_actors(self):
     &#34;&#34;&#34;
     Getter for self.__other_actors
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): None
+    \n\tOUTPUT(S): returns a list of the obstacles
     &#34;&#34;&#34;   
     return self.__other_actors</code></pre>
 </details>
 <div class="desc"><p>Getter for self.__other_actors</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): None</p>
+<p>OUTPUT(S): returns a list of the obstacles</p></div>
 </dd>
 <dt id="classes.obstacleSensor.ObstacleSensor.listen"><code class="name flex">
 <span>def <span class="ident">listen</span></span>(<span>self)</span>
@@ -235,14 +241,14 @@ el.replaceWith(d);
 <pre><code class="python">def listen(self):
     &#34;&#34;&#34;
     Sets up the listener for the obstacle detector with obstacle_detect as the callback function
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): N/A
     &#34;&#34;&#34;   
     self.get_sensor().listen(lambda event: self.obstacle_detect(event))</code></pre>
 </details>
 <div class="desc"><p>Sets up the listener for the obstacle detector with obstacle_detect as the callback function</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): N/A</p></div>
 </dd>
 <dt id="classes.obstacleSensor.ObstacleSensor.obstacle_detect"><code class="name flex">
 <span>def <span class="ident">obstacle_detect</span></span>(<span>self, event)</span>
@@ -255,8 +261,8 @@ el.replaceWith(d);
 <pre><code class="python">def obstacle_detect(self, event):
     &#34;&#34;&#34;
     Adds the obstacle detection to the list
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): event: the carla ObstacleEvent 
+    \n\tOUTPUT(S): N/A
     &#34;&#34;&#34;   
     try:
         assert isinstance(event, carla.libcarla.ObstacleDetectionEvent)
@@ -277,8 +283,8 @@ el.replaceWith(d);
             raise</code></pre>
 </details>
 <div class="desc"><p>Adds the obstacle detection to the list</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): event: the carla ObstacleEvent </p>
+<p>OUTPUT(S): N/A</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>

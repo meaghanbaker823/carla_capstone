@@ -61,9 +61,10 @@ el.replaceWith(d);
     &#34;&#34;&#34;
     def __init__(self, r, s, distance):
         &#34;&#34;&#34;
-        Sets up the variables needed for the CBF function
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): r: occulusion risk,
+                      s: current speed of the vehicle,
+                      distance: the standard following distance
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;
         self.__r = r
         self.__distance = distance
@@ -72,7 +73,8 @@ el.replaceWith(d);
     def calculate_min_distance(self, extra, standard_distance):
         &#34;&#34;&#34;
         Calculates the minimum distance from the standard following distance, occlusion risk, and the extra following distance
-        \n\tINPUT(S):
+        \n\tINPUT(S): extra: multiplier if there is occulsion risk,
+                      standard_distance: the standard following distance
         \n\tOUTPUT(S):
         &#34;&#34;&#34;
         return standard_distance + (self.__r * extra)
@@ -80,15 +82,17 @@ el.replaceWith(d);
     def calculate_safety_function(self, min_distance):
         &#34;&#34;&#34;
         Calculates the safety function by subtracting the current distance by the minimum distance
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): min_distance: the distance returned from calculate_min_distance (the minimum following distance)
+        \n\tOUTPUT(S): the safe following distance
         &#34;&#34;&#34;
         return self.__distance - min_distance
     
     def calculate_allowable_distance(self, alpha, h, DT):
         &#34;&#34;&#34;
         Calculates the u_cbf value using the equation provided by Professor Wuwei Shen
-        \n\tINPUT(S):
+        \n\tINPUT(S): alpha: constant provided
+                      h: distance calculated by calculate_safety_function, 
+                      DT: tick speed
         \n\tOUTPUT(S):
         &#34;&#34;&#34;
         return (((alpha * h) - self.__s) / DT/1000)
@@ -96,15 +100,19 @@ el.replaceWith(d);
     def final_logic(self, u_nom, u_cbf, max_acc, max_brake):
         &#34;&#34;&#34;
         Clamps the final throttle/brake value to be within certain values
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): u_nom: constant given, 
+                      u_cbf: allowable distance,
+                      max_acc: the maximum acceleration, 
+                      max_brake: the maximum brake
+        \n\tOUTPUT(S): the throttle the vehicle
         &#34;&#34;&#34;
         return max(min(u_nom, u_cbf, max_acc), -1 * (max_brake))</code></pre>
 </details>
 <div class="desc"><p>The class which holds all of the values and functions necessary to complete the Control Barrier Functions</p>
-<p>Sets up the variables needed for the CBF function</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): r: occulusion risk,
+s: current speed of the vehicle,
+distance: the standard following distance</p>
+<p>OUTPUT(S): N/A</p></div>
 <h3>Methods</h3>
 <dl>
 <dt id="classes.CBF.CBF.calculate_allowable_distance"><code class="name flex">
@@ -118,13 +126,17 @@ el.replaceWith(d);
 <pre><code class="python">def calculate_allowable_distance(self, alpha, h, DT):
     &#34;&#34;&#34;
     Calculates the u_cbf value using the equation provided by Professor Wuwei Shen
-    \n\tINPUT(S):
+    \n\tINPUT(S): alpha: constant provided
+                  h: distance calculated by calculate_safety_function, 
+                  DT: tick speed
     \n\tOUTPUT(S):
     &#34;&#34;&#34;
     return (((alpha * h) - self.__s) / DT/1000)</code></pre>
 </details>
 <div class="desc"><p>Calculates the u_cbf value using the equation provided by Professor Wuwei Shen</p>
-<p>INPUT(S):</p>
+<p>INPUT(S): alpha: constant provided
+h: distance calculated by calculate_safety_function,
+DT: tick speed</p>
 <p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.CBF.CBF.calculate_min_distance"><code class="name flex">
@@ -138,13 +150,15 @@ el.replaceWith(d);
 <pre><code class="python">def calculate_min_distance(self, extra, standard_distance):
     &#34;&#34;&#34;
     Calculates the minimum distance from the standard following distance, occlusion risk, and the extra following distance
-    \n\tINPUT(S):
+    \n\tINPUT(S): extra: multiplier if there is occulsion risk,
+                  standard_distance: the standard following distance
     \n\tOUTPUT(S):
     &#34;&#34;&#34;
     return standard_distance + (self.__r * extra)</code></pre>
 </details>
 <div class="desc"><p>Calculates the minimum distance from the standard following distance, occlusion risk, and the extra following distance</p>
-<p>INPUT(S):</p>
+<p>INPUT(S): extra: multiplier if there is occulsion risk,
+standard_distance: the standard following distance</p>
 <p>OUTPUT(S):</p></div>
 </dd>
 <dt id="classes.CBF.CBF.calculate_safety_function"><code class="name flex">
@@ -158,14 +172,14 @@ el.replaceWith(d);
 <pre><code class="python">def calculate_safety_function(self, min_distance):
     &#34;&#34;&#34;
     Calculates the safety function by subtracting the current distance by the minimum distance
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): min_distance: the distance returned from calculate_min_distance (the minimum following distance)
+    \n\tOUTPUT(S): the safe following distance
     &#34;&#34;&#34;
     return self.__distance - min_distance</code></pre>
 </details>
 <div class="desc"><p>Calculates the safety function by subtracting the current distance by the minimum distance</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): min_distance: the distance returned from calculate_min_distance (the minimum following distance)</p>
+<p>OUTPUT(S): the safe following distance</p></div>
 </dd>
 <dt id="classes.CBF.CBF.final_logic"><code class="name flex">
 <span>def <span class="ident">final_logic</span></span>(<span>self, u_nom, u_cbf, max_acc, max_brake)</span>
@@ -178,14 +192,20 @@ el.replaceWith(d);
 <pre><code class="python">def final_logic(self, u_nom, u_cbf, max_acc, max_brake):
     &#34;&#34;&#34;
     Clamps the final throttle/brake value to be within certain values
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): u_nom: constant given, 
+                  u_cbf: allowable distance,
+                  max_acc: the maximum acceleration, 
+                  max_brake: the maximum brake
+    \n\tOUTPUT(S): the throttle the vehicle
     &#34;&#34;&#34;
     return max(min(u_nom, u_cbf, max_acc), -1 * (max_brake))</code></pre>
 </details>
 <div class="desc"><p>Clamps the final throttle/brake value to be within certain values</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): u_nom: constant given,
+u_cbf: allowable distance,
+max_acc: the maximum acceleration,
+max_brake: the maximum brake</p>
+<p>OUTPUT(S): the throttle the vehicle</p></div>
 </dd>
 </dl>
 </dd>

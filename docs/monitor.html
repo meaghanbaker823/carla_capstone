@@ -61,9 +61,13 @@ el.replaceWith(d);
     &#34;&#34;&#34;
     def __init__(self, transform, car, blueprint, world, blueprint_lib, actors, route):
         &#34;&#34;&#34;
-        Initializes the variables needed for the Monitor class
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): transform: a list of relative transform for the sensors,
+                      car: the carla vehicle object,
+                      blueprint: a list of blueprints for the sensors,
+                      world: the world object,
+                      blueprint_lib: the carla blueprint library,
+                      route: the list of waypoints for the vehicle to follow
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;
         self.__old_parameters = []
         self.__new_parameter = None
@@ -83,48 +87,48 @@ el.replaceWith(d);
     def add_sensors(self, sensor):
         &#34;&#34;&#34;
         Add a sensor to the sensors list
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): sesnor: which sensor to add to the vehicle
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;
         self.__sensors.append(sensor)
 
     def get_actors(self):
         &#34;&#34;&#34;
         Getter for self.__actors
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): the actors list
         &#34;&#34;&#34;
         return self.__actors
 
     def get_sensors(self):
         &#34;&#34;&#34;
         Getter for self.__sensors
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): The list containing the sensors
         &#34;&#34;&#34;
         return self.__sensors
     
     def get_new_detections(self):
         &#34;&#34;&#34;
         Getter for self.__new_detections
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): The dictionary passed between MAPE steps
         &#34;&#34;&#34;
         return self.__new_detections
     
     def add_old_detections(self, detections):
         &#34;&#34;&#34;
         Add detections to the old_detections list
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): detections: The dictionary passed between MAPE steps
+        \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;
         self.__old_detections.append(detections)
 
     def advance_waypoint(self, current_waypoint_num):
         &#34;&#34;&#34;
         Move the waypoint to the next waypoint in the route by a certain amount
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): current_waypoint_num: the current index of the route
+        \n\tOUTPUT(S): the new index of the route
         &#34;&#34;&#34;
         try:
             assert isinstance(self.__car, carla.libcarla.Vehicle)
@@ -138,8 +142,8 @@ el.replaceWith(d);
     def get_lane_info(self, waypoint):
         &#34;&#34;&#34;
         Gets the lane info for a given waypoint
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): waypoint: a carla waypoint object
+        \n\tOUTPUT(S): a dictionary containing various information about the lane
         &#34;&#34;&#34;
         try:
             assert isinstance(waypoint, carla.libcarla.Waypoint)
@@ -167,8 +171,8 @@ el.replaceWith(d);
     def monitor(self, current_waypoint_num):
         &#34;&#34;&#34;
         Completes the monitor step by collecting information
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): current_waypoint_num: the current index of the route
+        \n\tOUTPUT(S): The dictionary passed between MAPE steps
         &#34;&#34;&#34;
         try:
             assert isinstance(current_waypoint_num, int)
@@ -207,8 +211,8 @@ el.replaceWith(d);
     def notify(self):
         &#34;&#34;&#34;
         Outputs the actions taken to the MAPE Step
-        \n\tINPUT(S):
-        \n\tOUTPUT(S):
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): A string containing the all of the detections
         &#34;&#34;&#34;
         output = &#34;The detections in this monitor iteration are: &#34;
         for i in self.get_new_detections():
@@ -217,9 +221,13 @@ el.replaceWith(d);
         return output</code></pre>
 </details>
 <div class="desc"><p>The Monitor portion of the MAPE Structure</p>
-<p>Initializes the variables needed for the Monitor class</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): transform: a list of relative transform for the sensors,
+car: the carla vehicle object,
+blueprint: a list of blueprints for the sensors,
+world: the world object,
+blueprint_lib: the carla blueprint library,
+route: the list of waypoints for the vehicle to follow</p>
+<p>OUTPUT(S): N/A</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="classes.MAPEStep.MAPEStep" href="MAPEStep.html#classes.MAPEStep.MAPEStep">MAPEStep</a></li>
@@ -237,14 +245,14 @@ el.replaceWith(d);
 <pre><code class="python">def add_old_detections(self, detections):
     &#34;&#34;&#34;
     Add detections to the old_detections list
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): detections: The dictionary passed between MAPE steps
+    \n\tOUTPUT(S): N/A
     &#34;&#34;&#34;
     self.__old_detections.append(detections)</code></pre>
 </details>
 <div class="desc"><p>Add detections to the old_detections list</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): detections: The dictionary passed between MAPE steps</p>
+<p>OUTPUT(S): N/A</p></div>
 </dd>
 <dt id="classes.monitor.Monitor.add_sensors"><code class="name flex">
 <span>def <span class="ident">add_sensors</span></span>(<span>self, sensor)</span>
@@ -257,14 +265,14 @@ el.replaceWith(d);
 <pre><code class="python">def add_sensors(self, sensor):
     &#34;&#34;&#34;
     Add a sensor to the sensors list
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): sesnor: which sensor to add to the vehicle
+    \n\tOUTPUT(S): N/A
     &#34;&#34;&#34;
     self.__sensors.append(sensor)</code></pre>
 </details>
 <div class="desc"><p>Add a sensor to the sensors list</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): sesnor: which sensor to add to the vehicle</p>
+<p>OUTPUT(S): N/A</p></div>
 </dd>
 <dt id="classes.monitor.Monitor.advance_waypoint"><code class="name flex">
 <span>def <span class="ident">advance_waypoint</span></span>(<span>self, current_waypoint_num)</span>
@@ -277,8 +285,8 @@ el.replaceWith(d);
 <pre><code class="python">def advance_waypoint(self, current_waypoint_num):
     &#34;&#34;&#34;
     Move the waypoint to the next waypoint in the route by a certain amount
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): current_waypoint_num: the current index of the route
+    \n\tOUTPUT(S): the new index of the route
     &#34;&#34;&#34;
     try:
         assert isinstance(self.__car, carla.libcarla.Vehicle)
@@ -290,8 +298,8 @@ el.replaceWith(d);
     return current_waypoint_num</code></pre>
 </details>
 <div class="desc"><p>Move the waypoint to the next waypoint in the route by a certain amount</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): current_waypoint_num: the current index of the route</p>
+<p>OUTPUT(S): the new index of the route</p></div>
 </dd>
 <dt id="classes.monitor.Monitor.get_actors"><code class="name flex">
 <span>def <span class="ident">get_actors</span></span>(<span>self)</span>
@@ -304,14 +312,14 @@ el.replaceWith(d);
 <pre><code class="python">def get_actors(self):
     &#34;&#34;&#34;
     Getter for self.__actors
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): the actors list
     &#34;&#34;&#34;
     return self.__actors</code></pre>
 </details>
 <div class="desc"><p>Getter for self.__actors</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): the actors list</p></div>
 </dd>
 <dt id="classes.monitor.Monitor.get_lane_info"><code class="name flex">
 <span>def <span class="ident">get_lane_info</span></span>(<span>self, waypoint)</span>
@@ -324,8 +332,8 @@ el.replaceWith(d);
 <pre><code class="python">def get_lane_info(self, waypoint):
     &#34;&#34;&#34;
     Gets the lane info for a given waypoint
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): waypoint: a carla waypoint object
+    \n\tOUTPUT(S): a dictionary containing various information about the lane
     &#34;&#34;&#34;
     try:
         assert isinstance(waypoint, carla.libcarla.Waypoint)
@@ -351,8 +359,8 @@ el.replaceWith(d);
     return lane_info</code></pre>
 </details>
 <div class="desc"><p>Gets the lane info for a given waypoint</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): waypoint: a carla waypoint object</p>
+<p>OUTPUT(S): a dictionary containing various information about the lane</p></div>
 </dd>
 <dt id="classes.monitor.Monitor.get_new_detections"><code class="name flex">
 <span>def <span class="ident">get_new_detections</span></span>(<span>self)</span>
@@ -365,14 +373,14 @@ el.replaceWith(d);
 <pre><code class="python">def get_new_detections(self):
     &#34;&#34;&#34;
     Getter for self.__new_detections
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): The dictionary passed between MAPE steps
     &#34;&#34;&#34;
     return self.__new_detections</code></pre>
 </details>
 <div class="desc"><p>Getter for self.__new_detections</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): The dictionary passed between MAPE steps</p></div>
 </dd>
 <dt id="classes.monitor.Monitor.get_sensors"><code class="name flex">
 <span>def <span class="ident">get_sensors</span></span>(<span>self)</span>
@@ -385,14 +393,14 @@ el.replaceWith(d);
 <pre><code class="python">def get_sensors(self):
     &#34;&#34;&#34;
     Getter for self.__sensors
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): The list containing the sensors
     &#34;&#34;&#34;
     return self.__sensors</code></pre>
 </details>
 <div class="desc"><p>Getter for self.__sensors</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): The list containing the sensors</p></div>
 </dd>
 <dt id="classes.monitor.Monitor.monitor"><code class="name flex">
 <span>def <span class="ident">monitor</span></span>(<span>self, current_waypoint_num)</span>
@@ -405,8 +413,8 @@ el.replaceWith(d);
 <pre><code class="python">def monitor(self, current_waypoint_num):
     &#34;&#34;&#34;
     Completes the monitor step by collecting information
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): current_waypoint_num: the current index of the route
+    \n\tOUTPUT(S): The dictionary passed between MAPE steps
     &#34;&#34;&#34;
     try:
         assert isinstance(current_waypoint_num, int)
@@ -443,8 +451,8 @@ el.replaceWith(d);
     return self.__new_detections</code></pre>
 </details>
 <div class="desc"><p>Completes the monitor step by collecting information</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): current_waypoint_num: the current index of the route</p>
+<p>OUTPUT(S): The dictionary passed between MAPE steps</p></div>
 </dd>
 <dt id="classes.monitor.Monitor.notify"><code class="name flex">
 <span>def <span class="ident">notify</span></span>(<span>self)</span>
@@ -457,8 +465,8 @@ el.replaceWith(d);
 <pre><code class="python">def notify(self):
     &#34;&#34;&#34;
     Outputs the actions taken to the MAPE Step
-    \n\tINPUT(S):
-    \n\tOUTPUT(S):
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): A string containing the all of the detections
     &#34;&#34;&#34;
     output = &#34;The detections in this monitor iteration are: &#34;
     for i in self.get_new_detections():
@@ -467,8 +475,8 @@ el.replaceWith(d);
     return output</code></pre>
 </details>
 <div class="desc"><p>Outputs the actions taken to the MAPE Step</p>
-<p>INPUT(S):</p>
-<p>OUTPUT(S):</p></div>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): A string containing the all of the detections</p></div>
 </dd>
 </dl>
 </dd>
