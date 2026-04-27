@@ -12,7 +12,9 @@ import time
 
 class World:
     """
-    Holds all of the variables and methods to set up and destroy the Carla world
+    Holds all of the variables and methods to set up and destroy the Carla world.
+    Additionally has the main_loop function that is used to run the MAPE cycle until 
+    we complete a route or an exception is raised (like a collision).
     """
     def __init__(self, world_map='town01'):
         """
@@ -135,7 +137,8 @@ class World:
             
     def spawn_pedestrians(self): 
         """
-        Spawns the necessary pedestrians into the Carla environment
+        Spawns the necessary pedestrians into the Carla environment 
+        using pre-generated spawnpoints.
         \n\tINPUT(S): N/A
         \n\tOUTPUT(S): N/A
         """
@@ -236,7 +239,8 @@ class World:
     #repeating logic performed in the main function
     def main_loop(self, spectator, car, vehicle, DT):
         """
-        Tne function which holds the functions to be repeated each cycle
+        Tne function which holds the functions to be repeated each cycle until
+        an exception is raised (like collision or a completed route)
         \n\tINPUT(S): spectator: the carla spectator,
                       car: the carla vehicle object,
                       vehicle: the Vehicle object,

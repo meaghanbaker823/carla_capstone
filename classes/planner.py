@@ -8,7 +8,9 @@ import numpy as np
 
 class Planner(MAPEStep):
     """
-    The Planner step of the MAPE Structure
+    The Planner step of the MAPE Structure creates a plan of what brake throttle and steering values
+    should be used in the executor. Functions of the planner include calculating steering values
+    based on waypoints as well as handling the CBF logic
     """
     def __init__(self):
         """
@@ -30,7 +32,18 @@ class Planner(MAPEStep):
     
     def angle_between(self, v1, v2):
         """
-        Determines the angle between 2 vectors
+        Determines the angle between our two vectors, typical
+            assert isinstance(v1, tuple) and isinstance(v2, tuple)
+        except:
+            raise
+
+        vector_difference = np.arctan2(v1[1], v1[0]) - np.arctan2(v2[1], v2[0])
+
+        while vector_difference > math.pi:
+            vector_difference -= 2 * math.pi
+
+        while vector_difference < -math.pi:ly the vehicle's forward vector
+        and a waypoint
         \n\tINPUT(S): v1: vector 1,
                       v2: vector 2
         \n\tOUTPUT(S): the angle between v1 and v2
@@ -82,7 +95,7 @@ class Planner(MAPEStep):
     
     def get_proper_angle(self, car, wp_idx, rte):
         """
-        Gets the propert steering angle for the vehicle
+        Gets the proper steering angle for the vehicle.
         \n\tINPUT(S): car: the carla vehicle,
                       wp_idx: the current index of the route,
                       rte: the route of the vehicle
@@ -110,7 +123,8 @@ class Planner(MAPEStep):
     
     def correct_angle(self, degrees):
         """
-        Adjusts the angle to be accurate
+        Adjusts the angle to be within 50 degrees to simulate a vehicles limited 
+        steering angles.
         \n\tINPUT(S): degrees: an angle to be normalized
         \n\tOUTPUT(S): the calculated steering angle
         """

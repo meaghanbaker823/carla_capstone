@@ -91,7 +91,7 @@ class Monitor(MAPEStep):
 
     def get_lane_info(self, waypoint):
         """
-        Gets the lane info for a given waypoint
+        Gets the lane info for a given waypoint (lane type, markings, etc.)
         \n\tINPUT(S): waypoint: a carla waypoint object
         \n\tOUTPUT(S): a dictionary containing various information about the lane
         """

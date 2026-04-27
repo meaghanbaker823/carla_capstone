@@ -4,7 +4,8 @@ import carla
 
 class Executor(MAPEStep):
     """
-    The class for the executor step in the MAPE structure
+    The class for the executor step in the MAPE structure. Used to execute the controls
+    passed in from the planner function
     """
     def __init__(self):
         """

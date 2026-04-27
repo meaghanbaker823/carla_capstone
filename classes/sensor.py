@@ -1,6 +1,7 @@
 class Sensor:
     """
-    The superclass for all other sensors
+    The superclass for all other sensors. Subclass sensors use polymorphism to modify
+    the functions provided here.
     """   
     def __init__(self, relative_transform, parent_actor, blueprint, world):
         """

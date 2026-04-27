@@ -37,7 +37,9 @@ class Analyzer(MAPEStep):
 
     def check_lane_options(self, waypoint_num, route, lane_change):
         """
-        Checks the waypoint's lane options to decide which way to swerve
+        Checks the waypoint's lane options to decide what lanes are availble and
+        which way to swerve if needed. The new route contains modified waypoints of the current
+        route that guide the car to the new lane.
         \n\tINPUT(S): waypoint_num: an index of route
                       route: the set of waypoints for the route of the vehicle
                       lane_change: says if a lane change is possible
@@ -84,7 +86,8 @@ class Analyzer(MAPEStep):
 
     def swerve(self, waypoint, direction):
         """
-        Adjusts one waypoint to move twice in the direction of the vector chosen and returns the waypoint at that location
+        Adjusts one waypoint to move twice in the direction of the vector chosen and 
+        returns the waypoint at that location. This is done to get a waypoint in another lane.
         \n\tINPUT(S): waypoint: a specific waypoint in the route
                       direction: which direction is the lane in
         \n\tOUTPUT(S): the new waypoint
@@ -111,6 +114,8 @@ class Analyzer(MAPEStep):
     def analyze(self, car, rules, detections, distance):
         """
         Creates observations to be sent to the planner based on information from the monitor.
+        Specifically it is used to calculate lane changes/swerves as well as handling
+        what rules need to be accounted for in the planner.
         \n\tINPUT(S): car: the Vehicle object
                       rules: a list containing the various rule objects,
                       detections: the dictionary passed through the MAPE steps

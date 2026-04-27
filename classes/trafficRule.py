@@ -2,7 +2,7 @@ from classes.rule import Rule
 
 class TrafficRule(Rule):
     """
-    The rule subclass for when a car's traffic light detection is triggered
+    The rule subclass for when a car's traffic light detection is triggered.
     """
     def __init__(self, sensors, car):
         """
@@ -26,7 +26,8 @@ class TrafficRule(Rule):
     
     def rule_follow(self, traffic_lights):
         """
-        Decides how the car should follow this rule when it is triggered (Will tell the car to stop if response is stop, else go)
+        Decides how the car should follow this rule when it is triggered 
+        (Will tell the car to stop if response is stop, else go)
         \n\tINPUT(S): traffic_lights: a list of the traffic lights on the map
         \n\tOUTPUT(S): returns 1 if need to stop, otherwise 1  
         """

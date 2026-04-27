@@ -65,7 +65,8 @@ class TrafficLight():
 
     def process_color(self, car):
         """
-        Processes the color of each of the traffic lights
+        Processes the color of each of the traffic lights and calls react to color
+        to determine what the appropriate response is.
         \n\tINPUT(S): car: the carla vehicle
         \n\tOUTPUT(S): the response of the vehicle to the light
         """
@@ -90,7 +91,8 @@ class TrafficLight():
 
     def react_to_color(self):
         """
-        Decides what action should be taken based on the traffic color
+        Decides what action should be taken based on the traffic color. Currently yellow and red have
+        the same logic but can be modified.
         \n\tINPUT(S): N/A
         \n\tOUTPUT(S): the action the car should take in response to the light (string)
         """   

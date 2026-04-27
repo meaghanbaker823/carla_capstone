@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>classes.trafficLight API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>classes.trafficLight</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="classes.trafficLight.TrafficLight"><code class="flex name class">
+<span>class <span class="ident">TrafficLight</span></span>
+<span>(</span><span>actors)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TrafficLight():
+    &#34;&#34;&#34;
+    A class to collect all traffic lights that are within the range of the car and give its correct reaction
+    &#34;&#34;&#34;
+    def __init__(self, actors):
+        &#34;&#34;&#34;
+        \n\tINPUT(S): actors: the actors list for carla,
+        \n\tOUTPUT(S): N/A
+        &#34;&#34;&#34;        
+        self.__lights = []
+        self.__color = &#34;unknown&#34;
+        self.__response = &#34;&#34;
+        self.set_lights(actors)
+
+    def get_color(self):
+        &#34;&#34;&#34;
+        Getter for self.__color
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): returns the color of the traffic light
+        &#34;&#34;&#34;   
+        return self.__color
+    
+    def get_lights(self):
+        &#34;&#34;&#34;
+        Getter for self.__lights
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): returns a list of the traffic lights on the carla map
+        &#34;&#34;&#34;   
+        return self.__lights
+    
+    def get_response(self):
+        &#34;&#34;&#34;
+        Getter for self.__response
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): returns how to respond to the traffic light
+        &#34;&#34;&#34;   
+        return self.__response
+    
+    def set_lights(self, actors):
+        &#34;&#34;&#34;
+        Setter for self.__lights
+        \n\tINPUT(S): actors: the carla actor list
+        \n\tOUTPUT(S): the list containing all of the traffic lights on the carla map
+        &#34;&#34;&#34;   
+        self.__lights = actors.filter(&#39;traffic.traffic_light*&#39;)
+
+    def set_response(self, response):
+        &#34;&#34;&#34;
+        Setter for self.__response
+        \n\tINPUT(S): response: a string containing how to repond to a traffic light
+        \n\tOUTPUT(S): N/A
+        &#34;&#34;&#34;   
+        self.__response = response
+
+    def set_color(self, color):
+        &#34;&#34;&#34;
+        Setter for self.__color
+        \n\tINPUT(S): color: the color of the traffic light (string)
+        \n\tOUTPUT(S): N/A
+        &#34;&#34;&#34;   
+        self.__color = color
+
+    def process_color(self, car):
+        &#34;&#34;&#34;
+        Processes the color of each of the traffic lights and calls react to color
+        to determine what the appropriate response is.
+        \n\tINPUT(S): car: the carla vehicle
+        \n\tOUTPUT(S): the response of the vehicle to the light
+        &#34;&#34;&#34;
+        try:
+            assert isinstance(car, carla.libcarla.Vehicle)
+        except:
+            raise
+
+        # this portion for the testing assignment
+        for light in self.get_lights():
+            if(self.is_light_close(car, light, 10, 40)):
+                old_color = self.get_color()
+                self.set_color(light.get_state().name)
+
+                if(old_color != self.get_color()):
+                    self.set_response(self.react_to_color())
+                    break
+            else:
+                self.set_response(&#34;&#34;)
+  
+        return self.get_response()
+
+    def react_to_color(self):
+        &#34;&#34;&#34;
+        Decides what action should be taken based on the traffic color. Currently yellow and red have
+        the same logic but can be modified.
+        \n\tINPUT(S): N/A
+        \n\tOUTPUT(S): the action the car should take in response to the light (string)
+        &#34;&#34;&#34;   
+        action = &#34;&#34;
+        if(self.get_color() == &#34;Green&#34;):
+            action = &#34;drive&#34;
+        else:
+            action = &#34;stop&#34;
+        
+        try:
+            assert type(action) == str
+        except:
+            raise
+
+        return action
+    
+    def is_light_close(self, car_check, light_check, target_distance, target_angle):
+        &#34;&#34;&#34;
+        Determines if the traffic light is close and in the right angle for the car
+        \n\tINPUT(S): car_check: the carla vehicle,
+                      light_check: a carla traffic light,
+                      target_distance: the distance in which the car will respond to a light,
+                      target_angle: the angle in which the car will respond to a light
+        \n\tOUTPUT(S): a boolean - True if the light is in distance and angle, False otherwise
+        &#34;&#34;&#34;   
+        try:
+            assert isinstance(car_check,  carla.Vehicle)
+            assert isinstance(light_check, carla.TrafficLight)
+            assert target_distance &gt;= 0
+            assert -180 &lt;= target_angle &lt;= 180
+        except:
+            raise
+        
+        car = car_check.get_transform().get_forward_vector()
+        light = light_check.get_location() - car_check.get_location()
+    
+        dot_product = car.x * light.x + car.y * light.y + car.z * light.z
+        magnitude_car = math.sqrt(car.x**2 + car.y**2 + car.z**2)
+        magnitude_light = math.sqrt(light.x**2 + light.y**2 + light.z**2)
+
+        angle_deg = abs(math.degrees(math.acos(max(-1.0, min(1.0, (dot_product / (magnitude_car * magnitude_light)))))))
+        distance = car_check.get_location().distance(light_check.get_location())
+
+        return ((angle_deg &lt; target_angle) and (distance &lt; target_distance))</code></pre>
+</details>
+<div class="desc"><p>A class to collect all traffic lights that are within the range of the car and give its correct reaction</p>
+<p>INPUT(S): actors: the actors list for carla,</p>
+<p>OUTPUT(S): N/A</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="classes.trafficLight.TrafficLight.get_color"><code class="name flex">
+<span>def <span class="ident">get_color</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_color(self):
+    &#34;&#34;&#34;
+    Getter for self.__color
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): returns the color of the traffic light
+    &#34;&#34;&#34;   
+    return self.__color</code></pre>
+</details>
+<div class="desc"><p>Getter for self.__color</p>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): returns the color of the traffic light</p></div>
+</dd>
+<dt id="classes.trafficLight.TrafficLight.get_lights"><code class="name flex">
+<span>def <span class="ident">get_lights</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_lights(self):
+    &#34;&#34;&#34;
+    Getter for self.__lights
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): returns a list of the traffic lights on the carla map
+    &#34;&#34;&#34;   
+    return self.__lights</code></pre>
+</details>
+<div class="desc"><p>Getter for self.__lights</p>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): returns a list of the traffic lights on the carla map</p></div>
+</dd>
+<dt id="classes.trafficLight.TrafficLight.get_response"><code class="name flex">
+<span>def <span class="ident">get_response</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_response(self):
+    &#34;&#34;&#34;
+    Getter for self.__response
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): returns how to respond to the traffic light
+    &#34;&#34;&#34;   
+    return self.__response</code></pre>
+</details>
+<div class="desc"><p>Getter for self.__response</p>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): returns how to respond to the traffic light</p></div>
+</dd>
+<dt id="classes.trafficLight.TrafficLight.is_light_close"><code class="name flex">
+<span>def <span class="ident">is_light_close</span></span>(<span>self, car_check, light_check, target_distance, target_angle)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_light_close(self, car_check, light_check, target_distance, target_angle):
+    &#34;&#34;&#34;
+    Determines if the traffic light is close and in the right angle for the car
+    \n\tINPUT(S): car_check: the carla vehicle,
+                  light_check: a carla traffic light,
+                  target_distance: the distance in which the car will respond to a light,
+                  target_angle: the angle in which the car will respond to a light
+    \n\tOUTPUT(S): a boolean - True if the light is in distance and angle, False otherwise
+    &#34;&#34;&#34;   
+    try:
+        assert isinstance(car_check,  carla.Vehicle)
+        assert isinstance(light_check, carla.TrafficLight)
+        assert target_distance &gt;= 0
+        assert -180 &lt;= target_angle &lt;= 180
+    except:
+        raise
+    
+    car = car_check.get_transform().get_forward_vector()
+    light = light_check.get_location() - car_check.get_location()
+
+    dot_product = car.x * light.x + car.y * light.y + car.z * light.z
+    magnitude_car = math.sqrt(car.x**2 + car.y**2 + car.z**2)
+    magnitude_light = math.sqrt(light.x**2 + light.y**2 + light.z**2)
+
+    angle_deg = abs(math.degrees(math.acos(max(-1.0, min(1.0, (dot_product / (magnitude_car * magnitude_light)))))))
+    distance = car_check.get_location().distance(light_check.get_location())
+
+    return ((angle_deg &lt; target_angle) and (distance &lt; target_distance))</code></pre>
+</details>
+<div class="desc"><p>Determines if the traffic light is close and in the right angle for the car</p>
+<p>INPUT(S): car_check: the carla vehicle,
+light_check: a carla traffic light,
+target_distance: the distance in which the car will respond to a light,
+target_angle: the angle in which the car will respond to a light</p>
+<p>OUTPUT(S): a boolean - True if the light is in distance and angle, False otherwise</p></div>
+</dd>
+<dt id="classes.trafficLight.TrafficLight.process_color"><code class="name flex">
+<span>def <span class="ident">process_color</span></span>(<span>self, car)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def process_color(self, car):
+    &#34;&#34;&#34;
+    Processes the color of each of the traffic lights and calls react to color
+    to determine what the appropriate response is.
+    \n\tINPUT(S): car: the carla vehicle
+    \n\tOUTPUT(S): the response of the vehicle to the light
+    &#34;&#34;&#34;
+    try:
+        assert isinstance(car, carla.libcarla.Vehicle)
+    except:
+        raise
+
+    # this portion for the testing assignment
+    for light in self.get_lights():
+        if(self.is_light_close(car, light, 10, 40)):
+            old_color = self.get_color()
+            self.set_color(light.get_state().name)
+
+            if(old_color != self.get_color()):
+                self.set_response(self.react_to_color())
+                break
+        else:
+            self.set_response(&#34;&#34;)
+
+    return self.get_response()</code></pre>
+</details>
+<div class="desc"><p>Processes the color of each of the traffic lights and calls react to color
+to determine what the appropriate response is.</p>
+<p>INPUT(S): car: the carla vehicle</p>
+<p>OUTPUT(S): the response of the vehicle to the light</p></div>
+</dd>
+<dt id="classes.trafficLight.TrafficLight.react_to_color"><code class="name flex">
+<span>def <span class="ident">react_to_color</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def react_to_color(self):
+    &#34;&#34;&#34;
+    Decides what action should be taken based on the traffic color. Currently yellow and red have
+    the same logic but can be modified.
+    \n\tINPUT(S): N/A
+    \n\tOUTPUT(S): the action the car should take in response to the light (string)
+    &#34;&#34;&#34;   
+    action = &#34;&#34;
+    if(self.get_color() == &#34;Green&#34;):
+        action = &#34;drive&#34;
+    else:
+        action = &#34;stop&#34;
+    
+    try:
+        assert type(action) == str
+    except:
+        raise
+
+    return action</code></pre>
+</details>
+<div class="desc"><p>Decides what action should be taken based on the traffic color. Currently yellow and red have
+the same logic but can be modified.</p>
+<p>INPUT(S): N/A</p>
+<p>OUTPUT(S): the action the car should take in response to the light (string)</p></div>
+</dd>
+<dt id="classes.trafficLight.TrafficLight.set_color"><code class="name flex">
+<span>def <span class="ident">set_color</span></span>(<span>self, color)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_color(self, color):
+    &#34;&#34;&#34;
+    Setter for self.__color
+    \n\tINPUT(S): color: the color of the traffic light (string)
+    \n\tOUTPUT(S): N/A
+    &#34;&#34;&#34;   
+    self.__color = color</code></pre>
+</details>
+<div class="desc"><p>Setter for self.__color</p>
+<p>INPUT(S): color: the color of the traffic light (string)</p>
+<p>OUTPUT(S): N/A</p></div>
+</dd>
+<dt id="classes.trafficLight.TrafficLight.set_lights"><code class="name flex">
+<span>def <span class="ident">set_lights</span></span>(<span>self, actors)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_lights(self, actors):
+    &#34;&#34;&#34;
+    Setter for self.__lights
+    \n\tINPUT(S): actors: the carla actor list
+    \n\tOUTPUT(S): the list containing all of the traffic lights on the carla map
+    &#34;&#34;&#34;   
+    self.__lights = actors.filter(&#39;traffic.traffic_light*&#39;)</code></pre>
+</details>
+<div class="desc"><p>Setter for self.__lights</p>
+<p>INPUT(S): actors: the carla actor list</p>
+<p>OUTPUT(S): the list containing all of the traffic lights on the carla map</p></div>
+</dd>
+<dt id="classes.trafficLight.TrafficLight.set_response"><code class="name flex">
+<span>def <span class="ident">set_response</span></span>(<span>self, response)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_response(self, response):
+    &#34;&#34;&#34;
+    Setter for self.__response
+    \n\tINPUT(S): response: a string containing how to repond to a traffic light
+    \n\tOUTPUT(S): N/A
+    &#34;&#34;&#34;   
+    self.__response = response</code></pre>
+</details>
+<div class="desc"><p>Setter for self.__response</p>
+<p>INPUT(S): response: a string containing how to repond to a traffic light</p>
+<p>OUTPUT(S): N/A</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="classes" href="index.html">classes</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="classes.trafficLight.TrafficLight" href="#classes.trafficLight.TrafficLight">TrafficLight</a></code></h4>
+<ul class="two-column">
+<li><code><a title="classes.trafficLight.TrafficLight.get_color" href="#classes.trafficLight.TrafficLight.get_color">get_color</a></code></li>
+<li><code><a title="classes.trafficLight.TrafficLight.get_lights" href="#classes.trafficLight.TrafficLight.get_lights">get_lights</a></code></li>
+<li><code><a title="classes.trafficLight.TrafficLight.get_response" href="#classes.trafficLight.TrafficLight.get_response">get_response</a></code></li>
+<li><code><a title="classes.trafficLight.TrafficLight.is_light_close" href="#classes.trafficLight.TrafficLight.is_light_close">is_light_close</a></code></li>
+<li><code><a title="classes.trafficLight.TrafficLight.process_color" href="#classes.trafficLight.TrafficLight.process_color">process_color</a></code></li>
+<li><code><a title="classes.trafficLight.TrafficLight.react_to_color" href="#classes.trafficLight.TrafficLight.react_to_color">react_to_color</a></code></li>
+<li><code><a title="classes.trafficLight.TrafficLight.set_color" href="#classes.trafficLight.TrafficLight.set_color">set_color</a></code></li>
+<li><code><a title="classes.trafficLight.TrafficLight.set_lights" href="#classes.trafficLight.TrafficLight.set_lights">set_lights</a></code></li>
+<li><code><a title="classes.trafficLight.TrafficLight.set_response" href="#classes.trafficLight.TrafficLight.set_response">set_response</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

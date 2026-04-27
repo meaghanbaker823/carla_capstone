@@ -16,7 +16,8 @@ class ParkedRule(Rule):
         
     def rule_flag(self, traffic_lights):
         """
-        Decides if the rule flag should be raised for this cycle (checks if the obstacle is a vehicle)
+        Decides if the rule flag should be raised for this cycle 
+        (checks if the obstacle is a vehicle)
         \n\tINPUT(S): traffic_lights: a list of the traffic lights on the map
         \n\tOUTPUT(S): Returns False if there is a parked car, otherwise True
         """

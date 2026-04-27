@@ -1,6 +1,7 @@
 class Rule():
     """
-    The super class for Rules
+    The super class for Rules. Each sub class of rule uses polymorphism to modify
+    the functions laid out here.
     """
     def __init__(self, sensors, car):
         """

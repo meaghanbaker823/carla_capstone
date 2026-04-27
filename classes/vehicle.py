@@ -116,7 +116,8 @@ class Vehicle:
 
     def mape_drive(self):  
         """
-        Walks through the MAPE structure
+        Walks through the MAPE structure. This is repeated by the main_loop() in the world class
+        Until the route is completed or the vehicle crashes.
         \n\tINPUT(S): N/A
         \n\tOUTPUT(S): N/A
         """   
