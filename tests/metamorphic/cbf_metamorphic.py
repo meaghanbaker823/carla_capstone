@@ -50,7 +50,7 @@ class MetamorphicFinalLogic(unittest.TestCase):
         self.max_brake = 6
 
         '''
-        Each test case; labeled test_meta_0 - test_meta_3, test different scenarios by comparing the output
+        Each test case; labeled test_meta_0 - test_meta_5, test different scenarios by comparing the output
         of final_logic() to the calculate_relation() function by verifying that the output is equal to the
         output of the real final_logic() function.
         '''
