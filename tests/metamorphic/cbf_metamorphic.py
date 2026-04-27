@@ -6,6 +6,23 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 from classes.CBFRule import CBFRule
 
+'''
+This function calculates a metamorphic relation for the function final_logic() in the CBFRule
+
+This relation is between the
+input: (standard_distance, extra, alpha, dt, u_nom, maxx_acc, max_brake, cbf)
+output: (result)
+
+Because final logic relies of the output of calculate_min_distance(),
+calculate_safety_function(), and calculate_allowable_distance(). Therefore the relation function
+replicates this calculations to give a realistic relation to the function.
+
+final_logic():
+(u_nom, u_cbf max_acc, max_brake)                                             ->        (result)
+
+calculate_relation():
+(standard_distance, extra, alpha, dt, u_nom, maxx_acc, max_brake, cbf)        ->        (result)
+'''
 def calculate_relation(standard_distance, extra, alpha, dt, u_nom, max_acc, max_brake, cbf: CBFRule):
         min_distance = standard_distance + (cbf._CBFRule__r * extra)
         h = cbf._CBFRule__distance - min_distance
@@ -31,7 +48,12 @@ class MetamorphicFinalLogic(unittest.TestCase):
         self.u_nom = 1
         self.max_acc = 3
         self.max_brake = 6
-    
+
+        '''
+        Each test case; labeled test_meta_0 - test_meta_3, test different scenarios by comparing the output
+        of final_logic() to the calculate_relation() function by verifying that the output is equal to the
+        output of the real final_logic() function.
+        '''
     def test_meta_0(self):
         cbf = self.rules[0]
 
