@@ -14,6 +14,22 @@ class TestMonitor(Monitor):
         self._Monitor__car = car
         self._Monitor__route = route
 
+'''
+This function calculates a metamorphic relation for the function advance_waypoint() in the Monitor
+
+The relation is between the 
+input: route, waypoint_idx
+output: the advanced waypoint
+
+This is done by returning the subset of the route which extends from the current waypoint index to
+the end of the route.
+
+advance_waypoint():
+(waypoint_idx)           ->    (new_waypoint)
+
+calculate_relation():
+(route, waypoint_idx)    ->    (route_subset)
+'''
 def calculate_relation(route, waypoint_idx):
     return range(waypoint_idx, len(route))
 
@@ -23,6 +39,11 @@ class MetamorphicAdvanceWaypoint(unittest.TestCase):
 
         self.monitor = TestMonitor(None, self.car, None, None, None, None, [[Mock(spec=carla.libcarla.Waypoint)]] * 10)
 
+    '''
+    Each test case; labeled test_meta_0 - test_meta_3, test different scenarios by comparing the output
+    of advance_waypoint() to the calculate_relation() function by verifying that the output index is
+    within the subset of the route.
+    '''
     def test_meta_0(self):
         self.car.get_transform.return_value.location.distance.return_value = 4
 
