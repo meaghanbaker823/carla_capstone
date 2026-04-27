@@ -18,7 +18,7 @@ class CBF():
         Calculates the minimum distance from the standard following distance, occlusion risk, and the extra following distance
         \n\tINPUT(S): extra: multiplier if there is occulsion risk,
                       standard_distance: the standard following distance
-        \n\tOUTPUT(S):
+        \n\tOUTPUT(S): returns the minimum distance
         """
         return standard_distance + (self.__r * extra)
     
@@ -36,7 +36,7 @@ class CBF():
         \n\tINPUT(S): alpha: constant provided
                       h: distance calculated by calculate_safety_function, 
                       DT: tick speed
-        \n\tOUTPUT(S):
+        \n\tOUTPUT(S): returns the allowable distance
         """
         return (((alpha * h) - self.__s) / DT/1000)
 
