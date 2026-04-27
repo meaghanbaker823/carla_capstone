@@ -16,6 +16,21 @@ class Vec():
         self.x = x
         self.y = y
 
+'''
+This function calculates a metamorphic relation for the function get_angle() in the Analyzer
+
+The relation is between the:
+input: (car_loc, car_fwd, wp_loc)
+output: (degrees)
+
+Because the get_angle() function employs the use of the angle_between() and correct_angle()
+functions along with the AngleConstraint class these calculations were replication for determining
+the relation.
+
+get_angle():
+(car, wp)                    ->    (corrected_deg)
+(car_log, car_fwd, wp_loc)   ->    (degree)
+'''
 def calculate_relation(car_loc: Vec, car_fwd: Vec, wp_loc: Vec):
     denom = ((wp_loc.y - car_loc.y) ** 2 + (wp_loc.x - car_loc.x) **2) ** 0.5 
     x = (wp_loc.x - car_loc.x)/denom
@@ -44,6 +59,11 @@ class MetamorphicGetAngle(unittest.TestCase):
         self.car = Mock(spec=carla.libcarla.Vehicle)
         self.wp = Mock(spec=carla.libcarla.Waypoint)
 
+    '''
+    Each test case; labeled test_meta_0 - test_meta_5, test different scenarios by comparing the output
+    of get_angle() to the output calculate_relation() function by verifying that the output is equal
+    to the output of get_angle().
+    '''
     def test_meta_0(self):
         car_loc = Vec(25, 30)
         car_fwd = Vec(0, 1)
