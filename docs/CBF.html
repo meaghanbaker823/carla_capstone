@@ -75,7 +75,7 @@ el.replaceWith(d);
         Calculates the minimum distance from the standard following distance, occlusion risk, and the extra following distance
         \n\tINPUT(S): extra: multiplier if there is occulsion risk,
                       standard_distance: the standard following distance
-        \n\tOUTPUT(S):
+        \n\tOUTPUT(S): returns the minimum distance
         &#34;&#34;&#34;
         return standard_distance + (self.__r * extra)
     
@@ -93,7 +93,7 @@ el.replaceWith(d);
         \n\tINPUT(S): alpha: constant provided
                       h: distance calculated by calculate_safety_function, 
                       DT: tick speed
-        \n\tOUTPUT(S):
+        \n\tOUTPUT(S): returns the allowable distance
         &#34;&#34;&#34;
         return (((alpha * h) - self.__s) / DT/1000)
 
@@ -129,7 +129,7 @@ distance: the standard following distance</p>
     \n\tINPUT(S): alpha: constant provided
                   h: distance calculated by calculate_safety_function, 
                   DT: tick speed
-    \n\tOUTPUT(S):
+    \n\tOUTPUT(S): returns the allowable distance
     &#34;&#34;&#34;
     return (((alpha * h) - self.__s) / DT/1000)</code></pre>
 </details>
@@ -137,7 +137,7 @@ distance: the standard following distance</p>
 <p>INPUT(S): alpha: constant provided
 h: distance calculated by calculate_safety_function,
 DT: tick speed</p>
-<p>OUTPUT(S):</p></div>
+<p>OUTPUT(S): returns the allowable distance</p></div>
 </dd>
 <dt id="classes.CBF.CBF.calculate_min_distance"><code class="name flex">
 <span>def <span class="ident">calculate_min_distance</span></span>(<span>self, extra, standard_distance)</span>
@@ -152,14 +152,14 @@ DT: tick speed</p>
     Calculates the minimum distance from the standard following distance, occlusion risk, and the extra following distance
     \n\tINPUT(S): extra: multiplier if there is occulsion risk,
                   standard_distance: the standard following distance
-    \n\tOUTPUT(S):
+    \n\tOUTPUT(S): returns the minimum distance
     &#34;&#34;&#34;
     return standard_distance + (self.__r * extra)</code></pre>
 </details>
 <div class="desc"><p>Calculates the minimum distance from the standard following distance, occlusion risk, and the extra following distance</p>
 <p>INPUT(S): extra: multiplier if there is occulsion risk,
 standard_distance: the standard following distance</p>
-<p>OUTPUT(S):</p></div>
+<p>OUTPUT(S): returns the minimum distance</p></div>
 </dd>
 <dt id="classes.CBF.CBF.calculate_safety_function"><code class="name flex">
 <span>def <span class="ident">calculate_safety_function</span></span>(<span>self, min_distance)</span>

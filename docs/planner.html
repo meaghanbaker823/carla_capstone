@@ -208,7 +208,6 @@ el.replaceWith(d);
         if(observations[&#34;rules&#34;] == 0):
             observations[&#34;distance&#34;] = 2
         
-        self.__new_plan[&#34;steering&#34;] = observations[&#34;steering_angle&#34;]
         
         speed = observations[&#34;current_speed&#34;] / 3.6
 
@@ -229,6 +228,7 @@ el.replaceWith(d);
       
         self.__new_plan[&#34;new_waypoint&#34;] = waypoint_num
         observations[&#34;steering_angle&#34;] = steering_angle / 75
+        self.__new_plan[&#34;steering&#34;] = observations[&#34;steering_angle&#34;]
         
         return self.__new_plan
     
@@ -479,7 +479,6 @@ rte: the route of the vehicle</p>
     if(observations[&#34;rules&#34;] == 0):
         observations[&#34;distance&#34;] = 2
     
-    self.__new_plan[&#34;steering&#34;] = observations[&#34;steering_angle&#34;]
     
     speed = observations[&#34;current_speed&#34;] / 3.6
 
@@ -500,6 +499,7 @@ rte: the route of the vehicle</p>
   
     self.__new_plan[&#34;new_waypoint&#34;] = waypoint_num
     observations[&#34;steering_angle&#34;] = steering_angle / 75
+    self.__new_plan[&#34;steering&#34;] = observations[&#34;steering_angle&#34;]
     
     return self.__new_plan</code></pre>
 </details>
