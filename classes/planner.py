@@ -160,7 +160,6 @@ class Planner(MAPEStep):
         if(observations["rules"] == 0):
             observations["distance"] = 2
         
-        self.__new_plan["steering"] = observations["steering_angle"]
         
         speed = observations["current_speed"] / 3.6
 
@@ -181,6 +180,7 @@ class Planner(MAPEStep):
       
         self.__new_plan["new_waypoint"] = waypoint_num
         observations["steering_angle"] = steering_angle / 75
+        self.__new_plan["steering"] = observations["steering_angle"]
         
         return self.__new_plan
     
