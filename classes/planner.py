@@ -95,7 +95,7 @@ class Planner(MAPEStep):
     
     def get_proper_angle(self, car, wp_idx, rte):
         """
-        Gets the proper steering angle for the vehicle.
+        Gets the proper steering angle to the next waypoints for the vehicle.
         \n\tINPUT(S): car: the carla vehicle,
                       wp_idx: the current index of the route,
                       rte: the route of the vehicle
@@ -149,7 +149,8 @@ class Planner(MAPEStep):
 
     def plan(self, car, observations, DT, extra, u_nom, alpha, max_acc, max_brake, standard_distance):
         """
-        Completes the plan step, decides what the control should be based on the environment and CBF
+        Completes the plan step, decides what the control should be based on
+        the environment and CBF logic that is calculated.
         \n\tINPUT(S): car: the carla vehicle,
                       observations: the dictionary passed between MAPE steps,
                       DT: the tick speed,

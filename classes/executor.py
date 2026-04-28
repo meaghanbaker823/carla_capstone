@@ -27,7 +27,7 @@ class Executor(MAPEStep):
 
     def execute(self, plan, car):
         """
-        Directly applies the controls from the planner onto the Carla car
+        Directly applies the controls from the planner onto the Carla car (steering, throttle and brake)
         \n\tINPUT(S): plan: the steering angle, throttle, and brake controls to be applied,
                       car: the carla vehicle object
         \n\tOUTPUT(S):

@@ -57,7 +57,8 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">class Monitor(MAPEStep):
     &#34;&#34;&#34;
-    The Monitor portion of the MAPE Structure
+    The Monitor portion of the MAPE Structure. Contains all the sensors of the vehicle
+    and then passes the observations made by the sensors to the analyzer.
     &#34;&#34;&#34;
     def __init__(self, transform, car, blueprint, world, blueprint_lib, actors, route):
         &#34;&#34;&#34;
@@ -170,7 +171,8 @@ el.replaceWith(d);
 
     def monitor(self, current_waypoint_num):
         &#34;&#34;&#34;
-        Completes the monitor step by collecting information
+        Completes the monitor step by collecting information from each sensor
+        and passes that information as a dictionary to the analyzer.
         \n\tINPUT(S): current_waypoint_num: the current index of the route
         \n\tOUTPUT(S): The dictionary passed between MAPE steps
         &#34;&#34;&#34;
@@ -220,7 +222,8 @@ el.replaceWith(d);
             output += &#34; &#34;
         return output</code></pre>
 </details>
-<div class="desc"><p>The Monitor portion of the MAPE Structure</p>
+<div class="desc"><p>The Monitor portion of the MAPE Structure. Contains all the sensors of the vehicle
+and then passes the observations made by the sensors to the analyzer.</p>
 <p>INPUT(S): transform: a list of relative transform for the sensors,
 car: the carla vehicle object,
 blueprint: a list of blueprints for the sensors,
@@ -412,7 +415,8 @@ route: the list of waypoints for the vehicle to follow</p>
 </summary>
 <pre><code class="python">def monitor(self, current_waypoint_num):
     &#34;&#34;&#34;
-    Completes the monitor step by collecting information
+    Completes the monitor step by collecting information from each sensor
+    and passes that information as a dictionary to the analyzer.
     \n\tINPUT(S): current_waypoint_num: the current index of the route
     \n\tOUTPUT(S): The dictionary passed between MAPE steps
     &#34;&#34;&#34;
@@ -450,7 +454,8 @@ route: the list of waypoints for the vehicle to follow</p>
     #return the info that the analyzer needs
     return self.__new_detections</code></pre>
 </details>
-<div class="desc"><p>Completes the monitor step by collecting information</p>
+<div class="desc"><p>Completes the monitor step by collecting information from each sensor
+and passes that information as a dictionary to the analyzer.</p>
 <p>INPUT(S): current_waypoint_num: the current index of the route</p>
 <p>OUTPUT(S): The dictionary passed between MAPE steps</p></div>
 </dd>

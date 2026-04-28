@@ -79,7 +79,7 @@ el.replaceWith(d);
 
     def execute(self, plan, car):
         &#34;&#34;&#34;
-        Directly applies the controls from the planner onto the Carla car
+        Directly applies the controls from the planner onto the Carla car (steering, throttle and brake)
         \n\tINPUT(S): plan: the steering angle, throttle, and brake controls to be applied,
                       car: the carla vehicle object
         \n\tOUTPUT(S):
@@ -121,7 +121,7 @@ passed in from the planner function</p>
 </summary>
 <pre><code class="python">def execute(self, plan, car):
     &#34;&#34;&#34;
-    Directly applies the controls from the planner onto the Carla car
+    Directly applies the controls from the planner onto the Carla car (steering, throttle and brake)
     \n\tINPUT(S): plan: the steering angle, throttle, and brake controls to be applied,
                   car: the carla vehicle object
     \n\tOUTPUT(S):
@@ -135,7 +135,7 @@ passed in from the planner function</p>
 
     return self.__new_action</code></pre>
 </details>
-<div class="desc"><p>Directly applies the controls from the planner onto the Carla car</p>
+<div class="desc"><p>Directly applies the controls from the planner onto the Carla car (steering, throttle and brake)</p>
 <p>INPUT(S): plan: the steering angle, throttle, and brake controls to be applied,
 car: the carla vehicle object</p>
 <p>OUTPUT(S):</p></div>

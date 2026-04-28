@@ -284,8 +284,9 @@ el.replaceWith(d);
     #repeating logic performed in the main function
     def main_loop(self, spectator, car, vehicle, DT):
         &#34;&#34;&#34;
-        Tne function which holds the functions to be repeated each cycle until
-        an exception is raised (like collision or a completed route)
+        Tne function which holds the functions to be repeated each cycle 
+        until an exception is raised (like collision or a completed route).
+        The loop updates the spectator and calls the mape_step() function.
         \n\tINPUT(S): spectator: the carla spectator,
                       car: the carla vehicle object,
                       vehicle: the Vehicle object,
@@ -613,8 +614,9 @@ standard_distance: the standard following distance for the vehicle</p>
 </summary>
 <pre><code class="python">def main_loop(self, spectator, car, vehicle, DT):
     &#34;&#34;&#34;
-    Tne function which holds the functions to be repeated each cycle until
-    an exception is raised (like collision or a completed route)
+    Tne function which holds the functions to be repeated each cycle 
+    until an exception is raised (like collision or a completed route).
+    The loop updates the spectator and calls the mape_step() function.
     \n\tINPUT(S): spectator: the carla spectator,
                   car: the carla vehicle object,
                   vehicle: the Vehicle object,
@@ -637,8 +639,9 @@ standard_distance: the standard following distance for the vehicle</p>
     except:
         raise</code></pre>
 </details>
-<div class="desc"><p>Tne function which holds the functions to be repeated each cycle until
-an exception is raised (like collision or a completed route)</p>
+<div class="desc"><p>Tne function which holds the functions to be repeated each cycle
+until an exception is raised (like collision or a completed route).
+The loop updates the spectator and calls the mape_step() function.</p>
 <p>INPUT(S): spectator: the carla spectator,
 car: the carla vehicle object,
 vehicle: the Vehicle object,

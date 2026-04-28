@@ -16,7 +16,8 @@ class TrafficRule(Rule):
 
     def rule_flag(self, traffic_lights):
         """
-        Decides if the rule flag should be raised for this cycle (checks if the car's process color is empty)
+        Decides if the rule flag should be raised for this cycle 
+        (checks if the car's process color is empty)
         \n\tINPUT(S): traffic_lights: a list of the traffic lights on the map
         \n\tOUTPUT(S): Returns False if there is a light to react to, otherwise True
         """

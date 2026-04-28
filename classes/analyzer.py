@@ -37,9 +37,10 @@ class Analyzer(MAPEStep):
 
     def check_lane_options(self, waypoint_num, route, lane_change):
         """
-        Checks the waypoint's lane options to decide what lanes are availble and
-        which way to swerve if needed. The new route contains modified waypoints of the current
-        route that guide the car to the new lane.
+        Checks the waypoint's lane options to decide what lanes are available and
+        which way to swerve if needed. If there are no passing lanes available
+        the car sweres left. The new route contains modified waypoints of the
+        current route that guide the car to the new lane.
         \n\tINPUT(S): waypoint_num: an index of route
                       route: the set of waypoints for the route of the vehicle
                       lane_change: says if a lane change is possible

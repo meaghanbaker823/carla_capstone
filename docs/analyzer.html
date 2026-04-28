@@ -89,9 +89,10 @@ el.replaceWith(d);
 
     def check_lane_options(self, waypoint_num, route, lane_change):
         &#34;&#34;&#34;
-        Checks the waypoint&#39;s lane options to decide what lanes are availble and
-        which way to swerve if needed. The new route contains modified waypoints of the current
-        route that guide the car to the new lane.
+        Checks the waypoint&#39;s lane options to decide what lanes are available and
+        which way to swerve if needed. If there are no passing lanes available
+        the car sweres left. The new route contains modified waypoints of the
+        current route that guide the car to the new lane.
         \n\tINPUT(S): waypoint_num: an index of route
                       route: the set of waypoints for the route of the vehicle
                       lane_change: says if a lane change is possible
@@ -338,9 +339,10 @@ distance: the standard following distance</p>
 </summary>
 <pre><code class="python">def check_lane_options(self, waypoint_num, route, lane_change):
     &#34;&#34;&#34;
-    Checks the waypoint&#39;s lane options to decide what lanes are availble and
-    which way to swerve if needed. The new route contains modified waypoints of the current
-    route that guide the car to the new lane.
+    Checks the waypoint&#39;s lane options to decide what lanes are available and
+    which way to swerve if needed. If there are no passing lanes available
+    the car sweres left. The new route contains modified waypoints of the
+    current route that guide the car to the new lane.
     \n\tINPUT(S): waypoint_num: an index of route
                   route: the set of waypoints for the route of the vehicle
                   lane_change: says if a lane change is possible
@@ -384,9 +386,10 @@ distance: the standard following distance</p>
             new_route[swerve_point] = self.swerve(route[swerve_point], &#34;right&#34;)
         return new_route        </code></pre>
 </details>
-<div class="desc"><p>Checks the waypoint's lane options to decide what lanes are availble and
-which way to swerve if needed. The new route contains modified waypoints of the current
-route that guide the car to the new lane.</p>
+<div class="desc"><p>Checks the waypoint's lane options to decide what lanes are available and
+which way to swerve if needed. If there are no passing lanes available
+the car sweres left. The new route contains modified waypoints of the
+current route that guide the car to the new lane.</p>
 <p>INPUT(S): waypoint_num: an index of route
 route: the set of waypoints for the route of the vehicle
 lane_change: says if a lane change is possible</p>

@@ -143,7 +143,7 @@ el.replaceWith(d);
     
     def get_proper_angle(self, car, wp_idx, rte):
         &#34;&#34;&#34;
-        Gets the proper steering angle for the vehicle.
+        Gets the proper steering angle to the next waypoints for the vehicle.
         \n\tINPUT(S): car: the carla vehicle,
                       wp_idx: the current index of the route,
                       rte: the route of the vehicle
@@ -197,7 +197,8 @@ el.replaceWith(d);
 
     def plan(self, car, observations, DT, extra, u_nom, alpha, max_acc, max_brake, standard_distance):
         &#34;&#34;&#34;
-        Completes the plan step, decides what the control should be based on the environment and CBF
+        Completes the plan step, decides what the control should be based on
+        the environment and CBF logic that is calculated.
         \n\tINPUT(S): car: the carla vehicle,
                       observations: the dictionary passed between MAPE steps,
                       DT: the tick speed,
@@ -430,7 +431,7 @@ wp: the carla waypoint</p>
 </summary>
 <pre><code class="python">def get_proper_angle(self, car, wp_idx, rte):
     &#34;&#34;&#34;
-    Gets the proper steering angle for the vehicle.
+    Gets the proper steering angle to the next waypoints for the vehicle.
     \n\tINPUT(S): car: the carla vehicle,
                   wp_idx: the current index of the route,
                   rte: the route of the vehicle
@@ -455,7 +456,7 @@ wp: the carla waypoint</p>
     except:
         raise RouteDone(&#34;Route complete :)&#34;)</code></pre>
 </details>
-<div class="desc"><p>Gets the proper steering angle for the vehicle.</p>
+<div class="desc"><p>Gets the proper steering angle to the next waypoints for the vehicle.</p>
 <p>INPUT(S): car: the carla vehicle,
 wp_idx: the current index of the route,
 rte: the route of the vehicle</p>
@@ -491,7 +492,8 @@ rte: the route of the vehicle</p>
 </summary>
 <pre><code class="python">def plan(self, car, observations, DT, extra, u_nom, alpha, max_acc, max_brake, standard_distance):
     &#34;&#34;&#34;
-    Completes the plan step, decides what the control should be based on the environment and CBF
+    Completes the plan step, decides what the control should be based on
+    the environment and CBF logic that is calculated.
     \n\tINPUT(S): car: the carla vehicle,
                   observations: the dictionary passed between MAPE steps,
                   DT: the tick speed,
@@ -540,7 +542,8 @@ rte: the route of the vehicle</p>
     
     return self.__new_plan</code></pre>
 </details>
-<div class="desc"><p>Completes the plan step, decides what the control should be based on the environment and CBF</p>
+<div class="desc"><p>Completes the plan step, decides what the control should be based on
+the environment and CBF logic that is calculated.</p>
 <p>INPUT(S): car: the carla vehicle,
 observations: the dictionary passed between MAPE steps,
 DT: the tick speed,

@@ -7,7 +7,8 @@ import carla
 
 class Monitor(MAPEStep):
     """
-    The Monitor portion of the MAPE Structure
+    The Monitor portion of the MAPE Structure. Contains all the sensors of the vehicle
+    and then passes the observations made by the sensors to the analyzer.
     """
     def __init__(self, transform, car, blueprint, world, blueprint_lib, actors, route):
         """
@@ -120,7 +121,8 @@ class Monitor(MAPEStep):
 
     def monitor(self, current_waypoint_num):
         """
-        Completes the monitor step by collecting information
+        Completes the monitor step by collecting information from each sensor
+        and passes that information as a dictionary to the analyzer.
         \n\tINPUT(S): current_waypoint_num: the current index of the route
         \n\tOUTPUT(S): The dictionary passed between MAPE steps
         """

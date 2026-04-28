@@ -239,8 +239,9 @@ class World:
     #repeating logic performed in the main function
     def main_loop(self, spectator, car, vehicle, DT):
         """
-        Tne function which holds the functions to be repeated each cycle until
-        an exception is raised (like collision or a completed route)
+        Tne function which holds the functions to be repeated each cycle 
+        until an exception is raised (like collision or a completed route).
+        The loop updates the spectator and calls the mape_step() function.
         \n\tINPUT(S): spectator: the carla spectator,
                       car: the carla vehicle object,
                       vehicle: the Vehicle object,

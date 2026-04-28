@@ -8,7 +8,8 @@ import random
 
 class Vehicle: 
     """
-    The class that controls the vehicle
+    The class that controls the vehicle, which is done through the 
+    mape_init() and mape_loop()
     """
     def __init__(self, blueprint_lib, carla_world, spawn, destination, transform, blueprint, world, DT, extra, u_nom, alpha, max_acc, max_brake, distance, standard_distance):
         """
