@@ -119,7 +119,8 @@ el.replaceWith(d);
 
     def process_color(self, car):
         &#34;&#34;&#34;
-        Processes the color of each of the traffic lights
+        Processes the color of each of the traffic lights and calls react to color
+        to determine what the appropriate response is.
         \n\tINPUT(S): car: the carla vehicle
         \n\tOUTPUT(S): the response of the vehicle to the light
         &#34;&#34;&#34;
@@ -144,7 +145,8 @@ el.replaceWith(d);
 
     def react_to_color(self):
         &#34;&#34;&#34;
-        Decides what action should be taken based on the traffic color
+        Decides what action should be taken based on the traffic color. Currently yellow and red have
+        the same logic but can be modified.
         \n\tINPUT(S): N/A
         \n\tOUTPUT(S): the action the car should take in response to the light (string)
         &#34;&#34;&#34;   
@@ -309,7 +311,8 @@ target_angle: the angle in which the car will respond to a light</p>
 </summary>
 <pre><code class="python">def process_color(self, car):
     &#34;&#34;&#34;
-    Processes the color of each of the traffic lights
+    Processes the color of each of the traffic lights and calls react to color
+    to determine what the appropriate response is.
     \n\tINPUT(S): car: the carla vehicle
     \n\tOUTPUT(S): the response of the vehicle to the light
     &#34;&#34;&#34;
@@ -332,7 +335,8 @@ target_angle: the angle in which the car will respond to a light</p>
 
     return self.get_response()</code></pre>
 </details>
-<div class="desc"><p>Processes the color of each of the traffic lights</p>
+<div class="desc"><p>Processes the color of each of the traffic lights and calls react to color
+to determine what the appropriate response is.</p>
 <p>INPUT(S): car: the carla vehicle</p>
 <p>OUTPUT(S): the response of the vehicle to the light</p></div>
 </dd>
@@ -346,7 +350,8 @@ target_angle: the angle in which the car will respond to a light</p>
 </summary>
 <pre><code class="python">def react_to_color(self):
     &#34;&#34;&#34;
-    Decides what action should be taken based on the traffic color
+    Decides what action should be taken based on the traffic color. Currently yellow and red have
+    the same logic but can be modified.
     \n\tINPUT(S): N/A
     \n\tOUTPUT(S): the action the car should take in response to the light (string)
     &#34;&#34;&#34;   
@@ -363,7 +368,8 @@ target_angle: the angle in which the car will respond to a light</p>
 
     return action</code></pre>
 </details>
-<div class="desc"><p>Decides what action should be taken based on the traffic color</p>
+<div class="desc"><p>Decides what action should be taken based on the traffic color. Currently yellow and red have
+the same logic but can be modified.</p>
 <p>INPUT(S): N/A</p>
 <p>OUTPUT(S): the action the car should take in response to the light (string)</p></div>
 </dd>

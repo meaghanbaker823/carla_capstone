@@ -57,7 +57,7 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">class TrafficRule(Rule):
     &#34;&#34;&#34;
-    The rule subclass for when a car&#39;s traffic light detection is triggered
+    The rule subclass for when a car&#39;s traffic light detection is triggered.
     &#34;&#34;&#34;
     def __init__(self, sensors, car):
         &#34;&#34;&#34;
@@ -81,7 +81,8 @@ el.replaceWith(d);
     
     def rule_follow(self, traffic_lights):
         &#34;&#34;&#34;
-        Decides how the car should follow this rule when it is triggered (Will tell the car to stop if response is stop, else go)
+        Decides how the car should follow this rule when it is triggered 
+        (Will tell the car to stop if response is stop, else go)
         \n\tINPUT(S): traffic_lights: a list of the traffic lights on the map
         \n\tOUTPUT(S): returns 1 if need to stop, otherwise 1  
         &#34;&#34;&#34;
@@ -90,7 +91,7 @@ el.replaceWith(d);
         else:
             return 1</code></pre>
 </details>
-<div class="desc"><p>The rule subclass for when a car's traffic light detection is triggered</p>
+<div class="desc"><p>The rule subclass for when a car's traffic light detection is triggered.</p>
 <p>INPUT(S): sensors: a list of the sensors attached to the vehicle,
 car: the vehicle object</p>
 <p>OUTPUT(S): N/A</p></div>
@@ -132,7 +133,8 @@ car: the vehicle object</p>
 </summary>
 <pre><code class="python">def rule_follow(self, traffic_lights):
     &#34;&#34;&#34;
-    Decides how the car should follow this rule when it is triggered (Will tell the car to stop if response is stop, else go)
+    Decides how the car should follow this rule when it is triggered 
+    (Will tell the car to stop if response is stop, else go)
     \n\tINPUT(S): traffic_lights: a list of the traffic lights on the map
     \n\tOUTPUT(S): returns 1 if need to stop, otherwise 1  
     &#34;&#34;&#34;
@@ -141,7 +143,8 @@ car: the vehicle object</p>
     else:
         return 1</code></pre>
 </details>
-<div class="desc"><p>Decides how the car should follow this rule when it is triggered (Will tell the car to stop if response is stop, else go)</p>
+<div class="desc"><p>Decides how the car should follow this rule when it is triggered
+(Will tell the car to stop if response is stop, else go)</p>
 <p>INPUT(S): traffic_lights: a list of the traffic lights on the map</p>
 <p>OUTPUT(S): returns 1 if need to stop, otherwise 1</p></div>
 </dd>

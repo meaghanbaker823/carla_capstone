@@ -56,7 +56,9 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">class Planner(MAPEStep):
     &#34;&#34;&#34;
-    The Planner step of the MAPE Structure
+    The Planner step of the MAPE Structure creates a plan of what brake throttle and steering values
+    should be used in the executor. Functions of the planner include calculating steering values
+    based on waypoints as well as handling the CBF logic
     &#34;&#34;&#34;
     def __init__(self):
         &#34;&#34;&#34;
@@ -78,7 +80,18 @@ el.replaceWith(d);
     
     def angle_between(self, v1, v2):
         &#34;&#34;&#34;
-        Determines the angle between 2 vectors
+        Determines the angle between our two vectors, typical
+            assert isinstance(v1, tuple) and isinstance(v2, tuple)
+        except:
+            raise
+
+        vector_difference = np.arctan2(v1[1], v1[0]) - np.arctan2(v2[1], v2[0])
+
+        while vector_difference &gt; math.pi:
+            vector_difference -= 2 * math.pi
+
+        while vector_difference &lt; -math.pi:ly the vehicle&#39;s forward vector
+        and a waypoint
         \n\tINPUT(S): v1: vector 1,
                       v2: vector 2
         \n\tOUTPUT(S): the angle between v1 and v2
@@ -130,7 +143,7 @@ el.replaceWith(d);
     
     def get_proper_angle(self, car, wp_idx, rte):
         &#34;&#34;&#34;
-        Gets the propert steering angle for the vehicle
+        Gets the proper steering angle for the vehicle.
         \n\tINPUT(S): car: the carla vehicle,
                       wp_idx: the current index of the route,
                       rte: the route of the vehicle
@@ -158,7 +171,8 @@ el.replaceWith(d);
     
     def correct_angle(self, degrees):
         &#34;&#34;&#34;
-        Adjusts the angle to be accurate
+        Adjusts the angle to be within 50 degrees to simulate a vehicles limited 
+        steering angles.
         \n\tINPUT(S): degrees: an angle to be normalized
         \n\tOUTPUT(S): the calculated steering angle
         &#34;&#34;&#34;
@@ -240,7 +254,9 @@ el.replaceWith(d);
         &#34;&#34;&#34;
         return &#34;The plan in this iteration is &#34; + str(self.get_new_plan())</code></pre>
 </details>
-<div class="desc"><p>The Planner step of the MAPE Structure</p>
+<div class="desc"><p>The Planner step of the MAPE Structure creates a plan of what brake throttle and steering values
+should be used in the executor. Functions of the planner include calculating steering values
+based on waypoints as well as handling the CBF logic</p>
 <p>INPUT(S): N/A</p>
 <p>OUTPUT(S): N/A</p></div>
 <h3>Ancestors</h3>
@@ -259,7 +275,18 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">def angle_between(self, v1, v2):
     &#34;&#34;&#34;
-    Determines the angle between 2 vectors
+    Determines the angle between our two vectors, typical
+        assert isinstance(v1, tuple) and isinstance(v2, tuple)
+    except:
+        raise
+
+    vector_difference = np.arctan2(v1[1], v1[0]) - np.arctan2(v2[1], v2[0])
+
+    while vector_difference &gt; math.pi:
+        vector_difference -= 2 * math.pi
+
+    while vector_difference &lt; -math.pi:ly the vehicle&#39;s forward vector
+    and a waypoint
     \n\tINPUT(S): v1: vector 1,
                   v2: vector 2
     \n\tOUTPUT(S): the angle between v1 and v2
@@ -278,7 +305,15 @@ el.replaceWith(d);
         vector_difference += 2 * math.pi
     return math.degrees(vector_difference)</code></pre>
 </details>
-<div class="desc"><p>Determines the angle between 2 vectors</p>
+<div class="desc"><p>Determines the angle between our two vectors, typical
+assert isinstance(v1, tuple) and isinstance(v2, tuple)
+except:
+raise</p>
+<p>vector_difference = np.arctan2(v1[1], v1[0]) - np.arctan2(v2[1], v2[0])</p>
+<p>while vector_difference &gt; math.pi:
+vector_difference -= 2 * math.pi</p>
+<p>while vector_difference &lt; -math.pi:ly the vehicle's forward vector
+and a waypoint</p>
 <p>INPUT(S): v1: vector 1,
 v2: vector 2</p>
 <p>OUTPUT(S): the angle between v1 and v2</p></div>
@@ -293,7 +328,8 @@ v2: vector 2</p>
 </summary>
 <pre><code class="python">def correct_angle(self, degrees):
     &#34;&#34;&#34;
-    Adjusts the angle to be accurate
+    Adjusts the angle to be within 50 degrees to simulate a vehicles limited 
+    steering angles.
     \n\tINPUT(S): degrees: an angle to be normalized
     \n\tOUTPUT(S): the calculated steering angle
     &#34;&#34;&#34;
@@ -316,7 +352,8 @@ v2: vector 2</p>
     
     return steer_input</code></pre>
 </details>
-<div class="desc"><p>Adjusts the angle to be accurate</p>
+<div class="desc"><p>Adjusts the angle to be within 50 degrees to simulate a vehicles limited
+steering angles.</p>
 <p>INPUT(S): degrees: an angle to be normalized</p>
 <p>OUTPUT(S): the calculated steering angle</p></div>
 </dd>
@@ -393,7 +430,7 @@ wp: the carla waypoint</p>
 </summary>
 <pre><code class="python">def get_proper_angle(self, car, wp_idx, rte):
     &#34;&#34;&#34;
-    Gets the propert steering angle for the vehicle
+    Gets the proper steering angle for the vehicle.
     \n\tINPUT(S): car: the carla vehicle,
                   wp_idx: the current index of the route,
                   rte: the route of the vehicle
@@ -418,7 +455,7 @@ wp: the carla waypoint</p>
     except:
         raise RouteDone(&#34;Route complete :)&#34;)</code></pre>
 </details>
-<div class="desc"><p>Gets the propert steering angle for the vehicle</p>
+<div class="desc"><p>Gets the proper steering angle for the vehicle.</p>
 <p>INPUT(S): car: the carla vehicle,
 wp_idx: the current index of the route,
 rte: the route of the vehicle</p>

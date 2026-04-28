@@ -57,7 +57,9 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">class World:
     &#34;&#34;&#34;
-    Holds all of the variables and methods to set up and destroy the Carla world
+    Holds all of the variables and methods to set up and destroy the Carla world.
+    Additionally has the main_loop function that is used to run the MAPE cycle until 
+    we complete a route or an exception is raised (like a collision).
     &#34;&#34;&#34;
     def __init__(self, world_map=&#39;town01&#39;):
         &#34;&#34;&#34;
@@ -180,7 +182,8 @@ el.replaceWith(d);
             
     def spawn_pedestrians(self): 
         &#34;&#34;&#34;
-        Spawns the necessary pedestrians into the Carla environment
+        Spawns the necessary pedestrians into the Carla environment 
+        using pre-generated spawnpoints.
         \n\tINPUT(S): N/A
         \n\tOUTPUT(S): N/A
         &#34;&#34;&#34;
@@ -281,7 +284,8 @@ el.replaceWith(d);
     #repeating logic performed in the main function
     def main_loop(self, spectator, car, vehicle, DT):
         &#34;&#34;&#34;
-        Tne function which holds the functions to be repeated each cycle
+        Tne function which holds the functions to be repeated each cycle until
+        an exception is raised (like collision or a completed route)
         \n\tINPUT(S): spectator: the carla spectator,
                       car: the carla vehicle object,
                       vehicle: the Vehicle object,
@@ -304,7 +308,9 @@ el.replaceWith(d);
         except:
             raise</code></pre>
 </details>
-<div class="desc"><p>Holds all of the variables and methods to set up and destroy the Carla world</p>
+<div class="desc"><p>Holds all of the variables and methods to set up and destroy the Carla world.
+Additionally has the main_loop function that is used to run the MAPE cycle until
+we complete a route or an exception is raised (like a collision).</p>
 <p>INPUT(S): world_map: [optional] world map name</p>
 <p>OUTPUT(S): N/A</p></div>
 <h3>Methods</h3>
@@ -607,7 +613,8 @@ standard_distance: the standard following distance for the vehicle</p>
 </summary>
 <pre><code class="python">def main_loop(self, spectator, car, vehicle, DT):
     &#34;&#34;&#34;
-    Tne function which holds the functions to be repeated each cycle
+    Tne function which holds the functions to be repeated each cycle until
+    an exception is raised (like collision or a completed route)
     \n\tINPUT(S): spectator: the carla spectator,
                   car: the carla vehicle object,
                   vehicle: the Vehicle object,
@@ -630,7 +637,8 @@ standard_distance: the standard following distance for the vehicle</p>
     except:
         raise</code></pre>
 </details>
-<div class="desc"><p>Tne function which holds the functions to be repeated each cycle</p>
+<div class="desc"><p>Tne function which holds the functions to be repeated each cycle until
+an exception is raised (like collision or a completed route)</p>
 <p>INPUT(S): spectator: the carla spectator,
 car: the carla vehicle object,
 vehicle: the Vehicle object,
@@ -647,7 +655,8 @@ DT: tick speed</p>
 </summary>
 <pre><code class="python">def spawn_pedestrians(self): 
     &#34;&#34;&#34;
-    Spawns the necessary pedestrians into the Carla environment
+    Spawns the necessary pedestrians into the Carla environment 
+    using pre-generated spawnpoints.
     \n\tINPUT(S): N/A
     \n\tOUTPUT(S): N/A
     &#34;&#34;&#34;
@@ -683,7 +692,8 @@ DT: tick speed</p>
         self.__world.tick()
         controller.go_to_location(destination.location)</code></pre>
 </details>
-<div class="desc"><p>Spawns the necessary pedestrians into the Carla environment</p>
+<div class="desc"><p>Spawns the necessary pedestrians into the Carla environment
+using pre-generated spawnpoints.</p>
 <p>INPUT(S): N/A</p>
 <p>OUTPUT(S): N/A</p></div>
 </dd>
